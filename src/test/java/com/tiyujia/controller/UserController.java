@@ -1,5 +1,6 @@
 package com.tiyujia.controller;
 
+import com.mobileservice.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -8,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mobileservice.dubborpc.UserFacade;
-import com.tiyujia.rpcentity.User;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@EnableAutoConfiguration
+@RestController
+//@EnableAutoConfiguration
 @RequestMapping("/user")
 public class UserController {
 	@Autowired

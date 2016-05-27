@@ -105,10 +105,24 @@ public class User extends BaseEntity {
 	public void setReceiiptAddress(String receiiptAddress) {
 		this.receiiptAddress = receiiptAddress;
 	}
-	
-	
-	
 
 
-
+	@Override
+	public String toString() {
+		return "User{" +
+				"name='" + name + '\'' +
+				", nick='" + nick + '\'' +
+				", passWord='" + passWord + '\'' +
+				", phone='" + phone + '\'' +
+				", url='" + url + '\'' +
+				", address='" + address + '\'' +
+				", birthday=" + birthday +
+				", registerTime=" + registerTime +
+				", lastLoginTime=" + lastLoginTime +
+				", idcard='" + idcard + '\'' +
+				", type=" + type +
+				", sex=" + sex +
+				", receiiptAddress='" + receiiptAddress + '\'' +
+				'}';
+	}
 }
