@@ -14,6 +14,9 @@
 	
 	<!-- 用户服务接口 -->
 	<dubbo:reference interface="com.mobileservice.dubborpc.UserFacade " id="userFacade" check="false" />
+	
+	<!-- 商城服务接口 -->
+	<dubbo:reference interface="com.zyx.rpc.shop.ShopService " id="shopService" check="false" />
 
 
 </beans>  
