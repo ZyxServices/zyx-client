@@ -2,14 +2,13 @@ package com.mobileservice.entity;
 
 import java.util.Date;
 
-import com.common.entity.BaseEntity;
 
 
 /**
  * @描述: 用户 .
  * @作者: zhanghr .
  */
-public class User extends BaseEntity {
+public class User {
 	
 	 /**serialVersionUID TODO*/ 
 	
