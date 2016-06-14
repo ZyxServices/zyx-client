@@ -10,3 +10,4 @@ classes
 .setting
 .classpath
 *.iml
+*.prefs

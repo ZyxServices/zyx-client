@@ -22,8 +22,8 @@ import java.util.Map;
  *          Copyright (c)2016 tyj-版权所有
  * @title com.activity.controller
  */
-@RestController
-@RequestMapping("/activity")
+//@RestController
+//@RequestMapping("/activity")
 public class ActivityController {
 
     @Resource

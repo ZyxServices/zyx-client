@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
         http://www.springframework.org/schema/beans/spring-beans.xsd  
         http://code.alibabatech.com/schema/dubbo  
@@ -11,17 +12,26 @@
 	<!-- 使用zookeeper注册中心暴露服务地址 -->
 	<!-- 注册中心地址 -->
 	<dubbo:registry protocol="zookeeper" address="112.74.78.74:2182" />
-	
+
 	<!-- 用户服务接口 -->
-	<dubbo:reference interface="com.mobileservice.dubborpc.UserFacade" id="userFacade" check="false" />
+	<dubbo:reference interface="com.mobileservice.dubborpc.UserFacade"
+		id="userFacade" check="false" />
+
 
 	<!-- 商城服务接口 -->
-	<dubbo:reference interface="com.zyx.rpc.shop.ShopService " id="shopService" check="false" />
+	<dubbo:reference interface="com.zyx.rpc.shop.ShopService "
+		id="shopService" check="false" />
 
 	<!-- 活动服务接口 -->
-	<dubbo:reference interface="com.dubborpc.activity.ActivityFacade" id="activityFacade" check="false" />
+	<dubbo:reference interface="com.dubborpc.activity.ActivityFacade"
+		id="activityFacade" check="false" />
+
+	<!-- 直播服务接口 -->
+	<dubbo:reference interface="com.zyx.rpc.live.LiveInfoFacade"
+		id="liveInfoFacade" check="false" />
 
 	<!-- 操场服务接口 -->
-	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade" check="false" />
+	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade"
+		check="false" />
 
 </beans>  
