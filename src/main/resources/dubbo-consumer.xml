@@ -14,11 +14,14 @@
 	
 	<!-- 用户服务接口 -->
 	<dubbo:reference interface="com.mobileservice.dubborpc.UserFacade" id="userFacade" check="false" />
-	
+
 	<!-- 商城服务接口 -->
 	<dubbo:reference interface="com.zyx.rpc.shop.ShopService " id="shopService" check="false" />
 
 	<!-- 活动服务接口 -->
 	<dubbo:reference interface="com.dubborpc.activity.ActivityFacade" id="activityFacade" check="false" />
+
+	<!-- 操场服务接口 -->
+	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade" check="false" />
 
 </beans>  

@@ -149,7 +149,7 @@
 
         <dependency>
             <groupId>tiyujia-parent</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>zyx-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
