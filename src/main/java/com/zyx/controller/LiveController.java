@@ -57,24 +57,40 @@ public class LiveController {
 	}
 	
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
-	public void update() {
+	public void update(HttpServletRequest request) {
 		LiveInfo liveInfo = new LiveInfo();
-		liveInfoFacade.update(liveInfo);
+		try{
+			//传入参数构造
+			liveInfo.setId(Long.parseLong(request.getParameter("id")));
+			liveInfo.setPublic(Boolean.parseBoolean(request.getParameter("isPublic")));
+			liveInfo.setType(Integer.parseInt(request.getParameter("type")));
+			liveInfo.setStart(Long.parseLong(request.getParameter("start")));
+			liveInfo.setStart(Long.parseLong(request.getParameter("end")));
+			liveInfo.setLab(Integer.parseInt(request.getParameter("lab")));
+			liveInfo.setTitle(request.getParameter("title"));
+			liveInfo.setUserId(Long.parseLong(request.getParameter("userId")));
+			//系统补全参数
+			liveInfo.setCreateTime(System.currentTimeMillis());
+			liveInfoFacade.update(liveInfo);
+		}catch(NumberFormatException nfe){
+			
+		}
+		
 	}
 	
 	
-	@RequestMapping(value = "/list",method = RequestMethod.GET)
-	public List<LiveInfo> getList(){
+	@RequestMapping(value = "/list",method = RequestMethod.POST)
+	public List<LiveInfo> getList(HttpServletRequest request){
 		LiveInfoVo liveInfoVo = new LiveInfoVo();
-		liveInfoVo.setType(1);
+		liveInfoVo.setType(Integer.parseInt(request.getParameter("type")));
 		List<LiveInfo> list = liveInfoFacade.getList( liveInfoVo);
-		System.out.println(list);
+		System.out.println("****get list size="+(null==list?0:list.size()));
 		return list;
 	}
 	
-	@RequestMapping(value = "/get",method = RequestMethod.GET)
-	public LiveInfo getByKey(){
-		return liveInfoFacade.getById(37L);
+	@RequestMapping(value = "/get",method = RequestMethod.POST)
+	public LiveInfo getByKey(HttpServletRequest request){
+		return liveInfoFacade.getById(Long.parseLong(request.getParameter("id")));
 	}
 
 }
