@@ -2,8 +2,6 @@ package com.mobileservice.entity;
 
 import java.util.Date;
 
-
-
 /**
  * @描述: 用户 .
  * @作者: zhanghr .

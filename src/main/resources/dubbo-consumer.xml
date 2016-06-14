@@ -34,4 +34,8 @@
 	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade"
 		check="false" />
 
+	<dubbo:reference interface="com.account.dubborpc.RegisterFacade" id="registerFacade" cache="false" />
+
+	<dubbo:reference interface="com.account.dubborpc.UserLoginFacade" id="userLoginFacade" cache="false" />
+
 </beans>  
