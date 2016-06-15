@@ -35,8 +35,8 @@ public class LoginController {
         Map<String, Object> map = new HashMap<>();
 
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password)) {// 缺少参数
-            map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10016);
-            map.put(AuthConstants.AUTH_ERRMSG, AuthConstants.MISS_PARAM_ERROR);
+            map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10016);
+            map.put(AuthConstants.ERRMSG, AuthConstants.MISS_PARAM_ERROR);
             jsonView.setAttributesMap(map);
         } else {
             jsonView.setAttributesMap(userLoginFacade.loginByPhoneAndPassword(phone, password));
@@ -51,8 +51,8 @@ public class LoginController {
         Map<String, Object> map = new HashMap<>();
 
         if (StringUtils.isEmpty(token)) {// 缺少参数
-            map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10016);
-            map.put(AuthConstants.AUTH_ERRMSG, AuthConstants.MISS_PARAM_ERROR);
+            map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10016);
+            map.put(AuthConstants.ERRMSG, AuthConstants.MISS_PARAM_ERROR);
             jsonView.setAttributesMap(map);
         } else {// 退出
             jsonView.setAttributesMap(userLoginFacade.signout(token));

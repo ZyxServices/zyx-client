@@ -1,7 +1,8 @@
 package com.zyx.controller;
 
-import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,23 +10,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.AbstractView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.alibaba.dubbo.rpc.RpcContext;
-import com.zyx.common.enums.LiveLab;
-import com.zyx.common.enums.LiveType;
+import com.alibaba.fastjson.JSON;
+import com.constants.AuthConstants;
 import com.zyx.entity.live.LiveInfo;
+import com.zyx.entity.live.TextLiveItem;
 import com.zyx.rpc.live.LiveInfoFacade;
+import com.zyx.rpc.live.TextLiveItemFacade;
+import com.zyx.vo.common.TimeAreaVo;
 import com.zyx.vo.live.LiveInfoVo;
+import com.zyx.vo.live.TextLiveItemVo;
 
 /**
  * 
  * @title LiveController.java
  * @package com.zyx.controller
  * @description TODO
- * @author DengQingHai   
+ * @author DengQingHai
  * @update 2016年6月14日 下午3:17:26
- * @version V1.0  
- * Copyright (c)2012 chantsoft-版权所有
+ * @version V1.0 Copyright (c)2012 chantsoft-版权所有
  */
 @RestController
 @RequestMapping("/v1/live")
@@ -33,34 +39,58 @@ public class LiveController {
 
 	@Autowired
 	LiveInfoFacade liveInfoFacade;
-	
-	
-	@RequestMapping(value = "/create",method = RequestMethod.POST)
-	public void create(HttpServletRequest request) {
-		LiveInfo liveInfo = new LiveInfo();
-		try{
-			//传入参数构造
-			liveInfo.setPublic(Boolean.parseBoolean(request.getParameter("isPublic")));
-			liveInfo.setType(Integer.parseInt(request.getParameter("type")));
-			liveInfo.setStart(Long.parseLong(request.getParameter("start")));
-			liveInfo.setStart(Long.parseLong(request.getParameter("end")));
-			liveInfo.setLab(Integer.parseInt(request.getParameter("lab")));
-			liveInfo.setTitle(request.getParameter("title"));
-			liveInfo.setUserId(Long.parseLong(request.getParameter("userId")));
-			//系统补全参数
-			liveInfo.setCreateTime(System.currentTimeMillis());
-			liveInfoFacade.add(liveInfo);
-		}catch(NumberFormatException nfe){
-			
+	@Autowired
+	TextLiveItemFacade textLiveItemFacade;
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public ModelAndView createLive(HttpServletRequest request) {
+
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		if (request.getParameter("type") == null || request.getParameter("title") == null
+				|| request.getParameter("lab") == null) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_MISS);
+		} else {
+			try {
+				LiveInfo liveInfo = new LiveInfo();
+				// 系统补全参数
+				liveInfo.setCreateTime(System.currentTimeMillis());
+				// 传入参数构造
+				if (request.getParameter("isPublic") == null)
+					liveInfo.setPublic(true);
+				else
+					liveInfo.setPublic(Boolean.parseBoolean(request.getParameter("isPublic")));
+				if (request.getParameter("start") == null)
+					liveInfo.setStart(liveInfo.getCreateTime());
+				else
+					liveInfo.setStart(Long.parseLong(request.getParameter("start")));
+
+				liveInfo.setType(Integer.parseInt(request.getParameter("type")));
+				liveInfo.setStart(Long.parseLong(request.getParameter("end")));
+				liveInfo.setLab(Integer.parseInt(request.getParameter("lab")));
+				liveInfo.setTitle(request.getParameter("title"));
+				liveInfo.setUserId(Long.parseLong(request.getParameter("userId")));
+
+				liveInfoFacade.add(liveInfo);
+				attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+			} catch (NumberFormatException nfe) {
+				attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+			}
 		}
-		
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+
 	}
-	
-	@RequestMapping(value = "/update",method = RequestMethod.POST)
-	public void update(HttpServletRequest request) {
-		LiveInfo liveInfo = new LiveInfo();
-		try{
-			//传入参数构造
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ModelAndView updateLive(HttpServletRequest request) {
+
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		try {
+			LiveInfo liveInfo = new LiveInfo();
+			// 传入参数构造
 			liveInfo.setId(Long.parseLong(request.getParameter("id")));
 			liveInfo.setPublic(Boolean.parseBoolean(request.getParameter("isPublic")));
 			liveInfo.setType(Integer.parseInt(request.getParameter("type")));
@@ -69,28 +99,152 @@ public class LiveController {
 			liveInfo.setLab(Integer.parseInt(request.getParameter("lab")));
 			liveInfo.setTitle(request.getParameter("title"));
 			liveInfo.setUserId(Long.parseLong(request.getParameter("userId")));
-			//系统补全参数
-			liveInfo.setCreateTime(System.currentTimeMillis());
-			liveInfoFacade.update(liveInfo);
-		}catch(NumberFormatException nfe){
-			
+			// 系统补全参数
+			liveInfoFacade.updateNotNull(liveInfo);
+			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+		} catch (NumberFormatException nfe) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+		} catch (Exception e) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
 		}
-		
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+
 	}
-	
-	
-	@RequestMapping(value = "/list",method = RequestMethod.POST)
-	public List<LiveInfo> getList(HttpServletRequest request){
-		LiveInfoVo liveInfoVo = new LiveInfoVo();
-		liveInfoVo.setType(Integer.parseInt(request.getParameter("type")));
-		List<LiveInfo> list = liveInfoFacade.getList( liveInfoVo);
-		System.out.println("****get list size="+(null==list?0:list.size()));
+
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	public ModelAndView getLiveList(HttpServletRequest request) {
+
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		try {
+			LiveInfoVo liveInfoVo = new LiveInfoVo();
+			liveInfoVo.setIds(JSON.parseArray(request.getParameter("ids"), Integer.class));
+
+			if (liveInfoVo.getIds() == null || liveInfoVo.getIds().isEmpty()) {// 未指定ID时
+																				// 指定其他条件
+				liveInfoVo.setCreateTime(JSON.parseObject(request.getParameter("createTime"), TimeAreaVo.class));
+				liveInfoVo.setStart(JSON.parseObject(request.getParameter("start"), TimeAreaVo.class));
+				liveInfoVo.setEnd(JSON.parseObject(request.getParameter("end"), TimeAreaVo.class));
+				liveInfoVo.setLabs(JSON.parseArray(request.getParameter("labs"), Integer.class));
+				liveInfoVo.setType(Integer.parseInt(request.getParameter("type")));
+				liveInfoVo.setUserId(Long.parseLong(request.getParameter("userID")));
+			}
+
+			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
+			attrMap.put("liveInfos", JSON.toJSONString(list));
+			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+		} catch (NumberFormatException nfe) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+		} catch (Exception e) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+	}
+
+	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	public ModelAndView getLiveByKey(HttpServletRequest request) {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		try {
+			LiveInfo liveInfo = liveInfoFacade.getById(Long.parseLong(request.getParameter("id")));
+			attrMap.put("liveInfos", JSON.toJSONString(liveInfo));
+			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+		} catch (NumberFormatException nfe) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+		} catch (Exception e) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public ModelAndView deleteLiveByKey(HttpServletRequest request) {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		try {
+			liveInfoFacade.delete(Long.parseLong(request.getParameter("id")));
+			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+		} catch (NumberFormatException nfe) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+		} catch (Exception e) {
+			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+	}
+
+	///////////
+	////
+	///////////
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public void createTextLiveItem(HttpServletRequest request) {
+		TextLiveItem item = new TextLiveItem();
+		try {
+			// 传入参数构造
+			item.setLvieId(Long.parseLong(request.getParameter("liveId")));
+			item.setContent(request.getParameter("content"));
+			item.setImgUrl(request.getParameter("imgUrl"));
+			item.setCreateTime(System.currentTimeMillis());
+			textLiveItemFacade.add(item);
+		} catch (NumberFormatException nfe) {
+
+		}
+
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 * @description 直播内容不提供修改
+	 * @version 1.0
+	 * @author MrDeng
+	 * @update 2016年6月15日 下午2:37:48
+	 */
+	// @RequestMapping(value = "/update", method = RequestMethod.POST)
+	// public void updateTextLiveItem(HttpServletRequest request) {
+	// TextLiveItem item = new TextLiveItem();
+	// try {
+	// // 传入参数构造
+	// item.setId(Long.parseLong(request.getParameter("id")));
+	// item.setLvieId(Long.parseLong(request.getParameter("liveId")));
+	// item.setContent(request.getParameter("content"));
+	// item.setImgUrl(request.getParameter("imgUrl"));
+	// item.setCreateTime(System.currentTimeMillis());
+	// // 系统补全参数
+	// } catch (NumberFormatException nfe) {
+	//
+	// }
+	//
+	// }
+
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	public List<TextLiveItem> getTextLiveItemList(HttpServletRequest request) {
+		TextLiveItemVo vo = new TextLiveItemVo();
+		vo.setLiveId(Long.parseLong(request.getParameter("liveId")));
+		// vo.setStartTime(Long.parseLong(request.getParameter("startTime")));
+		// vo.setEndTime(Long.parseLong(request.getParameter("endTime")));
+		List<TextLiveItem> list = textLiveItemFacade.getList(vo);
+		System.out.println("****get list size=" + (null == list ? 0 : list.size()));
 		return list;
 	}
-	
-	@RequestMapping(value = "/get",method = RequestMethod.POST)
-	public LiveInfo getByKey(HttpServletRequest request){
-		return liveInfoFacade.getById(Long.parseLong(request.getParameter("id")));
+
+	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	public TextLiveItem getTextLiveItemByKey(HttpServletRequest request) {
+		return textLiveItemFacade.getById(Long.parseLong(request.getParameter("id")));
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	public void deleteTextLiveItemByKey(HttpServletRequest request) {
+		textLiveItemFacade.deleteById(Long.parseLong(request.getParameter("id")));
 	}
 
 }

@@ -14,28 +14,32 @@
 	<dubbo:registry protocol="zookeeper" address="112.74.78.74:2182" />
 
 	<!-- 用户服务接口 -->
-	<dubbo:reference interface="com.mobileservice.dubborpc.UserFacade"
-		id="userFacade" check="false" />
+<!-- 	<dubbo:reference interface="com.mobileservice.dubborpc.UserFacade"
+		id="userFacade" check="false" /> -->
 
 
 	<!-- 商城服务接口 -->
-	<dubbo:reference interface="com.zyx.rpc.shop.ShopService "
-		id="shopService" check="false" />
+<!-- 	<dubbo:reference interface="com.zyx.rpc.shop.ShopService "
+		id="shopService" check="false" /> -->
 
 	<!-- 活动服务接口 -->
-	<dubbo:reference interface="com.dubborpc.activity.ActivityFacade"
-		id="activityFacade" check="false" />
+	<!-- <dubbo:reference interface="com.dubborpc.activity.ActivityFacade"
+		id="activityFacade" check="false" /> -->
 
 	<!-- 直播服务接口 -->
 	<dubbo:reference interface="com.zyx.rpc.live.LiveInfoFacade"
 		id="liveInfoFacade" check="false" />
+	<!-- <dubbo:reference interface="com.zyx.rpc.live.TextLiveItemFacade"
+		id="textLiveItemFacade" check="false" /> -->
 
 	<!-- 操场服务接口 -->
-	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade"
+<!-- 	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade"
 		check="false" />
+ -->
+<!-- 	<dubbo:reference interface="com.account.dubborpc.RegisterFacade"
+		id="registerFacade" cache="false" />
 
-	<dubbo:reference interface="com.account.dubborpc.RegisterFacade" id="registerFacade" cache="false" />
-
-	<dubbo:reference interface="com.account.dubborpc.UserLoginFacade" id="userLoginFacade" cache="false" />
+	<dubbo:reference interface="com.account.dubborpc.UserLoginFacade"
+		id="userLoginFacade" cache="false" /> -->
 
 </beans>  

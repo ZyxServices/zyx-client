@@ -38,33 +38,33 @@ public class RegisterController {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isEmpty(phone)) {
-            map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10016);
-            map.put(AuthConstants.AUTH_ERRMSG, "缺少参数");
+            map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10016);
+            map.put(AuthConstants.ERRMSG, "缺少参数");
             jsonView.setAttributesMap(map);
         } else {
             // 判断手机号码
             if (isMobileNum(phone)) {
                 int sendMessage = registerFacade.sendPhoneCode(phone, null);
                 if (sendMessage == 200) {
-                    map.put(AuthConstants.AUTH_STATE, AuthConstants.AUTH_SUCCESS_200);
-                    map.put(AuthConstants.AUTH_SUCCESS, "短信发送成功！");
+                    map.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+                    map.put(AuthConstants.SUCCESS_MSG, "短信发送成功！");
                     jsonView.setAttributesMap(map);
                 } else if (sendMessage == 501) {
-                    map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10005);
-                    map.put(AuthConstants.AUTH_ERRMSG, "短信发送失败！");
+                    map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10005);
+                    map.put(AuthConstants.ERRMSG, "短信发送失败！");
                     jsonView.setAttributesMap(map);
                 } else if (sendMessage == 502) {
-                    map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10005);
-                    map.put(AuthConstants.AUTH_ERRMSG, "短信发送过于频繁，短信发送失败！");
+                    map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10005);
+                    map.put(AuthConstants.ERRMSG, "短信发送过于频繁，短信发送失败！");
                     jsonView.setAttributesMap(map);
                 } else {//-1
-                    map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_100);
-                    map.put(AuthConstants.AUTH_ERRMSG, "未知错误,请重试");
+                    map.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+                    map.put(AuthConstants.ERRMSG, "未知错误,请重试");
                     jsonView.setAttributesMap(map);
                 }
             } else {
-                map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10016);
-                map.put(AuthConstants.AUTH_ERRMSG, "手机号输入有误");
+                map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10016);
+                map.put(AuthConstants.ERRMSG, "手机号输入有误");
                 jsonView.setAttributesMap(map);
             }
 
@@ -88,8 +88,8 @@ public class RegisterController {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(code)) {
-            map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10016);
-            map.put(AuthConstants.AUTH_ERRMSG, AuthConstants.MISS_PARAM_ERROR);
+            map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10016);
+            map.put(AuthConstants.ERRMSG, AuthConstants.MISS_PARAM_ERROR);
             jsonView.setAttributesMap(map);
         } else {
             //Todo:通过手机号和code码判断是否注册

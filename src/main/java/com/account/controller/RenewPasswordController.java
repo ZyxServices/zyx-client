@@ -38,8 +38,8 @@ public class RenewPasswordController {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(password) || StringUtils.isEmpty(password2)) {
-            map.put(AuthConstants.AUTH_ERRCODE, AuthConstants.AUTH_ERROR_10016);
-            map.put(AuthConstants.AUTH_ERRMSG, AuthConstants.MISS_PARAM_ERROR);
+            map.put(AuthConstants.ERRCODE, AuthConstants.AUTH_ERROR_10016);
+            map.put(AuthConstants.ERRMSG, AuthConstants.MISS_PARAM_ERROR);
             jsonView.setAttributesMap(map);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();

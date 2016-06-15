@@ -97,14 +97,7 @@ public class testLiveClient {
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-//            params.add(new BasicNameValuePair("id", "41"));
-//            params.add(new BasicNameValuePair("isPublic", "true"));
             params.add(new BasicNameValuePair("id", "41"));
-//            params.add(new BasicNameValuePair("start", "1465892150000"));
-//            params.add(new BasicNameValuePair("end", "1465898000000"));
-//            params.add(new BasicNameValuePair("lab", "1"));
-//            params.add(new BasicNameValuePair("title", "test live update"));
-//            params.add(new BasicNameValuePair("userId", "1"));
             UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
 			httpPost.setEntity(httpEntity );
             CloseableHttpResponse response = client.execute(httpPost);
