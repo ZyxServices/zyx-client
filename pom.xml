@@ -183,6 +183,31 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.12</version>
 		</dependency>
+
+		<dependency>
+			<groupId>tiyujia-parent</groupId>
+			<artifactId>zyx-constants</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>tiyujia-parent</groupId>
+			<artifactId>zyx-file</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 	<!-- <repositories> <repository> <id>spring-snapshots</id> <name>Spring 
 		Snapshots</name> <url>https://repo.spring.io/libs-snapshot</url> <snapshots> 
