@@ -13,14 +13,17 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.zyx.vo.common.TimeAreaVo;
+
 public class testLiveClient {
 
 	public static void main(String[] args) {
 		try {
 //			testLiveClient.testMultipartPost();
 //			testUpdatePost();
-//			testGetListPost();
-			testGetByIdtPost();
+			testGetListPost();
+//			testGetByIdtPost();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,8 +79,11 @@ public class testLiveClient {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
 //            params.add(new BasicNameValuePair("id", "41"));
 //            params.add(new BasicNameValuePair("isPublic", "true"));
-            params.add(new BasicNameValuePair("type", "1"));
-//            params.add(new BasicNameValuePair("start", "1465892150000"));
+//            params.add(new BasicNameValuePair("type", "1"));
+            TimeAreaVo createArea =  new TimeAreaVo();
+            createArea.setStart(1465883462800L);
+            createArea.setEnd(1465883462820L);
+            params.add(new BasicNameValuePair("createTime", JSON.toJSONString(createArea)));
 //            params.add(new BasicNameValuePair("end", "1465898000000"));
 //            params.add(new BasicNameValuePair("lab", "1"));
 //            params.add(new BasicNameValuePair("title", "test live update"));

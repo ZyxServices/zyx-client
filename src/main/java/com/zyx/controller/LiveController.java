@@ -123,21 +123,28 @@ public class LiveController {
 			liveInfoVo.setIds(JSON.parseArray(request.getParameter("ids"), Integer.class));
 
 			if (liveInfoVo.getIds() == null || liveInfoVo.getIds().isEmpty()) {// 未指定ID时
-																				// 指定其他条件
-				liveInfoVo.setCreateTime(JSON.parseObject(request.getParameter("createTime"), TimeAreaVo.class));
-				liveInfoVo.setStart(JSON.parseObject(request.getParameter("start"), TimeAreaVo.class));
-				liveInfoVo.setEnd(JSON.parseObject(request.getParameter("end"), TimeAreaVo.class));
-				liveInfoVo.setLabs(JSON.parseArray(request.getParameter("labs"), Integer.class));
-				liveInfoVo.setType(Integer.parseInt(request.getParameter("type")));
-				liveInfoVo.setUserId(Long.parseLong(request.getParameter("userID")));
+				if (request.getParameter("createTime") != null)
+					liveInfoVo.setCreateTime(JSON.parseObject(request.getParameter("createTime"), TimeAreaVo.class));
+				if (request.getParameter("start") != null)
+					liveInfoVo.setStart(JSON.parseObject(request.getParameter("start"), TimeAreaVo.class));
+				if (request.getParameter("end") != null)
+					liveInfoVo.setEnd(JSON.parseObject(request.getParameter("end"), TimeAreaVo.class));
+				if (request.getParameter("labs") != null)
+					liveInfoVo.setLabs(JSON.parseArray(request.getParameter("labs"), Integer.class));
+				if (request.getParameter("type") != null)
+					liveInfoVo.setType(Integer.parseInt(request.getParameter("type")));
+				if (request.getParameter("userID") != null)
+					liveInfoVo.setUserId(Long.parseLong(request.getParameter("userID")));
 			}
 
 			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
 			attrMap.put("liveInfos", JSON.toJSONString(list));
 			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
 		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
 			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
 		} catch (Exception e) {
+			e.printStackTrace();
 			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -184,7 +191,7 @@ public class LiveController {
 	////
 	///////////
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/text/create", method = RequestMethod.POST)
 	public void createTextLiveItem(HttpServletRequest request) {
 		TextLiveItem item = new TextLiveItem();
 		try {
@@ -226,7 +233,7 @@ public class LiveController {
 	//
 	// }
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/text/list", method = RequestMethod.POST)
 	public List<TextLiveItem> getTextLiveItemList(HttpServletRequest request) {
 		TextLiveItemVo vo = new TextLiveItemVo();
 		vo.setLiveId(Long.parseLong(request.getParameter("liveId")));
@@ -237,12 +244,12 @@ public class LiveController {
 		return list;
 	}
 
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/text/get", method = RequestMethod.POST)
 	public TextLiveItem getTextLiveItemByKey(HttpServletRequest request) {
 		return textLiveItemFacade.getById(Long.parseLong(request.getParameter("id")));
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/text/delete", method = RequestMethod.POST)
 	public void deleteTextLiveItemByKey(HttpServletRequest request) {
 		textLiveItemFacade.deleteById(Long.parseLong(request.getParameter("id")));
 	}
