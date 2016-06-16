@@ -37,12 +37,6 @@
 	<!--操场服务接口 -->
 	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade"
 		check="false" />
-	<dubbo:reference interface="com.account.dubborpc.RegisterFacade"
-		id="registerFacade" cache="false" />
-	<dubbo:reference interface="com.account.dubborpc.UserLoginFacade"
-		id="userLoginFacade" cache="false" />
-	<!-- 操场服务接口 -->
-	<dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade" check="false" />
     <!-- 我的模块服务接口 -->
 	<dubbo:reference interface="com.account.dubborpc.AccountCommonFacade" id="accountCommonFacade" cache="false" />
 	<dubbo:reference interface="com.account.dubborpc.RegisterFacade" id="registerFacade" cache="false" />
