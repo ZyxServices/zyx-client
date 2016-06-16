@@ -38,6 +38,7 @@ public interface ActivityFacade {
 
     /**
      * 多条条件查询活动
+     *
      * @param parm
      * @return
      */
@@ -45,6 +46,7 @@ public interface ActivityFacade {
 
     /**
      * 查询活动发起者自定义报名模板
+     *
      * @param id
      * @return
      */

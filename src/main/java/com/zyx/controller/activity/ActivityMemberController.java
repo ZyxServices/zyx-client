@@ -72,4 +72,16 @@ public class ActivityMemberController {
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
+
+    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    public ModelAndView update(@RequestParam(name = "token", required = false) String token,
+                                     @RequestParam(name = "id", required = true) Integer id) {
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        Map<String, Object> map = activityMemberFacade.updateMemberByExamine(id);
+
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
 }

@@ -2,6 +2,7 @@ package com.zyx.controller.activity;
 
 
 import com.utils.FileUploadUtils;
+import com.utils.ImagesVerifyUtils;
 import com.zyx.entity.activity.parm.QueryActivityParm;
 import com.zyx.rpc.activity.ActivityFacade;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,7 @@ public class ActivityController {
                                 @RequestParam(name = "createId", required = true) Integer createId,
                                 @RequestParam(name = "title", required = true) String title,
                                 @RequestParam(name = "desc", required = true) String desc,
-                                @RequestParam(name = "image", required = true) String image,
+                                @RequestParam(name = "image", required = true) MultipartFile image,
                                 @RequestParam(name = "startTime", required = true) Long startTime,
                                 @RequestParam(name = "endTime", required = true) Long endTime,
                                 @RequestParam(name = "lastTime", required = true) Long lastTime,
@@ -53,10 +54,18 @@ public class ActivityController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
-        Map<String, Object> map = activityFacade.insertActivity(createId, title, desc, image, startTime, endTime, lastTime, maxPeople, visible, phone, price, type, address, examine, memberTemplate);
+        String uploadFile = FileUploadUtils.uploadFile(image);
 
-        jsonView.setAttributesMap(map);
-        return new ModelAndView(jsonView);
+        Map<String, Object> verify = ImagesVerifyUtils.verify(uploadFile);
+
+        if (verify != null) {
+            jsonView.setAttributesMap(verify);
+            return new ModelAndView(jsonView);
+        } else {
+            Map<String, Object> map = activityFacade.insertActivity(createId, title, desc, uploadFile, startTime, endTime, lastTime, maxPeople, visible, phone, price, type, address, examine, memberTemplate);
+            jsonView.setAttributesMap(map);
+            return new ModelAndView(jsonView);
+        }
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
@@ -91,7 +100,6 @@ public class ActivityController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
-
         Map<String, Object> map = activityFacade.queryActivityMember(activitiId);
 
         jsonView.setAttributesMap(map);
@@ -100,10 +108,17 @@ public class ActivityController {
 
     @RequestMapping(value = "/testUpload", method = RequestMethod.POST)
     public void testUpload(HttpServletRequest request, HttpServletResponse response,
-                           @RequestParam(name = "file", required = false) MultipartFile file) {
+                           @RequestParam(name = "image", required = false) MultipartFile[] file) {
 
-        String uploadFile = FileUploadUtils.uploadFile(file);
-        System.out.println(uploadFile);
+        String images = "";
+        if (file != null) {
+            for (MultipartFile multipartFile : file) {
+                images = images + FileUploadUtils.uploadFile(multipartFile) + ",";
+            }
+        }
+        images = images.substring(0,images.length() - 1);
+        //String uploadFile = FileUploadUtils.uploadFile(file);
+        System.out.println();
     }
 
 
