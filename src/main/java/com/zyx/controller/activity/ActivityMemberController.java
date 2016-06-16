@@ -29,7 +29,7 @@ public class ActivityMemberController {
     @Resource
     private ActivityMemberFacade activityMemberFacade;
 
-    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public ModelAndView signup(@RequestParam(name = "token", required = false) String token,
                                @RequestParam(name = "activityId", required = true) Integer activitiId,
                                @RequestParam(name = "userId", required = true) Integer userId,
@@ -54,7 +54,7 @@ public class ActivityMemberController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/memberPeople", method = RequestMethod.GET)
+    @RequestMapping(value = "/memberPeople", method = RequestMethod.POST)
     public ModelAndView memberPeople(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "activityId", required = false) Integer activitiId,
                                      @RequestParam(name = "userId", required = false) Integer userId) {
@@ -73,7 +73,7 @@ public class ActivityMemberController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ModelAndView update(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "id", required = true) Integer id) {
 

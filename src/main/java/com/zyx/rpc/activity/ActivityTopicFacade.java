@@ -2,6 +2,7 @@ package com.zyx.rpc.activity;
 
 import com.zyx.entity.activity.parm.AddTopicParm;
 import com.zyx.entity.activity.parm.QueryMemberParm;
+import com.zyx.entity.activity.parm.QueryTopicParm;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 public interface ActivityTopicFacade {
 
     /**
-     * 查询报名信息添加
+     * 动态发布
      *
      * @param addTopicParm
      * @return
@@ -26,11 +27,11 @@ public interface ActivityTopicFacade {
     Map<String, Object> addActivityTopic(AddTopicParm addTopicParm);
 
     /**
-     * 查询报名信息添加
+     * 查询对应活动下到动态信息
      *
-     * @param addTopicParm
+     * @param topicParm
      * @return
      */
-    Map<String, Object> dynamicQuery(AddTopicParm addTopicParm);
+    Map<String, Object> dynamicQuery(QueryTopicParm topicParm);
 
 }

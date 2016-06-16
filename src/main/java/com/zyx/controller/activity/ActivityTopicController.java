@@ -5,6 +5,7 @@ import com.zyx.constants.Constants;
 import com.zyx.constants.activity.ActivityConstants;
 import com.zyx.entity.activity.parm.AddMemberInfoParm;
 import com.zyx.entity.activity.parm.AddTopicParm;
+import com.zyx.entity.activity.parm.QueryTopicParm;
 import com.zyx.rpc.activity.ActivityTopicFacade;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,5 +76,24 @@ public class ActivityTopicController {
         return new ModelAndView(jsonView);
     }
 
+    @RequestMapping(value = "/dynamicQuery", method = RequestMethod.POST)
+    public ModelAndView dynamicQuery(@RequestParam(name = "token", required = false) String token,
+                                @RequestParam(name = "activityId", required = true) Integer activitiId,
+                                @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
+                                @RequestParam(name = "page", required = true) Integer page) {
 
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        QueryTopicParm parm = new QueryTopicParm();
+        parm.setActivityId(activitiId);
+        parm.setPages(page);
+        parm.setPageNumber(pageNumber);
+
+
+        Map<String, Object> topic = activityTopicFacade.dynamicQuery(parm);
+
+        jsonView.setAttributesMap(topic);
+        return new ModelAndView(jsonView);
+    }
 }

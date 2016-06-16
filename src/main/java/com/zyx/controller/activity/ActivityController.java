@@ -34,7 +34,7 @@ public class ActivityController {
     @Resource
     private ActivityFacade activityFacade;
 
-    @RequestMapping(value = "/release", method = RequestMethod.GET)
+    @RequestMapping(value = "/release", method = RequestMethod.POST)
     public ModelAndView release(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "createId", required = true) Integer createId,
                                 @RequestParam(name = "title", required = true) String title,
@@ -68,7 +68,7 @@ public class ActivityController {
         }
     }
 
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    @RequestMapping(value = "/query", method = RequestMethod.POST)
     public ModelAndView query(@RequestParam(name = "token", required = false) String token,
                               @RequestParam(name = "createId", required = false) Integer createId,
                               @RequestParam(name = "id", required = false) Integer id,
@@ -93,7 +93,7 @@ public class ActivityController {
     }
 
 
-    @RequestMapping(value = "/memberTemplate", method = RequestMethod.GET)
+    @RequestMapping(value = "/memberTemplate", method = RequestMethod.POST)
     public ModelAndView memberTemplate(@RequestParam(name = "token", required = false) String token,
                                        @RequestParam(name = "id", required = true) Integer activitiId) {
 
