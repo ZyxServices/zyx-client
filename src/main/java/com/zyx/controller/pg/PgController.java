@@ -1,4 +1,4 @@
-package com.controller;
+package com.zyx.controller.pg;
 
 import com.zyx.pg.PgFacade;
 import org.springframework.web.bind.annotation.RequestMapping;

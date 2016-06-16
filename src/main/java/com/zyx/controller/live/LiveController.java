@@ -1,4 +1,4 @@
-package com.zyx.controller;
+package com.zyx.controller.live;
 
 import java.util.HashMap;
 import java.util.List;
@@ -156,14 +156,18 @@ public class LiveController {
 	public ModelAndView getLiveByKey(HttpServletRequest request) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		try {
-			LiveInfo liveInfo = liveInfoFacade.getById(Long.parseLong(request.getParameter("id")));
-			attrMap.put("liveInfos", JSON.toJSONString(liveInfo));
-			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-		} catch (NumberFormatException nfe) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
-		} catch (Exception e) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+		if (request.getParameter("id") == null) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+		} else {
+			try {
+				LiveInfo liveInfo = liveInfoFacade.getById(Long.parseLong(request.getParameter("id")));
+				attrMap.put("liveInfo", JSON.toJSONString(liveInfo));
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			} catch (NumberFormatException nfe) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			} catch (Exception e) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
@@ -174,13 +178,17 @@ public class LiveController {
 	public ModelAndView deleteLiveByKey(HttpServletRequest request) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		try {
-			liveInfoFacade.delete(Long.parseLong(request.getParameter("id")));
-			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-		} catch (NumberFormatException nfe) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
-		} catch (Exception e) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+		if (request.getParameter("id") == null) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+		} else {
+			try {
+				liveInfoFacade.delete(Long.parseLong(request.getParameter("id")));
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			} catch (NumberFormatException nfe) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			} catch (Exception e) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
@@ -192,19 +200,31 @@ public class LiveController {
 	///////////
 
 	@RequestMapping(value = "/text/create", method = RequestMethod.POST)
-	public void createTextLiveItem(HttpServletRequest request) {
-		TextLiveItem item = new TextLiveItem();
-		try {
-			// 传入参数构造
-			item.setLvieId(Long.parseLong(request.getParameter("liveId")));
-			item.setContent(request.getParameter("content"));
-			item.setImgUrl(request.getParameter("imgUrl"));
-			item.setCreateTime(System.currentTimeMillis());
-			textLiveItemFacade.add(item);
-		} catch (NumberFormatException nfe) {
-
+	public ModelAndView createTextLiveItem(HttpServletRequest request) {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+		if (request.getParameter("liveId") == null
+				|| !(request.getParameter("content") != null || request.getParameter("imgUrl") != null)) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+		} else {
+			TextLiveItem item = new TextLiveItem();
+			try {
+				// 传入参数构造
+				item.setLvieId(Long.parseLong(request.getParameter("liveId")));
+				item.setContent(request.getParameter("content"));
+				item.setImgUrl(request.getParameter("imgUrl"));
+				item.setCreateTime(System.currentTimeMillis());
+				textLiveItemFacade.add(item);
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			} catch (NumberFormatException nfe) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			} catch (Exception e) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			}
 		}
-
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
 	}
 
 	/**
@@ -234,24 +254,75 @@ public class LiveController {
 	// }
 
 	@RequestMapping(value = "/text/list", method = RequestMethod.POST)
-	public List<TextLiveItem> getTextLiveItemList(HttpServletRequest request) {
-		TextLiveItemVo vo = new TextLiveItemVo();
-		vo.setLiveId(Long.parseLong(request.getParameter("liveId")));
-		// vo.setStartTime(Long.parseLong(request.getParameter("startTime")));
-		// vo.setEndTime(Long.parseLong(request.getParameter("endTime")));
-		List<TextLiveItem> list = textLiveItemFacade.getList(vo);
-		System.out.println("****get list size=" + (null == list ? 0 : list.size()));
-		return list;
+	public ModelAndView getTextLiveItemList(HttpServletRequest request) {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+		if (request.getParameter("liveId") == null && request.getParameter("createTime") == null) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+		} else {
+			try {
+				TextLiveItemVo vo = new TextLiveItemVo();
+				if (request.getParameter("liveId") != null)
+					vo.setLiveId(Long.parseLong(request.getParameter("liveId")));
+				if (request.getParameter("createTime") != null)
+					vo.setCreateTime(JSON.parseObject(request.getParameter("createTime"), TimeAreaVo.class));
+				List<TextLiveItem> list = textLiveItemFacade.getList(vo);
+				attrMap.put("textLiveItems", JSON.toJSONString(list));
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			} catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			} catch (Exception e) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			}
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
 	}
 
 	@RequestMapping(value = "/text/get", method = RequestMethod.POST)
-	public TextLiveItem getTextLiveItemByKey(HttpServletRequest request) {
-		return textLiveItemFacade.getById(Long.parseLong(request.getParameter("id")));
+	public ModelAndView getTextLiveItemByKey(HttpServletRequest request) {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+		if (request.getParameter("id") == null) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+		} else {
+			try {
+				TextLiveItem textLiveItem = textLiveItemFacade.getById(Long.parseLong(request.getParameter("id")));
+				attrMap.put("textLiveItem", JSON.toJSONString(textLiveItem));
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			} catch (NumberFormatException nfe) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			} catch (Exception e) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			}
+		}
+
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
 	}
 
 	@RequestMapping(value = "/text/delete", method = RequestMethod.POST)
-	public void deleteTextLiveItemByKey(HttpServletRequest request) {
-		textLiveItemFacade.deleteById(Long.parseLong(request.getParameter("id")));
+	public ModelAndView deleteTextLiveItemByKey(HttpServletRequest request) {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+		if (request.getParameter("id") == null) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+		} else {
+			try {
+				textLiveItemFacade.deleteById(Long.parseLong(request.getParameter("id")));
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			} catch (NumberFormatException nfe) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			} catch (Exception e) {
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			}
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
 	}
 
 }

@@ -22,8 +22,12 @@ public class testLiveClient {
 		try {
 //			testLiveClient.testMultipartPost();
 //			testUpdatePost();
-			testGetListPost();
+//			testGetListPost();
 //			testGetByIdtPost();
+//			testTextCreatePost();
+//			testGetTextListPost();
+			testGetTextPost();
+			testDeleteTextPost();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -108,6 +112,74 @@ public class testLiveClient {
 			httpPost.setEntity(httpEntity );
             CloseableHttpResponse response = client.execute(httpPost);
             System.out.println("*************get****************");
+            System.out.println("************"+EntityUtils.toString(response.getEntity()));
+        } finally {
+            httpPost.releaseConnection();
+        }
+    }
+	
+	public static void testTextCreatePost() throws IOException {
+        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/create");
+        try {
+        	CloseableHttpClient client = HttpClients.createDefault();
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("liveId", "37"));
+            params.add(new BasicNameValuePair("content", "text text text"));
+            params.add(new BasicNameValuePair("imgUrl", "img img img"));
+            UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
+			httpPost.setEntity(httpEntity );
+            CloseableHttpResponse response = client.execute(httpPost);
+            System.out.println(EntityUtils.toString(response.getEntity()));
+        } finally {
+            httpPost.releaseConnection();
+        }
+    }
+	
+	public static void testGetTextListPost() throws IOException {
+        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/list");
+        try {
+        	CloseableHttpClient client = HttpClients.createDefault();
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            TimeAreaVo createArea =  new TimeAreaVo();
+            createArea.setStart(1466060000000L);
+            createArea.setEnd(1466060549000L);
+            params.add(new BasicNameValuePair("createTime", JSON.toJSONString(createArea)));
+//            params.add(new BasicNameValuePair("liveId", "1"));
+            UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
+			httpPost.setEntity(httpEntity );
+            CloseableHttpResponse response = client.execute(httpPost);
+            System.out.println("*************get list****************");
+            System.out.println("************"+EntityUtils.toString(response.getEntity()));
+        } finally {
+            httpPost.releaseConnection();
+        }
+    }
+	
+	public static void testGetTextPost() throws IOException {
+        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/get");
+        try {
+        	CloseableHttpClient client = HttpClients.createDefault();
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("id", JSON.toJSONString(2)));
+            UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
+			httpPost.setEntity(httpEntity );
+            CloseableHttpResponse response = client.execute(httpPost);
+            System.out.println("*************get list****************");
+            System.out.println("************"+EntityUtils.toString(response.getEntity()));
+        } finally {
+            httpPost.releaseConnection();
+        }
+    }
+	public static void testDeleteTextPost() throws IOException {
+        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/delete");
+        try {
+        	CloseableHttpClient client = HttpClients.createDefault();
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("id", JSON.toJSONString(2)));
+            UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
+			httpPost.setEntity(httpEntity );
+            CloseableHttpResponse response = client.execute(httpPost);
+            System.out.println("*************get list****************");
             System.out.println("************"+EntityUtils.toString(response.getEntity()));
         } finally {
             httpPost.releaseConnection();
