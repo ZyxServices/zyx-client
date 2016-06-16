@@ -15,7 +15,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.alibaba.fastjson.JSON;
-import com.constants.AuthConstants;
+import com.zyx.constants.live.LiveConstants;
 import com.zyx.entity.live.LiveInfo;
 import com.zyx.entity.live.TextLiveItem;
 import com.zyx.rpc.live.LiveInfoFacade;
@@ -46,10 +46,10 @@ public class LiveController {
 	public ModelAndView createLive(HttpServletRequest request) {
 
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (request.getParameter("type") == null || request.getParameter("title") == null
 				|| request.getParameter("lab") == null) {
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
 				LiveInfo liveInfo = new LiveInfo();
@@ -72,9 +72,9 @@ public class LiveController {
 				liveInfo.setUserId(Long.parseLong(request.getParameter("userId")));
 
 				liveInfoFacade.add(liveInfo);
-				attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
-				attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -87,7 +87,7 @@ public class LiveController {
 	public ModelAndView updateLive(HttpServletRequest request) {
 
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		try {
 			LiveInfo liveInfo = new LiveInfo();
 			// 传入参数构造
@@ -101,11 +101,11 @@ public class LiveController {
 			liveInfo.setUserId(Long.parseLong(request.getParameter("userId")));
 			// 系统补全参数
 			liveInfoFacade.updateNotNull(liveInfo);
-			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (NumberFormatException nfe) {
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 		} catch (Exception e) {
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
@@ -117,7 +117,7 @@ public class LiveController {
 	public ModelAndView getLiveList(HttpServletRequest request) {
 
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		try {
 			LiveInfoVo liveInfoVo = new LiveInfoVo();
 			liveInfoVo.setIds(JSON.parseArray(request.getParameter("ids"), Integer.class));
@@ -139,13 +139,13 @@ public class LiveController {
 
 			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
 			attrMap.put("liveInfos", JSON.toJSONString(list));
-			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 		} catch (Exception e) {
 			e.printStackTrace();
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
@@ -155,15 +155,15 @@ public class LiveController {
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	public ModelAndView getLiveByKey(HttpServletRequest request) {
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		try {
 			LiveInfo liveInfo = liveInfoFacade.getById(Long.parseLong(request.getParameter("id")));
 			attrMap.put("liveInfos", JSON.toJSONString(liveInfo));
-			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (NumberFormatException nfe) {
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 		} catch (Exception e) {
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
@@ -173,14 +173,14 @@ public class LiveController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public ModelAndView deleteLiveByKey(HttpServletRequest request) {
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(AuthConstants.STATE, AuthConstants.ERROR);
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		try {
 			liveInfoFacade.delete(Long.parseLong(request.getParameter("id")));
-			attrMap.put(AuthConstants.STATE, AuthConstants.SUCCESS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (NumberFormatException nfe) {
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 		} catch (Exception e) {
-			attrMap.put(AuthConstants.ERRCODE, AuthConstants.ERROR);
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
