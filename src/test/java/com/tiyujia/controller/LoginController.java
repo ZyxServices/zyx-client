@@ -1,7 +1,7 @@
 package com.tiyujia.controller;
 
-import com.account.dubborpc.UserLoginFacade;
 import com.constants.AuthConstants;
+import com.zyx.rpc.account.UserLoginFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by skmbg on 2016/6/12.
+ * Created by WeiMinSheng on 2016/6/12.
  *
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title com.account.controller
+ * @title LoginController.java
  */
 @RestController
 @RequestMapping("/v1/account")

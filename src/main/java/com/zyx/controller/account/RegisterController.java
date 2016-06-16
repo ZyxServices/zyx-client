@@ -1,8 +1,8 @@
 package com.zyx.controller.account;
 
-import com.account.dubborpc.RegisterFacade;
 import com.constants.AuthConstants;
 import com.zyx.entity.account.UserLoginParam;
+import com.zyx.rpc.account.RegisterFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
