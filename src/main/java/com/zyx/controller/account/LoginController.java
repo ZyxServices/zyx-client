@@ -1,6 +1,6 @@
 package com.zyx.controller.account;
 
-import com.constants.AuthConstants;
+import com.zyx.constants.Constants;
 import com.zyx.rpc.account.UserLoginFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -85,8 +85,8 @@ public class LoginController {
 
     private Map<String, Object> buildMissParamMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put(AuthConstants.STATE, AuthConstants.AUTH_ERROR_10016);
-        map.put(AuthConstants.ERRMSG, AuthConstants.MISS_PARAM_ERROR);
+        map.put(Constants.STATE, Constants.PARAM_MISS);
+        map.put(Constants.ERROR_MSG, Constants.MSG_PARAM_MISS);
         return map;
     }
 

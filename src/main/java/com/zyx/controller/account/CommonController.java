@@ -1,6 +1,7 @@
 package com.zyx.controller.account;
 
-import com.constants.AuthConstants;
+import com.zyx.constants.Constants;
+import com.zyx.constants.account.AccountConstants;
 import com.zyx.rpc.account.AccountCommonFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -40,8 +41,8 @@ public class CommonController {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String str = sdf.format(date);
-        map.put(AuthConstants.TIMESTAMP_A, System.currentTimeMillis());
-        map.put(AuthConstants.TIMESTAMP_B, str);
+        map.put(AccountConstants.TIMESTAMP_A, System.currentTimeMillis());
+        map.put(AccountConstants.TIMESTAMP_B, str);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
@@ -52,16 +53,16 @@ public class CommonController {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isEmpty(phone)) {
-            map.put(AuthConstants.STATE, AuthConstants.AUTH_ERROR_10016);
-            map.put(AuthConstants.ERRMSG, "缺少参数");
+            map.put(Constants.STATE, Constants.PARAM_MISS);
+            map.put(Constants.ERROR_MSG, Constants.MSG_PARAM_MISS);
             jsonView.setAttributesMap(map);
         } else {
             // 判断手机号码
             if (isMobileNum(phone)) {
                 jsonView.setAttributesMap(accountCommonFacade.sendPhoneCode(phone, null));
             } else {
-                map.put(AuthConstants.STATE, AuthConstants.AUTH_ERROR_10016);
-                map.put(AuthConstants.ERRMSG, "手机号输入有误");
+                map.put(Constants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50100);
+                map.put(Constants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50100_MSG);
                 jsonView.setAttributesMap(map);
             }
         }

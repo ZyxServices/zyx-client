@@ -1,6 +1,6 @@
 package com.utils;
 
-import com.zyx.constants.AuthConstants;
+import com.zyx.constants.Constants;
 import com.zyx.file.FastDFSClient;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,21 +36,21 @@ public class FileUploadUtils {
                 byte[] tempFile = file.getBytes();
                 String[] images = new String[]{"png", "gif", "jpeg", "jpeg", "jpg", "bmp"};
                 if (Arrays.binarySearch(images, fileName) != -1 && tempFile.length > IMAGES_MAX_BYTE) {
-                    return AuthConstants.AUTH_ERROR_901 + "";
+                    return Constants.AUTH_ERROR_901 + "";
                 }
 
                 String uploadFile = FastDFSClient.uploadFiles(tempFile, allFileName);
                 if (uploadFile != null) {
                     return uploadFile;
                 } else {
-                    return AuthConstants.AUTH_ERROR_902 + "";
+                    return Constants.AUTH_ERROR_902 + "";
                 }
             } else {
-                return AuthConstants.AUTH_ERROR_903 + "";
+                return Constants.AUTH_ERROR_903 + "";
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return AuthConstants.AUTH_ERROR_100 + "";
+            return Constants.ERROR + "";
         }
     }
 
