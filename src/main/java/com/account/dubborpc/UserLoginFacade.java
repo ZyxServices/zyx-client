@@ -11,7 +11,38 @@ import java.util.Map;
  * @title UserLoginFacade.java
  */
 public interface UserLoginFacade {
+
+    /**
+     * 用户名密码登录
+     *
+     * @param phone
+     * @param password
+     * @return
+     */
     Map<String, Object> loginByPhoneAndPassword(String phone, String password);
 
+    /**
+     * 退出
+     *
+     * @param token
+     * @return
+     */
     Map<String, Object> signout(String token);
+
+    /**
+     * 刷新token
+     *
+     * @param token
+     * @return
+     */
+    Map<String, Object> refreshtoken(String token);
+
+    /**
+     * 用户签到
+     *
+     * @param token
+     * @param accountId
+     * @return
+     */
+    Map<String, Object> sign(String token, String accountId);
 }

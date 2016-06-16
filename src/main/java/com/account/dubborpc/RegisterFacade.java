@@ -15,9 +15,27 @@ import java.util.Map;
  */
 public interface RegisterFacade {
 
-    int sendPhoneCode(String phone, String msg);
-
+    /**
+     * 注册账号
+     *
+     * @param userLoginParam
+     * @return
+     */
     Map<String, Object> registerAccount(UserLoginParam userLoginParam);
 
+    /**
+     * 更新密码
+     *
+     * @param userLoginParam
+     * @return
+     */
     Map<String, Object> renewpwd(UserLoginParam userLoginParam);
+
+    /**
+     * 忘记密码
+     *
+     * @param userLoginParam
+     * @return
+     */
+    Map<String, Object> retrievepwd(UserLoginParam userLoginParam);
 }
