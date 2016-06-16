@@ -1,4 +1,4 @@
-package com.account.controller;
+package com.zyx.controller.account;
 
 import com.account.dubborpc.RegisterFacade;
 import com.constants.AuthConstants;
