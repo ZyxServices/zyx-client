@@ -15,7 +15,7 @@
     <dubbo:registry protocol="zookeeper" address="112.74.78.74:2182"/>
 
     <!-- 用户服务接口 -->
-    <!--<dubbo:reference interface="com.mobileservice.dubborpc.UserFacade" id="userFacade" check="false"/>-->
+    <dubbo:reference interface="com.mobileservice.dubborpc.UserFacade" id="userFacade" check="false"/>
 
     <!-- 商城服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.shop.ShopService" id="shopService" check="false"/>
@@ -27,7 +27,7 @@
     <dubbo:reference interface="com.zyx.rpc.live.LiveInfoFacade" id="liveInfoFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.live.TextLiveItemFacade" id="textLiveItemFacade" check="false"/>
     <!--操场服务接口 -->
-    <dubbo:reference interface="com.zyx.pg.PgFacade" id="pgFacade" check="false"/>
+    <dubbo:reference interface="com.zyx.rpc.pg.PgFacade" id="pgFacade" check="false"/>
 
     <!-- 我的模块服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.account.AccountCommonFacade" id="accountCommonFacade" cache="false"/>
