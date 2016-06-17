@@ -1,14 +1,10 @@
 package com.tiyujia.main;
 
-import com.mobileservice.dubborpc.UserFacade;
-import com.mobileservice.entity.User;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @SpringBootApplication
 @ComponentScan("com.tiyujia.*")

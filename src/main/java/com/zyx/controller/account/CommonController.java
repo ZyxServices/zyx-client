@@ -6,6 +6,7 @@ import com.zyx.rpc.account.AccountCommonFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,21 +35,21 @@ public class CommonController {
     @Autowired
     private AccountCommonFacade accountCommonFacade;
 
-    @RequestMapping("/timestamp")
+    @RequestMapping(value = "/timestamp", method = RequestMethod.GET)
     public ModelAndView timestamp() {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String str = sdf.format(date);
-        map.put(AccountConstants.TIMESTAMP_A, System.currentTimeMillis());
-        map.put(AccountConstants.TIMESTAMP_B, str);
+        map.put(AccountConstants.TIMESTAMP_LONG, System.currentTimeMillis());
+        map.put(AccountConstants.TIMESTAMP_STRING, str);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping("/sendCode")
-    public ModelAndView sendCode(@RequestParam(name = "phone", required = true) String phone) {
+    @RequestMapping(value = "/sendCode", method = RequestMethod.GET)
+    public ModelAndView sendCode(@RequestParam(name = "phone") String phone) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();

@@ -30,7 +30,7 @@ public class LoginController {
     @Autowired
     private UserLoginFacade userLoginFacade;
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView login(@RequestParam(name = "phone") String phone, @RequestParam(name = "pwd") String password) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -43,7 +43,7 @@ public class LoginController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping("/signout")
+    @RequestMapping(value = "/signout", method = RequestMethod.GET)
     public ModelAndView signout(@RequestParam(name = "token") String token) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -64,20 +64,6 @@ public class LoginController {
             jsonView.setAttributesMap(buildMissParamMap());
         } else {// 刷新token并返回新token
             jsonView.setAttributesMap(userLoginFacade.refreshtoken(token));
-        }
-
-        return new ModelAndView(jsonView);
-    }
-
-    @RequestMapping(value = "/sign", method = RequestMethod.GET)
-    public ModelAndView sign(@RequestParam(name = "token") String token,
-                             @RequestParam(name = "account_id") String accountId) {
-        AbstractView jsonView = new MappingJackson2JsonView();
-
-        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(accountId)) {// 缺少参数
-            jsonView.setAttributesMap(buildMissParamMap());
-        } else {// 刷新token并返回新token
-            jsonView.setAttributesMap(userLoginFacade.sign(token, accountId));
         }
 
         return new ModelAndView(jsonView);

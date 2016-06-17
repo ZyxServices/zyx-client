@@ -6,6 +6,7 @@ import com.zyx.rpc.account.RegisterFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +31,7 @@ public class RenewPasswordController {
     @Autowired
     private RegisterFacade registerFacade;
 
-    @RequestMapping("/renewpwd")
+    @RequestMapping(value = "/renewpwd", method = RequestMethod.POST)
     public ModelAndView renewpwd(@RequestParam(name = "token") String token, @RequestParam(name = "old_pwd") String password, @RequestParam(name = "new_pwd") String password2) {
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(password) || StringUtils.isEmpty(password2)) {
@@ -46,7 +47,7 @@ public class RenewPasswordController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping("/retrievepwd")
+    @RequestMapping(value = "/retrievepwd", method = RequestMethod.POST)
     public ModelAndView retrievepwd(@RequestParam(name = "phone") String phone, @RequestParam(name = "pwd") String password, @RequestParam(name = "code") String code) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
