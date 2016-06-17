@@ -4,6 +4,7 @@ package com.zyx.controller.activity;
 import com.utils.FileUploadUtils;
 import com.utils.ImagesVerifyUtils;
 import com.zyx.entity.activity.parm.QueryActivityParm;
+import com.zyx.entity.activity.parm.QueryHistoryParm;
 import com.zyx.rpc.activity.ActivityFacade;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,6 +74,8 @@ public class ActivityController {
                               @RequestParam(name = "createId", required = false) Integer createId,
                               @RequestParam(name = "id", required = false) Integer id,
                               @RequestParam(name = "groupsName", required = false) String groupName,
+                              @RequestParam(name = "startTime", required = false) Long startTime,
+                              @RequestParam(name = "endTime", required = false) Long endTime,
                               @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
                               @RequestParam(name = "page", required = true) Integer page) {
 
@@ -83,6 +86,8 @@ public class ActivityController {
         parm.setCreateId(createId);
         parm.setGroupName(groupName);
         parm.setId(id);
+        parm.setStartTime(startTime);
+        parm.setEndTime(endTime);
         parm.setPageNumber(pageNumber);
         parm.setPage(page);
 
@@ -106,7 +111,25 @@ public class ActivityController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/testUpload", method = RequestMethod.POST)
+    @RequestMapping(value = "/history", method = RequestMethod.POST)
+    public ModelAndView history(@RequestParam(name = "token", required = false) String token,
+                                @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
+                                @RequestParam(name = "page", required = true) Integer page) {
+
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        QueryHistoryParm parm = new QueryHistoryParm();
+        parm.setPageNumber(pageNumber);
+        parm.setPageHis(page);
+
+        Map<String, Object> map = activityFacade.queryActivityHistory(parm);
+
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    /*@RequestMapping(value = "/testUpload", method = RequestMethod.POST)
     public void testUpload(HttpServletRequest request, HttpServletResponse response,
                            @RequestParam(name = "image", required = false) MultipartFile[] file) {
 
@@ -119,7 +142,7 @@ public class ActivityController {
         images = images.substring(0,images.length() - 1);
         //String uploadFile = FileUploadUtils.uploadFile(file);
         System.out.println();
-    }
+    }*/
 
 
 }
