@@ -3,6 +3,7 @@ package com.tiyujia.pg;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.junit.Test;
@@ -54,10 +55,11 @@ public class ApiTest {
     public void addCern() throws IOException {
         HttpClient client=new HttpClient();
         PostMethod  postMethod=new PostMethod("http://localhost:8080/v1/cern/add");
+        postMethod.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "utf-8");
         postMethod.addParameter("userId","1");
         postMethod.addParameter("type","2");
-        postMethod.addParameter("cernTitle","3");
-        postMethod.addParameter("content","4");
+        postMethod.addParameter("cernTitle","我是个人1");
+        postMethod.addParameter("content","我是个人1内容");
         postMethod.addParameter("imgUrl","5");
         postMethod.addParameter("videoUrl","6");
         postMethod.addParameter("visible","7");
@@ -99,7 +101,33 @@ public class ApiTest {
     @Test
     public void circleList() throws IOException {
         HttpClient client=new HttpClient();
-        GetMethod getMethod=new GetMethod("http://localhost:8080//v1/circle/list?max=100");
+        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/circle/list?max=100");
+        client.executeMethod(getMethod);
+        //打印服务器返回的状态
+        System.out.println(getMethod.getStatusLine());
+        //打印返回的信息
+        System.out.println(getMethod.getResponseBodyAsString());
+        //释放连接
+        getMethod.releaseConnection();
+    }
+
+    @Test
+    public void random() throws IOException {
+        HttpClient client=new HttpClient();
+        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/cern/random?n=10");
+        client.executeMethod(getMethod);
+        //打印服务器返回的状态
+        System.out.println(getMethod.getStatusLine());
+        //打印返回的信息
+        System.out.println(getMethod.getResponseBodyAsString());
+        //释放连接
+        getMethod.releaseConnection();
+    }
+
+    @Test
+    public void starRandom() throws IOException {
+        HttpClient client=new HttpClient();
+        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/cern/starRandom?n=10");
         client.executeMethod(getMethod);
         //打印服务器返回的状态
         System.out.println(getMethod.getStatusLine());

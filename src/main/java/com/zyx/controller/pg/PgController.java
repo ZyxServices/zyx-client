@@ -3,6 +3,7 @@ package com.zyx.controller.pg;
 import com.zyx.rpc.pg.PgFacade;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
@@ -39,7 +40,14 @@ public class PgController {
     }
 
     @RequestMapping(value = "/v1/cern/add", method = RequestMethod.POST)
-    public ModelAndView addCern(String token, Integer userId, Integer type, String cernTitle, String content, String imgUrl, String videoUrl, Integer visible) {
+    public ModelAndView addCern(@RequestParam(name = "token",value = "",required = false)String token,
+                                @RequestParam(name = "userId")Integer userId,
+                                @RequestParam(name = "type")Integer type,
+                                @RequestParam(name = "cernTitle")String cernTitle,
+                                @RequestParam(name = "content")String content,
+                                @RequestParam(name = "imgUrl")String imgUrl,
+                                @RequestParam(name = "videoUrl")String videoUrl,
+                                @RequestParam(name = "visible")Integer visible) {
         Map<String, Object> map = pgFacade.addCern(userId, type, cernTitle, content, imgUrl, videoUrl, visible);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -69,4 +77,21 @@ public class PgController {
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
+
+    @RequestMapping(value = "/v1/cern/random",method = RequestMethod.GET)
+    public ModelAndView random(Integer n){
+        Map<String, Object> map = pgFacade.starRandom(1,n);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/cern/starRandom",method = RequestMethod.GET)
+    public ModelAndView starRandom(Integer n){
+        Map<String, Object> map = pgFacade.starRandom(3,n);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
 }
