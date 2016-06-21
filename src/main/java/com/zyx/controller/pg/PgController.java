@@ -23,24 +23,48 @@ public class PgController {
     private PgFacade pgFacade;
 
     @RequestMapping(value = "/v1/circle/add", method = RequestMethod.POST)
-    public ModelAndView addCircle(String token, String title, Integer createId, Integer circleMasterId, String details, String headImgUrl) {
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleMasterId, details, headImgUrl);
+    public ModelAndView addCircle(String token, String title, Integer createId, Integer circleMasterId, Integer state, Integer type, String details, String headImgUrl) {
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleMasterId, state, type, details, headImgUrl);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
 
     @RequestMapping(value = "/v1/circle/meetting", method = RequestMethod.GET)
-    public ModelAndView circleMeet(String token, Integer circleId, Integer accountId) {
+    public ModelAndView addMeet(String token, Integer circleId, Integer accountId) {
         Map<String, Object> map = pgFacade.addMeet(circleId, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/cern/add", method = RequestMethod.GET)
-    public ModelAndView addCern(String token, Integer userId, String cernTitle, String content, String imgUrl, String videoUrl, Integer visible) {
-        Map<String, Object> map = pgFacade.addCern(userId, cernTitle, content, imgUrl, videoUrl, visible);
+    @RequestMapping(value = "/v1/cern/add", method = RequestMethod.POST)
+    public ModelAndView addCern(String token, Integer userId, Integer type, String cernTitle, String content, String imgUrl, String videoUrl, Integer visible) {
+        Map<String, Object> map = pgFacade.addCern(userId, type, cernTitle, content, imgUrl, videoUrl, visible);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/zan/add", method = RequestMethod.GET)
+    public ModelAndView zan(String token, Integer bodyId, Integer bodyType, Integer accountId) {
+        Map<String, Object> map = pgFacade.addZan(bodyId, bodyType, accountId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/cern/addMyConcern", method = RequestMethod.GET)
+    public ModelAndView myConcern(String token, Integer concernId, Integer concernType, Integer accountId) {
+        Map<String, Object> map = pgFacade.addMyConcern(concernId, concernType, accountId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circle/list",method = RequestMethod.GET)
+    public ModelAndView circleList(Integer max){
+        Map<String, Object> map = pgFacade.circleList(max);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
