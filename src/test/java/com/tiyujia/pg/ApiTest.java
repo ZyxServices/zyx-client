@@ -19,17 +19,16 @@ import java.io.IOException;
 public class ApiTest {
 
     @Test
-   public void addCircle() throws IOException {
-        HttpClient client=new HttpClient();
-        PostMethod  postMethod=new PostMethod("http://localhost:8080/v1/circle/add");
-        postMethod.addParameter("title","1");
-        postMethod.addParameter("createId","2");
-        postMethod.addParameter("circleMasterId","3");
-        postMethod.addParameter("state","0");
-        postMethod.addParameter("type","0");
-        postMethod.addParameter("details","4");
-        postMethod.addParameter("headImgUrl","5");
-       client.executeMethod(postMethod);
+    public void addCircle() throws IOException {
+        HttpClient client = new HttpClient();
+        PostMethod postMethod = new PostMethod("http://localhost:8080/v1/circle/add");
+        postMethod.addParameter("title", "1");
+        postMethod.addParameter("createId", "2");
+        postMethod.addParameter("state", "0");
+        postMethod.addParameter("type", "0");
+        postMethod.addParameter("details", "3");
+        postMethod.addParameter("headImgUrl", "4");
+        client.executeMethod(postMethod);
         //打印服务器返回的状态
         System.out.println(postMethod.getStatusLine());
         //打印返回的信息
@@ -39,9 +38,9 @@ public class ApiTest {
     }
 
     @Test
-    public  void meeting() throws IOException {
-        HttpClient client=new HttpClient();
-        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/circle/meetting?circleId=1&accountId=2");
+    public void meeting() throws IOException {
+        HttpClient client = new HttpClient();
+        GetMethod getMethod = new GetMethod("http://localhost:8080/v1/circle/meetting?circleId=1&accountId=2");
         client.executeMethod(getMethod);
         //打印服务器返回的状态
         System.out.println(getMethod.getStatusLine());
@@ -53,16 +52,16 @@ public class ApiTest {
 
     @Test
     public void addCern() throws IOException {
-        HttpClient client=new HttpClient();
-        PostMethod  postMethod=new PostMethod("http://localhost:8080/v1/cern/add");
+        HttpClient client = new HttpClient();
+        PostMethod postMethod = new PostMethod("http://localhost:8080/v1/cern/insert");
         postMethod.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "utf-8");
-        postMethod.addParameter("userId","1");
-        postMethod.addParameter("type","2");
-        postMethod.addParameter("cernTitle","我是个人1");
-        postMethod.addParameter("content","我是个人1内容");
-        postMethod.addParameter("imgUrl","5");
-        postMethod.addParameter("videoUrl","6");
-        postMethod.addParameter("visible","7");
+        postMethod.addParameter("userId", "1");
+        postMethod.addParameter("type", "2");
+        postMethod.addParameter("cernTitle", "我是个人1");
+        postMethod.addParameter("content", "我是个人1内容");
+        postMethod.addParameter("imgUrl", "5");
+        postMethod.addParameter("videoUrl", "6");
+        postMethod.addParameter("visible", "7");
         client.executeMethod(postMethod);
         //打印服务器返回的状态
         System.out.println(postMethod.getStatusLine());
@@ -74,8 +73,8 @@ public class ApiTest {
 
     @Test
     public void zan() throws IOException {
-        HttpClient client=new HttpClient();
-        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/zan/add?bodyId=1&bodyType=2&accountId=3");
+        HttpClient client = new HttpClient();
+        GetMethod getMethod = new GetMethod("http://localhost:8080/v1/zan/add?bodyId=1&bodyType=2&accountId=3");
         client.executeMethod(getMethod);
         //打印服务器返回的状态
         System.out.println(getMethod.getStatusLine());
@@ -87,8 +86,8 @@ public class ApiTest {
 
     @Test
     public void addMyConcern() throws IOException {
-        HttpClient client=new HttpClient();
-        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/cern/addMyConcern?concernId=2&concernType=2&accountId=3");
+        HttpClient client = new HttpClient();
+        GetMethod getMethod = new GetMethod("http://localhost:8080/v1/cern/add?concernId=2&concernType=2&accountId=3");
         client.executeMethod(getMethod);
         //打印服务器返回的状态
         System.out.println(getMethod.getStatusLine());
@@ -100,8 +99,8 @@ public class ApiTest {
 
     @Test
     public void circleList() throws IOException {
-        HttpClient client=new HttpClient();
-        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/circle/list?max=100");
+        HttpClient client = new HttpClient();
+        GetMethod getMethod = new GetMethod("http://localhost:8080/v1/circle/list?max=100");
         client.executeMethod(getMethod);
         //打印服务器返回的状态
         System.out.println(getMethod.getStatusLine());
@@ -113,8 +112,8 @@ public class ApiTest {
 
     @Test
     public void random() throws IOException {
-        HttpClient client=new HttpClient();
-        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/cern/random?n=10");
+        HttpClient client = new HttpClient();
+        GetMethod getMethod = new GetMethod("http://localhost:8080/v1/cern/random?n=10");
         client.executeMethod(getMethod);
         //打印服务器返回的状态
         System.out.println(getMethod.getStatusLine());
@@ -126,8 +125,39 @@ public class ApiTest {
 
     @Test
     public void starRandom() throws IOException {
-        HttpClient client=new HttpClient();
-        GetMethod getMethod=new GetMethod("http://localhost:8080/v1/cern/starRandom?n=10");
+        HttpClient client = new HttpClient();
+        GetMethod getMethod = new GetMethod("http://localhost:8080/v1/cern/starRandom?n=10");
+        client.executeMethod(getMethod);
+        //打印服务器返回的状态
+        System.out.println(getMethod.getStatusLine());
+        //打印返回的信息
+        System.out.println(getMethod.getResponseBodyAsString());
+        //释放连接
+        getMethod.releaseConnection();
+    }
+
+    @Test
+    public void addCircleItem() throws IOException {
+        HttpClient client = new HttpClient();
+        PostMethod postMethod = new PostMethod("http://localhost:8080/v1/circleItem/add");
+        postMethod.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "utf-8");
+        postMethod.addParameter("circle_id", "1");
+        postMethod.addParameter("create_id", "2");
+        postMethod.addParameter("title", "我是个人1");
+        postMethod.addParameter("content", "我是个人1内容");
+        client.executeMethod(postMethod);
+        //打印服务器返回的状态
+        System.out.println(postMethod.getStatusLine());
+        //打印返回的信息
+        System.out.println(postMethod.getResponseBodyAsString());
+        //释放连接
+        postMethod.releaseConnection();
+    }
+
+    @Test
+    public void setMaster() throws IOException {
+        HttpClient client = new HttpClient();
+        GetMethod getMethod = new GetMethod("http://localhost:8080/v1/circle/setMaster?circle_id=21&master_id=2&account_id=3");
         client.executeMethod(getMethod);
         //打印服务器返回的状态
         System.out.println(getMethod.getStatusLine());

@@ -24,8 +24,8 @@ public class PgController {
     private PgFacade pgFacade;
 
     @RequestMapping(value = "/v1/circle/add", method = RequestMethod.POST)
-    public ModelAndView addCircle(String token, String title, Integer createId, Integer circleMasterId, Integer state, Integer type, String details, String headImgUrl) {
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleMasterId, state, type, details, headImgUrl);
+    public ModelAndView addCircle(String token, String title, Integer createId, Integer state, Integer type, String details, String headImgUrl) {
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, state, type, details, headImgUrl);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -39,15 +39,15 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/cern/add", method = RequestMethod.POST)
-    public ModelAndView addCern(@RequestParam(name = "token",value = "",required = false)String token,
-                                @RequestParam(name = "userId")Integer userId,
-                                @RequestParam(name = "type")Integer type,
-                                @RequestParam(name = "cernTitle")String cernTitle,
-                                @RequestParam(name = "content")String content,
-                                @RequestParam(name = "imgUrl")String imgUrl,
-                                @RequestParam(name = "videoUrl")String videoUrl,
-                                @RequestParam(name = "visible")Integer visible) {
+    @RequestMapping(value = "/v1/cern/insert", method = RequestMethod.POST)
+    public ModelAndView addCern(@RequestParam(name = "token", value = "", required = false) String token,
+                                @RequestParam(name = "userId") Integer userId,
+                                @RequestParam(name = "type") Integer type,
+                                @RequestParam(name = "cernTitle") String cernTitle,
+                                @RequestParam(name = "content") String content,
+                                @RequestParam(name = "imgUrl") String imgUrl,
+                                @RequestParam(name = "videoUrl") String videoUrl,
+                                @RequestParam(name = "visible") Integer visible) {
         Map<String, Object> map = pgFacade.addCern(userId, type, cernTitle, content, imgUrl, videoUrl, visible);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -62,7 +62,7 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/cern/addMyConcern", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/cern/add", method = RequestMethod.GET)
     public ModelAndView myConcern(String token, Integer concernId, Integer concernType, Integer accountId) {
         Map<String, Object> map = pgFacade.addMyConcern(concernId, concernType, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -70,25 +70,41 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circle/list",method = RequestMethod.GET)
-    public ModelAndView circleList(Integer max){
+    @RequestMapping(value = "/v1/circle/list", method = RequestMethod.GET)
+    public ModelAndView circleList(Integer max) {
         Map<String, Object> map = pgFacade.circleList(max);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/cern/random",method = RequestMethod.GET)
-    public ModelAndView random(Integer n){
-        Map<String, Object> map = pgFacade.starRandom(1,n);
+    @RequestMapping(value = "/v1/cern/random", method = RequestMethod.GET)
+    public ModelAndView random(Integer n) {
+        Map<String, Object> map = pgFacade.starRandom(1, n);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/cern/starRandom",method = RequestMethod.GET)
-    public ModelAndView starRandom(Integer n){
-        Map<String, Object> map = pgFacade.starRandom(3,n);
+    @RequestMapping(value = "/v1/cern/starRandom", method = RequestMethod.GET)
+    public ModelAndView starRandom(Integer n) {
+        Map<String, Object> map = pgFacade.starRandom(3, n);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circleItem/add", method = RequestMethod.POST)
+    public ModelAndView addCircleItem(String token, Integer circle_id, Integer create_id, String title, String content) {
+        Map<String, Object> map = pgFacade.addCircleItem(circle_id, create_id, title, content);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circle/setMaster", method = RequestMethod.GET)
+    public ModelAndView setMaster(String token, Integer circle_id, Integer master_id, Integer account_id) {
+        Map<String, Object> map = pgFacade.setMaster(circle_id, master_id, account_id);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
