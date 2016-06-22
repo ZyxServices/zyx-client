@@ -80,6 +80,16 @@ public class SwaggerConfig {
                 .build();
     }
 
+    @Bean
+    public Docket accountApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("account")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.account"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build();
+    }
+
     private ApiInfo testApiInfo() {
         ApiInfo apiInfo = new ApiInfo("用户接口api",//大标题
                 "用户登陆，注册，。。。。。。。",//小标题

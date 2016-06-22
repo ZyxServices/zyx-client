@@ -2,9 +2,10 @@ package com.zyx.controller.account;
 
 import com.utils.FileUploadUtils;
 import com.utils.ImagesVerifyUtils;
-import com.zyx.constants.Constants;
+import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.account.UserLoginParam;
 import com.zyx.rpc.account.RegisterFacade;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,11 +35,12 @@ public class RegisterController {
     private RegisterFacade registerFacade;
 
     @RequestMapping(value = "/validate/code", method = RequestMethod.POST)
+    @ApiOperation(value = "用户注册接口", notes = "验证手机号和验证码是否匹配")
     public ModelAndView validatePhoneCode(@RequestParam(name = "phone") String phone, @RequestParam(name = "code") String code) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)) {
-            jsonView.setAttributesMap(buildMissParamMap());
+            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();
             userLoginParam.setPhone(phone);
@@ -51,6 +52,7 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ApiOperation(value = "用户注册接口", notes = "用户注册")
     public ModelAndView register(@RequestParam(name = "phone") String phone,
                                  @RequestParam(name = "pwd") String password,
 //                                 @RequestParam(name = "code") String code,
@@ -59,7 +61,7 @@ public class RegisterController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(nickname)) {
-            jsonView.setAttributesMap(buildMissParamMap());
+            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             if (avatar != null) {// 用户上传头像
                 String avatarId = FileUploadUtils.uploadFile(avatar);
@@ -87,10 +89,4 @@ public class RegisterController {
         return new ModelAndView(jsonView);
     }
 
-    private Map<String, Object> buildMissParamMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put(Constants.STATE, Constants.PARAM_MISS);
-        map.put(Constants.ERROR_MSG, Constants.MSG_PARAM_MISS);
-        return map;
-    }
 }

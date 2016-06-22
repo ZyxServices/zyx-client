@@ -3,6 +3,7 @@ package com.zyx.controller.account;
 import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.rpc.account.AccountCommonFacade;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ public class CommonController {
     private AccountCommonFacade accountCommonFacade;
 
     @RequestMapping(value = "/timestamp", method = RequestMethod.GET)
+    @ApiOperation(value = "用户公共接口", notes = "同步服务器时间戳")
     public ModelAndView timestamp() {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
@@ -48,7 +50,8 @@ public class CommonController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/sendCode", method = RequestMethod.GET)
+    @RequestMapping(value = "/sendCode", method = RequestMethod.POST)
+    @ApiOperation(value = "用户公共接口", notes = "发送验证码")
     public ModelAndView sendCode(@RequestParam(name = "phone") String phone) {
 
         AbstractView jsonView = new MappingJackson2JsonView();

@@ -2,6 +2,7 @@ package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
 import com.zyx.rpc.account.UserLoginFacade;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class LoginController {
     private UserLoginFacade userLoginFacade;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ApiOperation(value = "用户接口", notes = "手机密码登录")
     public ModelAndView login(@RequestParam(name = "phone") String phone, @RequestParam(name = "pwd") String password) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -44,6 +46,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/signout", method = RequestMethod.GET)
+    @ApiOperation(value = "用户接口", notes = "退出")
     public ModelAndView signout(@RequestParam(name = "token") String token) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -57,6 +60,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
+    @ApiOperation(value = "用户接口", notes = "刷新token")
     public ModelAndView refreshtoken(@RequestParam(name = "token") String token) {
         AbstractView jsonView = new MappingJackson2JsonView();
 

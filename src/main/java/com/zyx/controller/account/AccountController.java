@@ -1,20 +1,16 @@
 package com.zyx.controller.account;
 
-import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.rpc.account.AccountInfoFacade;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by WeiMinSheng on 2016/6/17.
@@ -31,6 +27,7 @@ public class AccountController {
     private AccountInfoFacade accountInfoFacade;
 
     @RequestMapping(value = "/info")
+    @ApiOperation(value = "用户接口", notes = "通过用户ID查询用户信息")
     public ModelAndView login(@RequestParam(name = "token") String token, @RequestParam(name = "account_id") Integer userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 

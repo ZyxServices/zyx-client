@@ -1,9 +1,9 @@
 package com.zyx.controller.account;
 
-import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.account.param.UserMarkParam;
 import com.zyx.rpc.account.MarkFacade;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by WeiMinSheng on 2016/6/16.
@@ -33,11 +30,12 @@ public class MarkController {
     private MarkFacade markFacade;
 
     @RequestMapping(value = "/sign", method = RequestMethod.GET)
+    @ApiOperation(value = "用户签到接口", notes = "签到")
     public ModelAndView sign(@RequestParam(name = "token") String token, @RequestParam(name = "accountId") int userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(buildMissParamMap());
+            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             try {
                 UserMarkParam userMarkParam = new UserMarkParam();
@@ -53,11 +51,12 @@ public class MarkController {
     }
 
     @RequestMapping(value = "/querySign", method = RequestMethod.GET)
+    @ApiOperation(value = "用户签到接口", notes = "查询用户签到信息")
     public ModelAndView querySign(@RequestParam(name = "token") String token, @RequestParam(name = "accountId") int userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(buildMissParamMap());
+            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             try {
                 UserMarkParam userMarkParam = new UserMarkParam();
@@ -72,11 +71,4 @@ public class MarkController {
         return new ModelAndView(jsonView);
     }
 
-
-    private Map<String, Object> buildMissParamMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put(Constants.STATE, Constants.PARAM_MISS);
-        map.put(Constants.ERROR_MSG, Constants.MSG_PARAM_MISS);
-        return map;
-    }
 }

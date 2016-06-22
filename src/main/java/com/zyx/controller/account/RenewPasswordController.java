@@ -1,8 +1,9 @@
 package com.zyx.controller.account;
 
-import com.zyx.constants.Constants;
+import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.account.UserLoginParam;
 import com.zyx.rpc.account.RegisterFacade;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by WeiMinSheng on 2016/6/13.
@@ -32,10 +30,11 @@ public class RenewPasswordController {
     private RegisterFacade registerFacade;
 
     @RequestMapping(value = "/renewpwd", method = RequestMethod.POST)
+    @ApiOperation(value = "用户接口", notes = "修改密码")
     public ModelAndView renewpwd(@RequestParam(name = "token") String token, @RequestParam(name = "old_pwd") String password, @RequestParam(name = "new_pwd") String password2) {
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(password) || StringUtils.isEmpty(password2)) {
-            jsonView.setAttributesMap(buildMissParamMap());
+            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();
             userLoginParam.setToken(token);
@@ -48,11 +47,12 @@ public class RenewPasswordController {
     }
 
     @RequestMapping(value = "/retrievepwd", method = RequestMethod.POST)
+    @ApiOperation(value = "用户接口", notes = "忘记密码，通过手机号和验证码修改密码")
     public ModelAndView retrievepwd(@RequestParam(name = "phone") String phone, @RequestParam(name = "pwd") String password, @RequestParam(name = "code") String code) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(code)) {
-            jsonView.setAttributesMap(buildMissParamMap());
+            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();
             userLoginParam.setCode(code);
@@ -64,10 +64,4 @@ public class RenewPasswordController {
         return new ModelAndView(jsonView);
     }
 
-    private Map<String, Object> buildMissParamMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put(Constants.STATE, Constants.PARAM_MISS);
-        map.put(Constants.ERROR_MSG, Constants.MSG_PARAM_MISS);
-        return map;
-    }
 }
