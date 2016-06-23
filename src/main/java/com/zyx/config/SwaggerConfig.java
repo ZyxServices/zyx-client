@@ -1,25 +1,11 @@
 package com.zyx.config;
 
-import static com.google.common.base.Predicates.or;
-import static springfox.documentation.builders.PathSelectors.regex;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-
-import com.google.common.base.Predicate;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -65,12 +51,21 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any()) // 对所有路径进行监控
                 .build();
     }*/
-    @Bean
+  /*  @Bean
     public Docket shopApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("shop")
                 .select()  // 选择那些路径和api会生成document
                 .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.shop"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build();
+    }*/
+    @Bean
+    public Docket pgApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("pg")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.pg"))
                 .paths(PathSelectors.any()) // 对所有路径进行监控
                 .build();
     }
@@ -86,14 +81,65 @@ public class SwaggerConfig {
                 .apiInfo(testApiInfo());
     }
 
+    @Bean
+    public Docket activityApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("activity")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.activity"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build()
+                .apiInfo(activityApiInfo());
+    }
+    
+    @Bean
+    public Docket liveApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("live")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.live"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build()
+                .apiInfo(liveApiInfo());
+    }
+
+
     private ApiInfo testApiInfo() {
         ApiInfo apiInfo = new ApiInfo("用户接口API",//大标题
                 "1、用户收货地址服务API。2、用户公共接口API。3、用户登录相关API。4、用户签到接口API。5、用户注册接口API。6、用户密码修改API。7、用户信息相关接口。",//小标题
                 "1.0",//版本
                 "NO terms of service",
                 "魏民升",//作者
-                "体育家，Version 1.0",//链接显示文字
+                "体育家",//链接显示文字
                 "http://112.74.112.143:8081/ui/Delta/index.html"//网站链接
+        );
+
+        return apiInfo;
+    }
+
+    private ApiInfo activityApiInfo() {
+        ApiInfo apiInfo = new ApiInfo("活动API",//大标题
+                "活动",//小标题
+                "0.1",//版本
+                "成都term",
+                "舒子栋",//作者
+                "智悠行",//链接显示文字
+                "http://112.74.112.143:8081/ui/Delta/index.html "//网站链接
+        );
+
+        return apiInfo;
+    }
+    
+    
+    
+    private ApiInfo liveApiInfo() {
+        ApiInfo apiInfo = new ApiInfo("直播接口API",//大标题
+                "图文直播，视频直播",//小标题
+                "0.1",//版本
+                "成都term",
+                "邓清海",//作者
+                "智悠行",//链接显示文字
+                "http://112.74.112.143:8081/ui/Delta/index.html "//网站链接
         );
 
         return apiInfo;

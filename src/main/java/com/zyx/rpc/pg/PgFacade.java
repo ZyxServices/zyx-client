@@ -90,4 +90,11 @@ public interface PgFacade {
      * @return
      */
     Map<String,Object> setMaster(Integer circle_id,Integer master_id,Integer account_id);
+
+    /**
+     * 删除圈子
+     * @param circle_id
+     * @return
+     */
+    Map<String, Object> delete(Integer circle_id);
 }

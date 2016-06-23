@@ -6,10 +6,8 @@ import com.utils.ImagesVerifyUtils;
 import com.zyx.entity.activity.parm.QueryActivityParm;
 import com.zyx.entity.activity.parm.QueryHistoryParm;
 import com.zyx.rpc.activity.ActivityFacade;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
@@ -36,11 +34,12 @@ public class ActivityController {
     private ActivityFacade activityFacade;
 
     @RequestMapping(value = "/release", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "活动发布")
     public ModelAndView release(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "createId", required = true) Integer createId,
                                 @RequestParam(name = "title", required = true) String title,
                                 @RequestParam(name = "desc", required = true) String desc,
-                                @RequestParam(name = "image", required = true) MultipartFile image,
+                                @RequestPart(name = "image", required= true) MultipartFile image,
                                 @RequestParam(name = "startTime", required = true) Long startTime,
                                 @RequestParam(name = "endTime", required = true) Long endTime,
                                 @RequestParam(name = "lastTime", required = true) Long lastTime,
@@ -70,6 +69,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "活动查询")
     public ModelAndView query(@RequestParam(name = "token", required = false) String token,
                               @RequestParam(name = "createId", required = false) Integer createId,
                               @RequestParam(name = "id", required = false) Integer id,
@@ -99,6 +99,7 @@ public class ActivityController {
 
 
     @RequestMapping(value = "/memberTemplate", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "活动报名模板查询")
     public ModelAndView memberTemplate(@RequestParam(name = "token", required = false) String token,
                                        @RequestParam(name = "id", required = true) Integer activitiId) {
 
@@ -112,6 +113,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "查询历史活动")
     public ModelAndView history(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
                                 @RequestParam(name = "page", required = true) Integer page) {
