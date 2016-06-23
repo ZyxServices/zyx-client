@@ -74,6 +74,15 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any()) // 对所有路径进行监控
                 .build();
     }
+    @Bean
+    public Docket pgApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("pg")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.pg"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build();
+    }
 
     @Bean
     public Docket accountApi() {
