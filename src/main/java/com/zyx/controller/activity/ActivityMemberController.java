@@ -3,6 +3,7 @@ package com.zyx.controller.activity;
 import com.zyx.rpc.activity.ActivityMemberFacade;
 import com.zyx.entity.activity.parm.AddMemberInfoParm;
 import com.zyx.entity.activity.parm.QueryMemberParm;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,7 @@ public class ActivityMemberController {
     private ActivityMemberFacade activityMemberFacade;
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "活动报名")
     public ModelAndView signup(@RequestParam(name = "token", required = false) String token,
                                @RequestParam(name = "activityId", required = true) Integer activitiId,
                                @RequestParam(name = "userId", required = true) Integer userId,
@@ -55,6 +57,7 @@ public class ActivityMemberController {
     }
 
     @RequestMapping(value = "/memberPeople", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "查询参与活动人列表（详细信息）可查寻当前用户参加过到活动")
     public ModelAndView memberPeople(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "activityId", required = false) Integer activitiId,
                                      @RequestParam(name = "userId", required = false) Integer userId) {
@@ -74,6 +77,7 @@ public class ActivityMemberController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "发起者审核报名用户")
     public ModelAndView update(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "id", required = true) Integer id) {
 

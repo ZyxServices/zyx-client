@@ -86,12 +86,37 @@ public class SwaggerConfig {
                 .apiInfo(testApiInfo());
     }
 
+    @Bean
+    public Docket activityApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("activity")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.activity"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build()
+                .apiInfo(activityApiInfo());
+    }
+
+
     private ApiInfo testApiInfo() {
         ApiInfo apiInfo = new ApiInfo("用户接口API",//大标题
                 "用户登陆，注册，。。。。。。。",//小标题
                 "0.1",//版本
                 "NO terms of service",
                 "魏民升",//作者
+                "The Apache License, Version 2.0",//链接显示文字
+                "http://www.ronghuazhang.com:9090/sonarqube/ "//网站链接
+        );
+
+        return apiInfo;
+    }
+
+    private ApiInfo activityApiInfo() {
+        ApiInfo apiInfo = new ApiInfo("活动API",//大标题
+                "活动",//小标题
+                "0.1",//版本
+                "NO terms of service",
+                "舒子栋",//作者
                 "The Apache License, Version 2.0",//链接显示文字
                 "http://www.ronghuazhang.com:9090/sonarqube/ "//网站链接
         );

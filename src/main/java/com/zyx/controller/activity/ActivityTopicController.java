@@ -7,10 +7,8 @@ import com.zyx.entity.activity.parm.AddMemberInfoParm;
 import com.zyx.entity.activity.parm.AddTopicParm;
 import com.zyx.entity.activity.parm.QueryTopicParm;
 import com.zyx.rpc.activity.ActivityTopicFacade;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
@@ -38,12 +36,13 @@ public class ActivityTopicController {
     private ActivityTopicFacade activityTopicFacade;
 
     @RequestMapping(value = "/dynamic", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "发布活动动态")
     public ModelAndView dynamic(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "activityId", required = true) Integer activitiId,
                                 @RequestParam(name = "userId", required = true) Integer userId,
                                 @RequestParam(name = "topicTitle", required = true) String topicTitle,
                                 @RequestParam(name = "topicContent", required = true) String topicContent,
-                                @RequestParam(name = "image", required = true) MultipartFile[] image) {
+                                @RequestPart(name = "image", required = true) MultipartFile[] image) {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -77,6 +76,7 @@ public class ActivityTopicController {
     }
 
     @RequestMapping(value = "/dynamicQuery", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "查询当前活动的发布动态")
     public ModelAndView dynamicQuery(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "activityId", required = true) Integer activitiId,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
