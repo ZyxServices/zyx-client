@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  */
 @RestController
 @RequestMapping("/v1")
-@Api(description = "用户公共接口包括1、同步服务器时间戳。2、发送验证码")
+@Api(description = "用户公共接口API。1、同步服务器时间戳。2、发送验证码")
 public class CommonController {
 
     @Autowired

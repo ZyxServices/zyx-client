@@ -3,6 +3,7 @@ package com.zyx.controller.account;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.account.param.UserMarkParam;
 import com.zyx.rpc.account.MarkFacade;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -24,13 +25,14 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
  */
 @RestController
 @RequestMapping("/v1/account")
+@Api(description = "用户签到接口API。1、签到。2、查询用户签到信息")
 public class MarkController {
 
     @Autowired
     private MarkFacade markFacade;
 
     @RequestMapping(value = "/sign", method = RequestMethod.GET)
-    @ApiOperation(value = "用户签到接口", notes = "签到")
+    @ApiOperation(value = "签到", notes = "签到")
     public ModelAndView sign(@RequestParam(name = "token") String token, @RequestParam(name = "accountId") int userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -51,7 +53,7 @@ public class MarkController {
     }
 
     @RequestMapping(value = "/querySign", method = RequestMethod.GET)
-    @ApiOperation(value = "用户签到接口", notes = "查询用户签到信息")
+    @ApiOperation(value = "查询签到信息", notes = "查询用户签到信息")
     public ModelAndView querySign(@RequestParam(name = "token") String token, @RequestParam(name = "accountId") int userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 

@@ -398,7 +398,7 @@ public class LiveController {
 					Barrage entity = new Barrage();
 					entity.setLiveId(Long.parseLong(request.getParameter("liveId")));
 					entity.setContent(request.getParameter("content"));
-					entity.setUserId(Integer.parseInt(account.getId()));
+					entity.setUserId(account.getId());
 					entity.setNickName(account.getNickname());
 					entity.setAvatar(account.getAvatar());
 					entity.setCreateTime(System.currentTimeMillis());

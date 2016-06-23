@@ -3,6 +3,7 @@ package com.zyx.controller.account;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.account.UserLoginParam;
 import com.zyx.rpc.account.RegisterFacade;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -24,13 +25,14 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
  */
 @RestController
 @RequestMapping("/v1/account")
+@Api(description = "用户密码修改API。1、同步服务器时间戳。2、发送验证码")
 public class RenewPasswordController {
 
     @Autowired
     private RegisterFacade registerFacade;
 
     @RequestMapping(value = "/renewpwd", method = RequestMethod.POST)
-    @ApiOperation(value = "用户接口", notes = "修改密码")
+    @ApiOperation(value = "修改密码", notes = "修改密码")
     public ModelAndView renewpwd(@RequestParam(name = "token") String token, @RequestParam(name = "old_pwd") String password, @RequestParam(name = "new_pwd") String password2) {
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(password) || StringUtils.isEmpty(password2)) {
@@ -47,7 +49,7 @@ public class RenewPasswordController {
     }
 
     @RequestMapping(value = "/retrievepwd", method = RequestMethod.POST)
-    @ApiOperation(value = "用户接口", notes = "忘记密码，通过手机号和验证码修改密码")
+    @ApiOperation(value = "忘记密码", notes = "忘记密码，通过手机号和验证码修改密码")
     public ModelAndView retrievepwd(@RequestParam(name = "phone") String phone, @RequestParam(name = "pwd") String password, @RequestParam(name = "code") String code) {
         AbstractView jsonView = new MappingJackson2JsonView();
 

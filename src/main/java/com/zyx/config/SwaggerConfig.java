@@ -88,12 +88,12 @@ public class SwaggerConfig {
 
     private ApiInfo testApiInfo() {
         ApiInfo apiInfo = new ApiInfo("用户接口API",//大标题
-                "用户登陆，注册，。。。。。。。",//小标题
-                "0.1",//版本
+                "1、用户收货地址服务API。2、用户公共接口API。3、用户登录相关API。4、用户签到接口API。5、用户注册接口API。6、用户密码修改API。7、用户信息相关接口。",//小标题
+                "1.0",//版本
                 "NO terms of service",
                 "魏民升",//作者
-                "The Apache License, Version 2.0",//链接显示文字
-                "http://www.ronghuazhang.com:9090/sonarqube/ "//网站链接
+                "体育家，Version 1.0",//链接显示文字
+                "http://112.74.112.143:8081/ui/Delta/index.html"//网站链接
         );
 
         return apiInfo;

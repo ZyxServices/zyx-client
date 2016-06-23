@@ -5,13 +5,11 @@ import com.utils.ImagesVerifyUtils;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.account.UserLoginParam;
 import com.zyx.rpc.account.RegisterFacade;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
@@ -29,13 +27,14 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/v1/account")
+@Api(description = "用户注册接口API。1、验证手机验证码。2、注册")
 public class RegisterController {
 
     @Autowired
     private RegisterFacade registerFacade;
 
     @RequestMapping(value = "/validate/code", method = RequestMethod.POST)
-    @ApiOperation(value = "用户注册接口", notes = "验证手机号和验证码是否匹配")
+    @ApiOperation(value = "验证手机验证码", notes = "验证手机号和验证码是否匹配")
     public ModelAndView validatePhoneCode(@RequestParam(name = "phone") String phone, @RequestParam(name = "code") String code) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -52,12 +51,12 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @ApiOperation(value = "用户注册接口", notes = "用户注册")
+    @ApiOperation(value = "用户注册", notes = "用户注册，头像可不设置")
     public ModelAndView register(@RequestParam(name = "phone") String phone,
                                  @RequestParam(name = "pwd") String password,
 //                                 @RequestParam(name = "code") String code,
                                  @RequestParam(name = "nickname") String nickname,
-                                 @RequestParam(name = "avatar", required = false) MultipartFile avatar) {
+                                 @RequestPart(name = "avatar", required = false) MultipartFile avatar) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(nickname)) {
