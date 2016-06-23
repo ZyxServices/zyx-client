@@ -18,23 +18,24 @@ import com.zyx.vo.common.TimeAreaVo;
 
 public class testLiveClient {
 
+	private static String IP_ADDRESS = "http://114.112.98.72:8089/";
 	public static void main(String[] args) {
 		try {
-//			testLiveClient.testMultipartPost();
+//			testLiveClient.testCreateLivePost();
 //			testUpdatePost();
-//			testGetListPost();
+			testGetListPost();
 //			testGetByIdtPost();
 //			testTextCreatePost();
 //			testGetTextListPost();
-			testGetTextPost();
-			testDeleteTextPost();
+//			testGetTextPost();
+//			testDeleteTextPost();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public static void testMultipartPost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/create");
+	public static void testCreateLivePost() throws IOException {
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/create");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -55,7 +56,7 @@ public class testLiveClient {
     }
 	
 	public static void testUpdatePost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/update");
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/update");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -77,7 +78,7 @@ public class testLiveClient {
     }
 	
 	public static void testGetListPost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/list");
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/list");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -103,11 +104,11 @@ public class testLiveClient {
     }
 	
 	public static void testGetByIdtPost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/get");
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/get");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("id", "41"));
+            params.add(new BasicNameValuePair("id", "37"));
             UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
 			httpPost.setEntity(httpEntity );
             CloseableHttpResponse response = client.execute(httpPost);
@@ -119,7 +120,7 @@ public class testLiveClient {
     }
 	
 	public static void testTextCreatePost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/create");
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/text/create");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -136,7 +137,7 @@ public class testLiveClient {
     }
 	
 	public static void testGetTextListPost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/list");
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/text/list");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -156,11 +157,11 @@ public class testLiveClient {
     }
 	
 	public static void testGetTextPost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/get");
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/text/get");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("id", JSON.toJSONString(2)));
+            params.add(new BasicNameValuePair("id", "1"));
             UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
 			httpPost.setEntity(httpEntity );
             CloseableHttpResponse response = client.execute(httpPost);
@@ -171,11 +172,31 @@ public class testLiveClient {
         }
     }
 	public static void testDeleteTextPost() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/live/text/delete");
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/text/delete");
         try {
         	CloseableHttpClient client = HttpClients.createDefault();
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("id", JSON.toJSONString(2)));
+            params.add(new BasicNameValuePair("id", "1"));
+            UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
+			httpPost.setEntity(httpEntity );
+            CloseableHttpResponse response = client.execute(httpPost);
+            System.out.println("*************get list****************");
+            System.out.println("************"+EntityUtils.toString(response.getEntity()));
+        } finally {
+            httpPost.releaseConnection();
+        }
+    }
+	
+	public static void testGetBarragePost() throws IOException {
+        HttpPost httpPost = new HttpPost(IP_ADDRESS+"/v1/live/barrage/list");
+        try {
+        	CloseableHttpClient client = HttpClients.createDefault();
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            TimeAreaVo createArea =  new TimeAreaVo();
+            createArea.setStart(1466060000000L);
+            createArea.setEnd(1466060549000L);
+            params.add(new BasicNameValuePair("createTime", JSON.toJSONString(createArea)));
+//            params.add(new BasicNameValuePair("liveId", "1"));
             UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
 			httpPost.setEntity(httpEntity );
             CloseableHttpResponse response = client.execute(httpPost);
