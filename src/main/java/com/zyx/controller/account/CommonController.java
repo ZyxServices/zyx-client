@@ -3,6 +3,7 @@ package com.zyx.controller.account;
 import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.rpc.account.AccountCommonFacade;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -31,13 +32,14 @@ import java.util.regex.Pattern;
  */
 @RestController
 @RequestMapping("/v1")
+@Api(description = "用户公共接口包括1、同步服务器时间戳。2、发送验证码")
 public class CommonController {
 
     @Autowired
     private AccountCommonFacade accountCommonFacade;
 
     @RequestMapping(value = "/timestamp", method = RequestMethod.GET)
-    @ApiOperation(value = "用户公共接口", notes = "同步服务器时间戳")
+    @ApiOperation(value = "同步服务器时间戳", notes = "同步服务器时间戳，返回两种类型的结果1、1466648250174。2、20160623101730")
     public ModelAndView timestamp() {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
@@ -51,7 +53,7 @@ public class CommonController {
     }
 
     @RequestMapping(value = "/sendCode", method = RequestMethod.POST)
-    @ApiOperation(value = "用户公共接口", notes = "发送验证码")
+    @ApiOperation(value = "发送验证码", notes = "发送验证码")
     public ModelAndView sendCode(@RequestParam(name = "phone") String phone) {
 
         AbstractView jsonView = new MappingJackson2JsonView();

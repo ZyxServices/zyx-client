@@ -31,13 +31,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //http://blog.csdn.net/catoop/article/details/50668896
 //http://blog.csdn.net/jia20003/article/details/50700736
 public class SwaggerConfig {
-	
-	
-	/**
+
+
+    /**
      * 可以定义多个组，比如本类中定义把test和demo区分开了
-     * （访问页面就可以看到效果了） 
-     *
-     *
+     * （访问页面就可以看到效果了）
      */
   /* @Bean
     public Docket testApi() {
@@ -67,13 +65,10 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any()) // 对所有路径进行监控
                 .build();
     }*/
-
-  
-    
     @Bean
     public Docket shopApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-        		.groupName("shop")
+                .groupName("shop")
                 .select()  // 选择那些路径和api会生成document
                 .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.shop"))
                 .paths(PathSelectors.any()) // 对所有路径进行监控
@@ -87,15 +82,16 @@ public class SwaggerConfig {
                 .select()  // 选择那些路径和api会生成document
                 .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.account"))
                 .paths(PathSelectors.any()) // 对所有路径进行监控
-                .build();
+                .build()
+                .apiInfo(testApiInfo());
     }
 
     private ApiInfo testApiInfo() {
-        ApiInfo apiInfo = new ApiInfo("用户接口api",//大标题
+        ApiInfo apiInfo = new ApiInfo("用户接口API",//大标题
                 "用户登陆，注册，。。。。。。。",//小标题
                 "0.1",//版本
                 "NO terms of service",
-                "魏民生",//作者
+                "魏民升",//作者
                 "The Apache License, Version 2.0",//链接显示文字
                 "http://www.ronghuazhang.com:9090/sonarqube/ "//网站链接
         );
@@ -103,13 +99,13 @@ public class SwaggerConfig {
         return apiInfo;
     }
 
- 
+
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
-          .addResourceLocations("classpath:/META-INF/resources/");
-     
+                .addResourceLocations("classpath:/META-INF/resources/");
+
         registry.addResourceHandler("/webjars/**")
-          .addResourceLocations("classpath:/META-INF/resources/webjars/");
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
 }
