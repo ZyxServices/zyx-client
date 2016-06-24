@@ -1,8 +1,8 @@
 package com.zyx.controller.activity;
 
 
-import com.utils.FileUploadUtils;
-import com.utils.ImagesVerifyUtils;
+import com.zyx.utils.FileUploadUtils;
+import com.zyx.utils.ImagesVerifyUtils;
 import com.zyx.entity.activity.parm.QueryActivityParm;
 import com.zyx.entity.activity.parm.QueryHistoryParm;
 import com.zyx.rpc.activity.ActivityFacade;
@@ -14,8 +14,6 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**

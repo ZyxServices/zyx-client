@@ -1,4 +1,4 @@
-package com.utils;
+package com.zyx.utils;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;

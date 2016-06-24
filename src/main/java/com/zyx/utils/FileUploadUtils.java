@@ -1,4 +1,4 @@
-package com.utils;
+package com.zyx.utils;
 
 import com.zyx.constants.Constants;
 import com.zyx.file.FastDFSClient;

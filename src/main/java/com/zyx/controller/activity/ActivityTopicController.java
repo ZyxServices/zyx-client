@@ -1,9 +1,8 @@
 package com.zyx.controller.activity;
 
-import com.utils.FileUploadUtils;
+import com.zyx.utils.FileUploadUtils;
 import com.zyx.constants.Constants;
 import com.zyx.constants.activity.ActivityConstants;
-import com.zyx.entity.activity.parm.AddMemberInfoParm;
 import com.zyx.entity.activity.parm.AddTopicParm;
 import com.zyx.entity.activity.parm.QueryTopicParm;
 import com.zyx.rpc.activity.ActivityTopicFacade;

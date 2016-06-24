@@ -123,7 +123,7 @@ public class SwaggerConfig {
                 "0.1",//版本
                 "成都term",
                 "舒子栋",//作者
-                "智悠行",//链接显示文字
+                "体育家",//链接显示文字
                 "http://112.74.112.143:8081/ui/Delta/index.html "//网站链接
         );
 

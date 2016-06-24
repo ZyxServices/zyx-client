@@ -1,4 +1,4 @@
-package com.utils;
+package com.zyx.utils;
 
 import com.zyx.constants.Constants;
 
@@ -12,7 +12,7 @@ import java.util.Map;
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
  * @title ImagesVerifyUtils
- * @package com.utils
+ * @package com.zyx.utils
  * @update 16-6-16 上午10:21
  */
 public class ImagesVerifyUtils {

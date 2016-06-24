@@ -1,7 +1,7 @@
 package com.zyx.controller.activity;
 
+import com.zyx.entity.activity.parm.MemberInfoParm;
 import com.zyx.rpc.activity.ActivityMemberFacade;
-import com.zyx.entity.activity.parm.AddMemberInfoParm;
 import com.zyx.entity.activity.parm.QueryMemberParm;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +42,7 @@ public class ActivityMemberController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
-        AddMemberInfoParm addMemberInfoParm = new AddMemberInfoParm();
+        MemberInfoParm addMemberInfoParm = new MemberInfoParm();
 
         addMemberInfoParm.setActivityId(activitiId);
         addMemberInfoParm.setUserId(userId);
@@ -51,6 +51,25 @@ public class ActivityMemberController {
         addMemberInfoParm.setMemberInfo(memberInfo);
 
         Map<String, Object> map = activityMemberFacade.addActivityMember(addMemberInfoParm);
+
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/cancelSignup", method = RequestMethod.POST)
+    @ApiOperation(value = "活动接口", notes = "取消对应到活动报名")
+    public ModelAndView cancelSignup(@RequestParam(name = "token", required = false) String token,
+                                     @RequestParam(name = "activityId", required = true) Integer activitiId,
+                                     @RequestParam(name = "userId", required = true) Integer userId) {
+
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        MemberInfoParm memberInfoParm = new MemberInfoParm();
+        memberInfoParm.setActivityId(activitiId);
+        memberInfoParm.setUserId(userId);
+
+        Map<String, Object> map = activityMemberFacade.delActivityMember(memberInfoParm);
 
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -75,6 +94,7 @@ public class ActivityMemberController {
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
+
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "发起者审核报名用户")
