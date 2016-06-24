@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
  */
 @RestController
 @RequestMapping("/v1/account")
-@Api(description = "用户密码修改API。1、同步服务器时间戳。2、发送验证码")
+@Api(description = "用户密码修改API。1、修改密码。2、忘记密码。")
 public class RenewPasswordController {
 
     @Autowired
@@ -50,16 +50,18 @@ public class RenewPasswordController {
 
     @RequestMapping(value = "/retrievepwd", method = RequestMethod.POST)
     @ApiOperation(value = "忘记密码", notes = "忘记密码，通过手机号和验证码修改密码")
-    public ModelAndView retrievepwd(@RequestParam(name = "phone") String phone, @RequestParam(name = "pwd") String password, @RequestParam(name = "code") String code) {
+    public ModelAndView retrievepwd(@RequestParam(name = "phone") String phone,
+                                    @RequestParam(name = "pwd") String password,
+                                    @RequestParam(name = "re_pwd") String rePassword) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
-        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(code)) {
+        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(rePassword)) {
             jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();
-            userLoginParam.setCode(code);
             userLoginParam.setPhone(phone);
-            userLoginParam.setPassword2(password);
+            userLoginParam.setPassword(password);
+            userLoginParam.setPassword2(rePassword);
             jsonView.setAttributesMap(registerFacade.retrievepwd(userLoginParam));
         }
 
