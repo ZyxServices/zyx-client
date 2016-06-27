@@ -63,6 +63,8 @@ public class RegisterController {
             jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
         } else {
             if (avatar != null) {// 用户上传头像
+                System.out.println("avatar  :  " + avatar);
+                System.out.println("avatar.getName()  :  " + avatar.getName());
                 String avatarId = FileUploadUtils.uploadFile(avatar);
                 Map<String, Object> map = ImagesVerifyUtils.verify(avatarId);
                 if (map != null) {

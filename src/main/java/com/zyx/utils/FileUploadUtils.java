@@ -23,9 +23,15 @@ public class FileUploadUtils {
      * @return
      */
     public static String uploadFile(MultipartFile file) {
+        System.out.println("uploadFile method : " + file);
 
         String allFileName = file.getOriginalFilename();
+
+        System.out.println("allFileName : " + allFileName);
+
         String fileName = getFileExtension(allFileName);
+
+        System.out.println("fileName : " + fileName);
         fileName = fileName.toLowerCase();
         //"gif", "jpeg", "jpg", "bmp", "png"
         String[] strings = new String[]{"png", "gif", "jpeg", "jpeg", "jpg", "bmp"};
