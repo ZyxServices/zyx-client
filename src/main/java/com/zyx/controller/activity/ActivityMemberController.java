@@ -57,7 +57,7 @@ public class ActivityMemberController {
     }
 
     @RequestMapping(value = "/cancelSignup", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "取消对应到活动报名")
+    @ApiOperation(value = "活动接口", notes = "取消对的活动报名")
     public ModelAndView cancelSignup(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "activityId", required = true) Integer activitiId,
                                      @RequestParam(name = "userId", required = true) Integer userId) {

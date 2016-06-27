@@ -34,7 +34,7 @@ public class FileUploadUtils {
         System.out.println("fileName : " + fileName);
         fileName = fileName.toLowerCase();
         //"gif", "jpeg", "jpg", "bmp", "png"
-        String[] strings = new String[]{"png", "gif", "jpeg", "jpeg", "jpg", "bmp"};
+        String[] strings = new String[]{"png", "gif", "jpeg", "jpg", "bmp"};
         try {
             if (Arrays.binarySearch(strings, fileName) != -1) {
 
