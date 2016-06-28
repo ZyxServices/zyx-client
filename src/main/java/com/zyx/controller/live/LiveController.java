@@ -1,5 +1,6 @@
 package com.zyx.controller.live;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,20 @@ public class LiveController {
 		return new ModelAndView(jsonView);
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/labs", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
+	public ModelAndView getLabs() {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+		Map<Integer,String>  map = new HashMap<>();
+		map.put(1, "NBA");
+		attrMap.put("labs", map);
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+	}
+	
+	@RequestMapping(value = "/update_lvie", method = RequestMethod.POST)
 	@ApiOperation(value = "直播更新修改", notes = "直播-直播更新修改")
 	public ModelAndView updateLive(@RequestParam(name = "token") String token, @RequestParam(name = "id") Long id,
 			@RequestParam(name = "isPublic", required = false) Boolean isPublic,
@@ -166,28 +180,101 @@ public class LiveController {
 
 	}
 
+	@RequestMapping(value = "/update_status", method = RequestMethod.POST)
+	@ApiOperation(value = "直播更新修改", notes = "直播-直播更新修改")
+	public ModelAndView updateLiveStatus(@RequestParam(name = "token") String token, @RequestParam(name = "id") Long id,
+			@RequestParam(name = "status") Integer status) {
+		Map<String, Object> attrMap = new HashMap<>();
+		if (token == null || "".equals(token) || null == status || null == id) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
+		} else if (status != 2) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+		} else {
+			try {
+				boolean flag = accountCommonFacade.validateToken(token);
+				if (flag) {
+					LiveInfo liveInfo = new LiveInfo();
+					liveInfo.setId(id);
+					liveInfo.setStatus(status);
+					liveInfoFacade.updateNotNull(liveInfo);
+					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				} else {
+					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			}
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+
+	}
+
 	@RequestMapping(value = "/list/lab", method = { RequestMethod.GET, RequestMethod.POST })
 	@ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
 	public ModelAndView getLiveList(@RequestParam(name = "token", required = false) String token,
-			@RequestParam(name = "lab") Integer lab,
-			@RequestParam(name = "pageNo" , required = false) Integer pageNo,
-			@RequestParam(name = "pageSize" , required = false) Integer pageSize) {
+			@RequestParam(name = "lab") Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
+			@RequestParam(name = "pageSize", required = false) Integer pageSize) {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+		if (!(lab == 1 || lab == 2 || lab == 3 || lab == 4)) {// 判断参数合法性
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+		} else {
+			try {
+				LiveInfoVo liveInfoVo = new LiveInfoVo();
+				boolean flag = accountCommonFacade.validateToken(token);
+				if (!flag) {
+					liveInfoVo.setAuth(1);
+				} else {
+					List<Integer> userIds = new ArrayList<Integer>();
+					liveInfoVo.setUserIds(userIds.isEmpty() ? null : userIds);
+				}
+				liveInfoVo.setLab(lab);
+				if (pageNo != null) {
+					liveInfoVo.setPageNo(pageSize);
+					liveInfoVo.setPageSize(pageSize);
+				}
+				List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
+				attrMap.put("liveInfos", JSON.toJSONString(list));
+				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			} catch (Exception e) {
+				e.printStackTrace();
+				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.MSG_ERROR);
+			}
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+	}
+
+	@RequestMapping(value = "/list/head", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
+	public ModelAndView getHeadLives(@RequestParam(name = "token", required = false) String token,
+			@RequestParam(name = "pageNo", required = false) Integer pageNo,
+			@RequestParam(name = "pageSize", required = false) Integer pageSize) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		try {
 			LiveInfoVo liveInfoVo = new LiveInfoVo();
-			liveInfoVo.setLab(lab);
-			if(pageNo!= null){
-				liveInfoVo.setPageNo(pageSize);
-				liveInfoVo.setPageSize(pageSize);
+			boolean flag = accountCommonFacade.validateToken(token);
+			if (!flag) {
+				liveInfoVo.setAuth(1);
+			} else {
+				List<Integer> userIds = new ArrayList<Integer>();
+				liveInfoVo.setUserIds(userIds.isEmpty() ? null : userIds);
 			}
+			liveInfoVo.setPageNo(pageSize);
+			liveInfoVo.setPageSize(pageSize);
 			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
 			attrMap.put("liveInfos", JSON.toJSONString(list));
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
-			attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.MSG_PARAM_ILIGAL);
 		} catch (Exception e) {
 			e.printStackTrace();
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
@@ -225,7 +312,7 @@ public class LiveController {
 		return new ModelAndView(jsonView);
 	}
 
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")
 	public ModelAndView getLiveByKey(@RequestParam(name = "id") Long id) {
 		Map<String, Object> attrMap = new HashMap<>();
@@ -283,7 +370,6 @@ public class LiveController {
 	///////////
 	////
 	///////////
-
 	@RequestMapping(value = "/text/create", method = RequestMethod.POST)
 	@ApiOperation(value = "直播-发布直播图文内容", notes = "直播-发布直播图文内容")
 	public ModelAndView createTextLiveItem(@RequestParam(name = "token") String token,
@@ -321,7 +407,7 @@ public class LiveController {
 		return new ModelAndView(jsonView);
 	}
 
-	@RequestMapping(value = "/text/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/text/list", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取多条直播图文内容", notes = "直播-获取多条直播图文内容")
 	public ModelAndView getTextLiveItemList(@RequestParam(name = "liveId", required = false) Long liveId,
 			@RequestParam(name = "createTimeLower", required = false) Long createTimeLower,
@@ -351,7 +437,7 @@ public class LiveController {
 		return new ModelAndView(jsonView);
 	}
 
-	@RequestMapping(value = "/text/get", method = RequestMethod.POST)
+	@RequestMapping(value = "/text/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取单条直播图文内容", notes = "直播-获取单条直播图文内容")
 	public ModelAndView getTextLiveItemByKey(@RequestParam(name = "id") Long id) {
 		Map<String, Object> attrMap = new HashMap<>();
@@ -456,7 +542,7 @@ public class LiveController {
 		return new ModelAndView(jsonView);
 	}
 
-	@RequestMapping(value = "/barrage/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/barrage/list", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取直播弹幕", notes = "直播-获取直播弹幕 ")
 	public ModelAndView getBarrageList(@RequestParam(name = "liveId", required = false) Long liveId,
 			@RequestParam(name = "createTimeLower", required = false) Long createTimeLower,

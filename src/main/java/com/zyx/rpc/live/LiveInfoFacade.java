@@ -29,7 +29,7 @@ public interface LiveInfoFacade {
 	/**
 	 * 
 	 * @param liveInfo
-	 * @description 更新直播 
+	 * @description 更新直播 需要Token验证
 	 * @version 1.0
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:29:15
@@ -70,7 +70,7 @@ public interface LiveInfoFacade {
 	 * 
 	 * @param token
 	 * @param id
-	 * @description 删除直播 
+	 * @description 删除直播 需要Token验证
 	 * @version 1.0
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:30:06
