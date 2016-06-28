@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,11 +14,13 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.alibaba.fastjson.JSON;
+import com.zyx.common.page.PageParam;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.constants.live.LiveConstants;
 import com.zyx.entity.live.Barrage;
 import com.zyx.entity.live.LiveInfo;
 import com.zyx.entity.live.TextLiveItem;
+import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.rpc.account.AccountInfoFacade;
 import com.zyx.rpc.live.BarrageFacade;
 import com.zyx.rpc.live.LiveInfoFacade;
@@ -57,42 +57,55 @@ public class LiveController {
 	@Autowired
 	AccountInfoFacade accountInfoFacade;
 
+	@Autowired
+	AccountCommonFacade accountCommonFacade;
+
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "直播发布", notes = "直播-直播发布")
 	public ModelAndView createLive(@RequestParam(name = "token") String token,
-			@RequestParam(name = "isPublic", required = false) Boolean isPublic,
-			@RequestParam(name = "type") Integer type, @RequestParam(name = "start", required = false) Long start,
-			@RequestParam(name = "end", required = false) Long end, @RequestParam(name = "userId") Long userId,
-			@RequestParam(name = "title") String title, @RequestParam(name = "lab") Integer lab,
-			@RequestParam(name = "bgmUrl", required = false) String bgmUrl,
-			@RequestParam(name = "vedioUrl", required = false) String vedioUrl) {
+			@RequestParam(name = "auth") Integer auth, @RequestParam(name = "type") Integer type,
+			@RequestParam(name = "start", required = false) Long start,
+			@RequestParam(name = "end", required = false) Long end, @RequestParam(name = "title") String title,
+			@RequestParam(name = "lab") Integer lab, @RequestParam(name = "bgmUrl", required = false) String bgmUrl) {
 		// Token 验证
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (token == null || "".equals(token)) {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
-		} else if (type == null || title == null || lab == null) {
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_REQUEST_UNAUTHORIZED);
+		} else if (type == null || title == null || "".equals(title) || lab == null) {// 判断参数必要性
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
+		} else if (!(type == 1 || type == 2) || !(lab == 1 || lab == 2 || lab == 3 || lab == 4)
+				|| !(auth == 1 || auth == 2 || auth == 3 || auth == 4)) {// 判断参数合法性
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 		} else {
-			try {
-				LiveInfo liveInfo = new LiveInfo();
-				// 系统补全参数
-				liveInfo.setCreateTime(System.currentTimeMillis());
-				// 传入参数构造
-				liveInfo.setPublic(isPublic == null ? true : isPublic);
-				liveInfo.setType(type);
-				liveInfo.setTitle(title);
-				liveInfo.setUserId(userId);
-				liveInfo.setLab(lab);
-				// 不必须字段
-				liveInfo.setStart(start == null ? System.currentTimeMillis() : start);
-				liveInfo.setEnd(end == null ? System.currentTimeMillis() : end);
-				liveInfo.setBgmUrl(bgmUrl);
-				liveInfo.setVedioUrl(vedioUrl);
-				liveInfoFacade.add(token, liveInfo);
-				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-			} catch (NumberFormatException nfe) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			boolean flag = accountCommonFacade.validateToken(token);
+			if (flag) {
+				AccountInfoVo account = accountCommonFacade.getAccountVoByToken(token);
+				if (account == null || account.getId() == null) {
+					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
+					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
+				} else {
+					LiveInfo liveInfo = new LiveInfo();
+					// 系统补全参数
+					liveInfo.setCreateTime(System.currentTimeMillis());
+					liveInfo.setAuth(auth);
+					// 传入参数构造
+					liveInfo.setType(type);
+					liveInfo.setStart(start);
+					liveInfo.setEnd(end);
+					liveInfo.setTitle(title);
+					liveInfo.setLab(lab);
+					// 不必须字段
+					liveInfo.setBgmUrl(bgmUrl);
+					liveInfoFacade.add(liveInfo);
+					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				}
+			} else {
+				attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+				attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -104,38 +117,46 @@ public class LiveController {
 	@ApiOperation(value = "直播更新修改", notes = "直播-直播更新修改")
 	public ModelAndView updateLive(@RequestParam(name = "token") String token, @RequestParam(name = "id") Long id,
 			@RequestParam(name = "isPublic", required = false) Boolean isPublic,
-			@RequestParam(name = "type") Integer type, @RequestParam(name = "start", required = false) Long start,
-			@RequestParam(name = "end", required = false) Long end, @RequestParam(name = "userId") Long userId,
-			@RequestParam(name = "title") String title, @RequestParam(name = "lab") Integer lab,
+			@RequestParam(name = "type", required = false) Integer type,
+			@RequestParam(name = "start", required = false) Long start,
+			@RequestParam(name = "end", required = false) Long end,
+			@RequestParam(name = "title", required = false) String title,
+			@RequestParam(name = "lab", required = false) Integer lab,
 			@RequestParam(name = "bgmUrl", required = false) String bgmUrl,
 			@RequestParam(name = "vedioUrl", required = false) String vedioUrl) {
-
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		if (token == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
+		if (token == null || "".equals(token) || null == id) {
+			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else {
 			try {
-				LiveInfo liveInfo = new LiveInfo();
-				// 传入参数构造
-				liveInfo.setCreateTime(System.currentTimeMillis());
-				// 传入参数构造
-				liveInfo.setPublic(isPublic == null ? true : isPublic);
-				liveInfo.setType(type);
-				liveInfo.setTitle(title);
-				liveInfo.setUserId(userId);
-				liveInfo.setLab(lab);
-				// 不必须字段
-				liveInfo.setStart(start == null ? System.currentTimeMillis() : start);
-				liveInfo.setEnd(end == null ? System.currentTimeMillis() : end);
-				liveInfo.setBgmUrl(bgmUrl);
-				liveInfo.setVedioUrl(vedioUrl);
-				// 系统补全参数
-				liveInfoFacade.updateNotNull(token, liveInfo);
-				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				boolean flag = accountCommonFacade.validateToken(token);
+				if (flag) {
+					LiveInfo liveInfo = new LiveInfo();
+					liveInfo.setId(id);
+					// 传入参数构造
+					liveInfo.setCreateTime(System.currentTimeMillis());
+					// 传入参数构造
+					liveInfo.setType(type);
+					liveInfo.setTitle(title);
+					liveInfo.setLab(lab);
+					// 不必须字段
+					liveInfo.setStart(start == null ? System.currentTimeMillis() : start);
+					liveInfo.setEnd(end == null ? System.currentTimeMillis() : end);
+					liveInfo.setBgmUrl(bgmUrl);
+					liveInfo.setVedioUrl(vedioUrl);
+					// 系统补全参数
+					liveInfoFacade.updateNotNull(liveInfo);
+					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				} else {
+					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+				}
 			} catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
+				e.printStackTrace();
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
 			}
 		}
@@ -145,33 +166,20 @@ public class LiveController {
 
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	@ApiOperation(value = "直播-获取多条直播", notes = "直播-获取多条直播")
-	public ModelAndView getLiveList(@RequestParam(name = "ids", required = false) List<Long> ids,
-			@RequestParam(name = "createTimeLower", required = false) Long createTimeLower,
-			@RequestParam(name = "createTimeUpper", required = false) Long createTimeUpper,
-			@RequestParam(name = "startUpper", required = false) Long startUpper,
-			@RequestParam(name = "startUpper", required = false) Long startLower,
-			@RequestParam(name = "endUpper", required = false) Long endUpper,
-			@RequestParam(name = "endLower", required = false) Long endLower,
-			@RequestParam(name = "type", required = false) Integer type,
-			@RequestParam(name = "lab", required = false) List<Integer> labs) {
-
+	@RequestMapping(value = "/list/lab", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
+	public ModelAndView getLiveList(@RequestParam(name = "token", required = false) String token,
+			@RequestParam(name = "lab") Integer lab,
+			@RequestParam(name = "pageNo") Integer pageNo,
+			@RequestParam(name = "pageSize") Integer pageSize) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		try {
 			LiveInfoVo liveInfoVo = new LiveInfoVo();
-			if (null != ids && !ids.isEmpty()) {
-				liveInfoVo.setIds(ids);
-			} else {
-				liveInfoVo.setCreateTimeLower(createTimeLower);
-				liveInfoVo.setCreateTimeUpper(createTimeUpper);
-				liveInfoVo.setStartLower(startLower);
-				liveInfoVo.setStartUpper(startUpper);
-				liveInfoVo.setEndLower(endLower);
-				liveInfoVo.setEndUpper(endUpper);
-				liveInfoVo.setType(type);
-				liveInfoVo.setLabs(labs);
+			liveInfoVo.setLab(lab);
+			if(pageNo!= null){
+				liveInfoVo.setPageNo(pageSize);
+				liveInfoVo.setPageSize(pageSize);
 			}
 			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
 			attrMap.put("liveInfos", JSON.toJSONString(list));
@@ -179,9 +187,11 @@ public class LiveController {
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.MSG_PARAM_ILIGAL);
 		} catch (Exception e) {
 			e.printStackTrace();
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.MSG_ERROR);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
@@ -251,8 +261,14 @@ public class LiveController {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
-				liveInfoFacade.delete(token, id);
-				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				boolean flag = accountCommonFacade.validateToken(token);
+				if (flag) {
+					liveInfoFacade.delete(id);
+					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				} else {
+					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+				}
 			} catch (NumberFormatException nfe) {
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
@@ -282,13 +298,18 @@ public class LiveController {
 		} else {
 			TextLiveItem item = new TextLiveItem();
 			try {
-				// 传入参数构造
-				item.setLiveId(liveId);
-				item.setContent(content);
-				item.setImgUrl(imgUrl);
-				item.setCreateTime(System.currentTimeMillis());
-				textLiveItemFacade.add(item);
-				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				boolean flag = accountCommonFacade.validateToken(token);
+				if (flag) {
+					item.setLiveId(liveId);
+					item.setContent(content);
+					item.setImgUrl(imgUrl);
+					item.setCreateTime(System.currentTimeMillis());
+					textLiveItemFacade.add(item);
+					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				} else {
+					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+				}
 			} catch (NumberFormatException nfe) {
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
@@ -356,7 +377,7 @@ public class LiveController {
 
 	@RequestMapping(value = "/text/delete", method = RequestMethod.POST)
 	@ApiOperation(value = "直播-删除图文直播", notes = "直播-删除图文直播")
-	public ModelAndView deleteTextLiveItemByKey(@RequestParam(name = "token") Long token,
+	public ModelAndView deleteTextLiveItemByKey(@RequestParam(name = "token") String token,
 			@RequestParam(name = "id") Long id) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
@@ -366,8 +387,14 @@ public class LiveController {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
-				textLiveItemFacade.deleteById(id);
-				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				boolean flag = accountCommonFacade.validateToken(token);
+				if (flag) {
+					textLiveItemFacade.deleteById(id);
+					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+				} else {
+					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+				}
 			} catch (NumberFormatException nfe) {
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
@@ -386,19 +413,22 @@ public class LiveController {
 			@RequestParam(name = "content") String content) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
 		if (token == null) {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
 		} else if (liveId == null || liveId == null) {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else if (content == null || "".equals(content)) {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.LIVE_BARRAGE_NULL_CONTENT);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_LIVE_BARRAGE_NULL_CONTENT);
 		} else {
-
 			try {
 				Map<String, Object> rstMap = accountInfoFacade.queryAccountInfo(token, userId);
 				AccountInfoVo account = (AccountInfoVo) rstMap.get("result");
 				if (null == account) {
 					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.ACCOUNT_ERROR_CODE_50300);
+					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50300_MSG);
 				} else {
 					// 传入参数构造
 					Barrage entity = new Barrage();
@@ -408,12 +438,16 @@ public class LiveController {
 					entity.setNickName(account.getNickname());
 					entity.setAvatar(account.getAvatar());
 					entity.setCreateTime(System.currentTimeMillis());
-					barrageFacade.add(token, entity);
+					barrageFacade.add(entity);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				}
 			} catch (NumberFormatException nfe) {
+				// nfe.printStackTrace();
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 			} catch (Exception e) {
+				// e.printStackTrace();
+				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
 			}
 		}
@@ -423,14 +457,17 @@ public class LiveController {
 	}
 
 	@RequestMapping(value = "/barrage/list", method = RequestMethod.POST)
-	@ApiOperation(value = "直播-获取直播弹幕", notes = "直播-获取直播弹幕")
+	@ApiOperation(value = "直播-获取直播弹幕", notes = "直播-获取直播弹幕 ")
 	public ModelAndView getBarrageList(@RequestParam(name = "liveId", required = false) Long liveId,
 			@RequestParam(name = "createTimeLower", required = false) Long createTimeLower,
-			@RequestParam(name = "createTimeUpper", required = false) Long createTimeUpper) {
+			@RequestParam(name = "createTimeUpper", required = false) Long createTimeUpper,
+			@RequestParam(name = "topNum", required = false) Integer topNum) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		if (liveId== null) {
+		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
+		if (liveId == null) {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else {
 			try {
 				BarrageVo vo = new BarrageVo();
@@ -442,9 +479,11 @@ public class LiveController {
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
+				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
 				e.printStackTrace();
+				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
 				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
 			}
 		}

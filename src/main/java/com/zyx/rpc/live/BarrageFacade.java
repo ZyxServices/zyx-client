@@ -14,7 +14,7 @@ public interface BarrageFacade {
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:28:48
 	 */
-	public void add(String token,Barrage barrage);
+	public void add(Barrage barrage);
 //	/**
 //	 * 
 //	 * @param id
@@ -44,5 +44,5 @@ public interface BarrageFacade {
 //	 * @author MrDeng
 //	 * @update 2016年6月22日 上午10:30:06
 //	 */
-//	public void delete(String token,Long id);
+//	public void delete(Long id);
 }

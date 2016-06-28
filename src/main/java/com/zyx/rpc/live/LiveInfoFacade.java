@@ -25,16 +25,16 @@ public interface LiveInfoFacade {
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:28:48
 	 */
-	public void add(String token,LiveInfo liveInfo);
+	public void add(LiveInfo liveInfo);
 	/**
 	 * 
 	 * @param liveInfo
-	 * @description 更新直播 需要Token验证
+	 * @description 更新直播 
 	 * @version 1.0
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:29:15
 	 */
-	public void updateNotNull(String token,LiveInfo liveInfo);
+	public void updateNotNull(LiveInfo liveInfo);
 	/**
 	 * 
 	 * @param id
@@ -70,10 +70,21 @@ public interface LiveInfoFacade {
 	 * 
 	 * @param token
 	 * @param id
-	 * @description 删除直播 需要Token验证
+	 * @description 删除直播 
 	 * @version 1.0
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:30:06
 	 */
-	public void delete(String token,Long id);
+	public void delete(Long id);
+	
+	/**
+	 * 
+	 * @param liveId
+	 * @return
+	 * @description 获取直播地址
+	 * @version 1.0
+	 * @author MrDeng
+	 * @update 2016年6月27日 下午6:18:28
+	 */
+	public String getLiveUrl(Long liveId);
 }
