@@ -127,7 +127,7 @@ public class LiveController {
 		return new ModelAndView(jsonView);
 	}
 	
-	@RequestMapping(value = "/update_lvie", method = RequestMethod.POST)
+	@RequestMapping(value = "/update_live", method = RequestMethod.POST)
 	@ApiOperation(value = "直播更新修改", notes = "直播-直播更新修改")
 	public ModelAndView updateLive(@RequestParam(name = "token") String token, @RequestParam(name = "id") Long id,
 			@RequestParam(name = "isPublic", required = false) Boolean isPublic,
@@ -285,32 +285,32 @@ public class LiveController {
 		return new ModelAndView(jsonView);
 	}
 
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	@ApiOperation(value = "直播-直播模块搜索", notes = "直播-直播模块搜索")
-	public ModelAndView searchLiveList(@RequestParam(name = "lab", required = false) Integer lab,
-			@RequestParam(name = "name", required = false) String name,
-			@RequestParam(name = "keyWord", required = false) String keyWord) {
-		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		try {
-			LiveSearchVo liveSearchVo = new LiveSearchVo();
-			liveSearchVo.setLab(lab);
-			liveSearchVo.setName(name);
-			liveSearchVo.setKeyWord(keyWord);
-			List<LiveInfo> list = liveInfoFacade.searchList(liveSearchVo);
-			attrMap.put("liveInfos", JSON.toJSONString(list));
-			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
-		} catch (Exception e) {
-			e.printStackTrace();
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
-		}
-		AbstractView jsonView = new MappingJackson2JsonView();
-		jsonView.setAttributesMap(attrMap);
-		return new ModelAndView(jsonView);
-	}
+//	@RequestMapping(value = "/search", method = RequestMethod.POST)
+//	@ApiOperation(value = "直播-直播模块搜索", notes = "直播-直播模块搜索")
+//	public ModelAndView searchLiveList(@RequestParam(name = "lab", required = false) Integer lab,
+//			@RequestParam(name = "name", required = false) String name,
+//			@RequestParam(name = "keyWord", required = false) String keyWord) {
+//		Map<String, Object> attrMap = new HashMap<>();
+//		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+//		try {
+//			LiveSearchVo liveSearchVo = new LiveSearchVo();
+//			liveSearchVo.setLab(lab);
+//			liveSearchVo.setName(name);
+//			liveSearchVo.setKeyWord(keyWord);
+//			List<LiveInfo> list = liveInfoFacade.searchList(liveSearchVo);
+//			attrMap.put("liveInfos", JSON.toJSONString(list));
+//			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+//		} catch (NumberFormatException nfe) {
+//			nfe.printStackTrace();
+//			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+//		}
+//		AbstractView jsonView = new MappingJackson2JsonView();
+//		jsonView.setAttributesMap(attrMap);
+//		return new ModelAndView(jsonView);
+//	}
 
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")
@@ -499,7 +499,7 @@ public class LiveController {
 			@RequestParam(name = "content") String content) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
+//		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
 		if (token == null) {
 			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
 		} else if (liveId == null || liveId == null) {
