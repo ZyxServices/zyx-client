@@ -170,8 +170,8 @@ public class LiveController {
 	@ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
 	public ModelAndView getLiveList(@RequestParam(name = "token", required = false) String token,
 			@RequestParam(name = "lab") Integer lab,
-			@RequestParam(name = "pageNo") Integer pageNo,
-			@RequestParam(name = "pageSize") Integer pageSize) {
+			@RequestParam(name = "pageNo" , required = false) Integer pageNo,
+			@RequestParam(name = "pageSize" , required = false) Integer pageSize) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		try {
