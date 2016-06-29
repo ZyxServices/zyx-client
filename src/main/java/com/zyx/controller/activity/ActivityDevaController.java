@@ -33,8 +33,6 @@ public class ActivityDevaController {
 
     @Resource
     private ActivityDevaFacade activityDevaFacade;
-    @Resource
-    private RedisTemplate<String, List<Activity>> redisTemplate;
 
     @RequestMapping(value = "/activityDeva", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "首页首推")
