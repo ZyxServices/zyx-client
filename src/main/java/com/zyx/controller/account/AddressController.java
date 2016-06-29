@@ -1,6 +1,6 @@
 package com.zyx.controller.account;
 
-import com.zyx.constants.account.AccountConstants;
+import com.zyx.constants.Constants;
 import com.zyx.entity.account.param.UserAddressParam;
 import com.zyx.rpc.account.AccountAddressFacade;
 import io.swagger.annotations.Api;
@@ -44,7 +44,7 @@ public class AddressController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId) || StringUtils.isEmpty(receiver) || StringUtils.isEmpty(phone) || StringUtils.isEmpty(zipCode) || StringUtils.isEmpty(content)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserAddressParam param = new UserAddressParam();
             param.setToken(token);
@@ -70,7 +70,7 @@ public class AddressController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(address_id)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserAddressParam param = new UserAddressParam();
             param.setToken(token);
@@ -89,7 +89,7 @@ public class AddressController {
     public ModelAndView info(@RequestParam(name = "token") String token, @RequestParam(name = "address_id") String addressId) {
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(addressId)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserAddressParam param = new UserAddressParam();
             param.setToken(token);
@@ -105,7 +105,7 @@ public class AddressController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(addressId)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserAddressParam param = new UserAddressParam();
             param.setToken(token);
@@ -121,7 +121,7 @@ public class AddressController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId) || StringUtils.isEmpty(addressId)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserAddressParam param = new UserAddressParam();
             param.setToken(token);
@@ -138,7 +138,7 @@ public class AddressController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserAddressParam param = new UserAddressParam();
             param.setToken(token);

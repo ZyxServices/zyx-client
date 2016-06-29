@@ -59,9 +59,7 @@ public class CommonController {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isEmpty(phone)) {
-            map.put(Constants.STATE, Constants.PARAM_MISS);
-            map.put(Constants.ERROR_MSG, Constants.MSG_PARAM_MISS);
-            jsonView.setAttributesMap(map);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             // 判断手机号码
             if (isMobileNum(phone)) {

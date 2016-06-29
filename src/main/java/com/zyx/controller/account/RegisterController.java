@@ -1,8 +1,8 @@
 package com.zyx.controller.account;
 
+import com.zyx.constants.Constants;
 import com.zyx.utils.FileUploadUtils;
 import com.zyx.utils.ImagesVerifyUtils;
-import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.account.UserLoginParam;
 import com.zyx.rpc.account.RegisterFacade;
 import io.swagger.annotations.Api;
@@ -39,7 +39,7 @@ public class RegisterController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)) {
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();
             userLoginParam.setPhone(phone);
@@ -60,7 +60,7 @@ public class RegisterController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(nickname)) {
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             if (avatar != null) {// 用户上传头像
                 System.out.println("avatar  :  " + avatar);
@@ -86,6 +86,27 @@ public class RegisterController {
                 userLoginParam.setNickname(nickname);
                 jsonView.setAttributesMap(registerFacade.registerAccount(userLoginParam));
             }
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/register2", method = RequestMethod.POST)
+    @ApiOperation(value = "用户注册", notes = "用户注册，头像可不设置")
+    public ModelAndView register2(@RequestParam(name = "phone") String phone,
+                                  @RequestParam(name = "pwd") String password,
+                                  @RequestParam(name = "nickname") String nickname,
+                                  @RequestParam(name = "avatar", required = false) String avatar) {
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(nickname)) {
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            UserLoginParam userLoginParam = new UserLoginParam();
+            userLoginParam.setPhone(phone);
+            userLoginParam.setPassword(password);
+            userLoginParam.setNickname(nickname);
+            userLoginParam.setAvatar(avatar);
+            jsonView.setAttributesMap(registerFacade.registerAccount(userLoginParam));
         }
         return new ModelAndView(jsonView);
     }

@@ -1,6 +1,6 @@
 package com.zyx.controller.account;
 
-import com.zyx.constants.account.AccountConstants;
+import com.zyx.constants.Constants;
 import com.zyx.entity.account.UserLoginParam;
 import com.zyx.rpc.account.RegisterFacade;
 import io.swagger.annotations.Api;
@@ -36,7 +36,7 @@ public class RenewPasswordController {
     public ModelAndView renewpwd(@RequestParam(name = "token") String token, @RequestParam(name = "old_pwd") String password, @RequestParam(name = "new_pwd") String password2) {
         AbstractView jsonView = new MappingJackson2JsonView();
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(password) || StringUtils.isEmpty(password2)) {
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();
             userLoginParam.setToken(token);
@@ -56,7 +56,7 @@ public class RenewPasswordController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(rePassword)) {
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             UserLoginParam userLoginParam = new UserLoginParam();
             userLoginParam.setPhone(phone);

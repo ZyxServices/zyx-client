@@ -1,6 +1,6 @@
 package com.zyx.controller.account;
 
-import com.zyx.constants.account.AccountConstants;
+import com.zyx.constants.Constants;
 import com.zyx.entity.account.param.UserMarkParam;
 import com.zyx.rpc.account.MarkFacade;
 import io.swagger.annotations.Api;
@@ -37,7 +37,7 @@ public class MarkController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             try {
                 UserMarkParam userMarkParam = new UserMarkParam();
@@ -45,7 +45,7 @@ public class MarkController {
                 userMarkParam.setUserId(userId);
                 jsonView.setAttributesMap(markFacade.sign(userMarkParam));
             } catch (Exception e) {
-                jsonView.setAttributesMap(AccountConstants.MAP_500);
+                jsonView.setAttributesMap(Constants.MAP_500);
             }
         }
 
@@ -58,7 +58,7 @@ public class MarkController {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(AccountConstants.MAP_PARAM_MISS);
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             try {
                 UserMarkParam userMarkParam = new UserMarkParam();
@@ -66,7 +66,7 @@ public class MarkController {
                 userMarkParam.setUserId(userId);
                 jsonView.setAttributesMap(markFacade.querySign(userMarkParam));
             } catch (Exception e) {
-                jsonView.setAttributesMap(AccountConstants.MAP_500);
+                jsonView.setAttributesMap(Constants.MAP_500);
             }
         }
 
