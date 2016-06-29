@@ -1,6 +1,10 @@
 package com.zyx.controller.activity;
 
 
+import com.zyx.constants.Constants;
+import com.zyx.entity.activity.parm.UpdateDevaluationParm;
+import com.zyx.rpc.account.AccountCommonFacade;
+import com.zyx.utils.ActivityUtils;
 import com.zyx.utils.FileUploadUtils;
 import com.zyx.utils.ImagesVerifyUtils;
 import com.zyx.entity.activity.parm.QueryActivityParm;
@@ -14,6 +18,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,14 +35,16 @@ public class ActivityController {
 
     @Resource
     private ActivityFacade activityFacade;
+    @Resource
+    private AccountCommonFacade accountCommonFacade;
 
     @RequestMapping(value = "/release", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "活动发布")
-    public ModelAndView release(@RequestParam(name = "token", required = false) String token,
+    public ModelAndView release(@RequestParam(name = "token", required = true) String token,
                                 @RequestParam(name = "createId", required = true) Integer createId,
                                 @RequestParam(name = "title", required = true) String title,
                                 @RequestParam(name = "desc", required = true) String desc,
-                                @RequestPart(name = "image", required= true) MultipartFile image,
+                                @RequestPart(name = "image", required = true) MultipartFile image,
                                 @RequestParam(name = "startTime", required = true) Long startTime,
                                 @RequestParam(name = "endTime", required = true) Long endTime,
                                 @RequestParam(name = "lastTime", required = true) Long lastTime,
@@ -51,6 +58,10 @@ public class ActivityController {
                                 @RequestParam(name = "memberTemplate", required = false) String memberTemplate) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
+
 
         String uploadFile = FileUploadUtils.uploadFile(image);
 
@@ -68,7 +79,7 @@ public class ActivityController {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "活动查询")
-    public ModelAndView query(@RequestParam(name = "token", required = false) String token,
+    public ModelAndView query(@RequestParam(name = "token", required = true) String token,
                               @RequestParam(name = "createId", required = false) Integer createId,
                               @RequestParam(name = "id", required = false) Integer id,
                               @RequestParam(name = "groupsName", required = false) String groupName,
@@ -79,6 +90,9 @@ public class ActivityController {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
         QueryActivityParm parm = new QueryActivityParm();
         parm.setCreateId(createId);
@@ -98,11 +112,14 @@ public class ActivityController {
 
     @RequestMapping(value = "/memberTemplate", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "活动报名模板查询")
-    public ModelAndView memberTemplate(@RequestParam(name = "token", required = false) String token,
+    public ModelAndView memberTemplate(@RequestParam(name = "token", required = true) String token,
                                        @RequestParam(name = "id", required = true) Integer activitiId) {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
         Map<String, Object> map = activityFacade.queryActivityMember(activitiId);
 
@@ -112,12 +129,15 @@ public class ActivityController {
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "查询历史活动")
-    public ModelAndView history(@RequestParam(name = "token", required = false) String token,
+    public ModelAndView history(@RequestParam(name = "token", required = true) String token,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
                                 @RequestParam(name = "page", required = true) Integer page) {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
         QueryHistoryParm parm = new QueryHistoryParm();
         parm.setPageNumber(pageNumber);

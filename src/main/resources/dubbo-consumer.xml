@@ -21,6 +21,7 @@
     <dubbo:reference interface="com.zyx.rpc.activity.ActivityMemberFacade" id="activityMemberFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.activity.ActivityTopicFacade" id="activityTopicFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.activity.PageViwesFacade" id="pageViwesFacade" check="false"/>
+    <dubbo:reference interface="com.zyx.rpc.activity.ActivityDevaFacade" id="activityDevaFacade" check="false"/>
     <!-- 直播服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.live.LiveInfoFacade" id="liveInfoFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.live.TextLiveItemFacade" id="textLiveItemFacade" check="false"/>
