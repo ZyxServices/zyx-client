@@ -113,6 +113,18 @@ public class SwaggerConfig {
                 .apiInfo(liveApiInfo());
     }
 
+    @Bean
+    public Docket adminApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("admin")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.admin"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build()
+                .apiInfo(liveApiInfo());
+    }
+
+
 
     private ApiInfo testApiInfo() {
         ApiInfo apiInfo = new ApiInfo("用户接口API",//大标题
