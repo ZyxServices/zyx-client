@@ -373,7 +373,7 @@ public class LiveController {
 	@RequestMapping(value = "/text/create", method = RequestMethod.POST)
 	@ApiOperation(value = "直播-发布直播图文内容", notes = "直播-发布直播图文内容")
 	public ModelAndView createTextLiveItem(@RequestParam(name = "token") String token,
-			@RequestParam(name = "liveId") Long liveId, @RequestParam(name = "imgUrl", required = false) String imgUrl,
+			@RequestParam(name = "liveId") Integer liveId, @RequestParam(name = "imgUrl", required = false) String imgUrl,
 			@RequestParam(name = "content", required = false) String content) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
@@ -409,7 +409,7 @@ public class LiveController {
 
 	@RequestMapping(value = "/text/list", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取多条直播图文内容", notes = "直播-获取多条直播图文内容")
-	public ModelAndView getTextLiveItemList(@RequestParam(name = "liveId", required = false) Long liveId,
+	public ModelAndView getTextLiveItemList(@RequestParam(name = "liveId", required = false) Integer liveId,
 			@RequestParam(name = "createTimeLower", required = false) Long createTimeLower,
 			@RequestParam(name = "createTimeUpper", required = false) Long createTimeUpper) {
 		Map<String, Object> attrMap = new HashMap<>();
@@ -495,7 +495,7 @@ public class LiveController {
 	@RequestMapping(value = "/barrage/create", method = RequestMethod.POST)
 	@ApiOperation(value = "直播-发送直播弹", notes = "直播-发送直播弹幕")
 	public ModelAndView createBarrage(@RequestParam(name = "token") String token,
-			@RequestParam(name = "liveId") Long liveId, @RequestParam(name = "userId") Integer userId,
+			@RequestParam(name = "liveId") Integer liveId, @RequestParam(name = "userId") Integer userId,
 			@RequestParam(name = "content") String content) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
@@ -544,7 +544,7 @@ public class LiveController {
 
 	@RequestMapping(value = "/barrage/list", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取直播弹幕", notes = "直播-获取直播弹幕 ")
-	public ModelAndView getBarrageList(@RequestParam(name = "liveId", required = false) Long liveId,
+	public ModelAndView getBarrageList(@RequestParam(name = "liveId", required = false) Integer liveId,
 			@RequestParam(name = "createTimeLower", required = false) Long createTimeLower,
 			@RequestParam(name = "createTimeUpper", required = false) Long createTimeUpper,
 			@RequestParam(name = "topNum", required = false) Integer topNum) {
@@ -577,5 +577,16 @@ public class LiveController {
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
 	}
-
+	@RequestMapping(value = "/deva/get", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "直播-获取所有首推", notes = "直播-获取所有首推")
+	public ModelAndView getDeva() {
+		Map<String, Object> attrMap = new HashMap<>();
+		attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+		List<LiveInfo> list = liveInfoFacade.getDevaLives();
+		attrMap.put("data", JSON.toJSONString(list));
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+	}
+		
 }
