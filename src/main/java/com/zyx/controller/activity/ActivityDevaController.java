@@ -1,10 +1,10 @@
 package com.zyx.controller.activity;
 
 import com.zyx.entity.Devaluation;
-import com.zyx.entity.activity.parm.MemberInfoParm;
+import com.zyx.entity.activity.Activity;
 import com.zyx.rpc.activity.ActivityDevaFacade;
-import com.zyx.utils.ActivityUtils;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,12 +33,12 @@ public class ActivityDevaController {
 
     @Resource
     private ActivityDevaFacade activityDevaFacade;
+    @Resource
+    private RedisTemplate<String, List<Activity>> redisTemplate;
 
     @RequestMapping(value = "/activityDeva", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "首页首推")
     public ModelAndView activityDeva() {
-
-
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = activityDevaFacade.queryActivityDeva();
         jsonView.setAttributesMap(map);
@@ -49,8 +50,6 @@ public class ActivityDevaController {
     @ApiOperation(value = "首推接口", notes = "首页首推")
     public ModelAndView inster(@RequestParam(name = "types", required = true) Integer types,
                                @RequestParam(name = "devaluationId", required = true) Integer devaluationId) {
-
-
         AbstractView jsonView = new MappingJackson2JsonView();
         Devaluation devaluation = new Devaluation();
         devaluation.setTypes(types);
