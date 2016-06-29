@@ -72,21 +72,21 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (token == null || "".equals(token)) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
+			attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_REQUEST_UNAUTHORIZED);
 		} else if (type == null || title == null || "".equals(title) || lab == null) {// 判断参数必要性
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else if (!(type == 1 || type == 2) || !(lab == 1 || lab == 2 || lab == 3 || lab == 4)
 				|| !(auth == 1 || auth == 2 || auth == 3 || auth == 4)) {// 判断参数合法性
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 		} else {
 			boolean flag = accountCommonFacade.validateToken(token);
 			if (flag) {
 				AccountInfoVo account = accountCommonFacade.getAccountVoByToken(token);
 				if (account == null || account.getId() == null) {
-					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
+					attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
 					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
 				} else {
 					LiveInfo liveInfo = new LiveInfo();
@@ -105,7 +105,7 @@ public class LiveController {
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				}
 			} else {
-				attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+				attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
 				attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
 			}
 		}
@@ -140,7 +140,7 @@ public class LiveController {
 			@RequestParam(name = "vedioUrl", required = false) String vedioUrl) {
 		Map<String, Object> attrMap = new HashMap<>();
 		if (token == null || "".equals(token) || null == id) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else {
 			try {
@@ -163,15 +163,15 @@ public class LiveController {
 					liveInfoFacade.updateNotNull(liveInfo);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				} else {
-					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
 					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
 				}
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
 				e.printStackTrace();
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -186,10 +186,10 @@ public class LiveController {
 			@RequestParam(name = "status") Integer status) {
 		Map<String, Object> attrMap = new HashMap<>();
 		if (token == null || "".equals(token) || null == status || null == id) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else if (status != 2) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 		} else {
 			try {
@@ -201,12 +201,12 @@ public class LiveController {
 					liveInfoFacade.updateNotNull(liveInfo);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				} else {
-					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
 					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -223,7 +223,7 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (!(lab == 1 || lab == 2 || lab == 3 || lab == 4)) {// 判断参数合法性
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 		} else {
 			try {
@@ -245,7 +245,7 @@ public class LiveController {
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (Exception e) {
 				e.printStackTrace();
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 				attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.MSG_ERROR);
 			}
 		}
@@ -277,7 +277,7 @@ public class LiveController {
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+			attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.MSG_ERROR);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -302,10 +302,10 @@ public class LiveController {
 //			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 //		} catch (NumberFormatException nfe) {
 //			nfe.printStackTrace();
-//			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+//			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 //		} catch (Exception e) {
 //			e.printStackTrace();
-//			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+//			attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 //		}
 //		AbstractView jsonView = new MappingJackson2JsonView();
 //		jsonView.setAttributesMap(attrMap);
@@ -318,16 +318,16 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (id == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
 				LiveInfo liveInfo = liveInfoFacade.getById(id);
 				attrMap.put("liveInfo", JSON.toJSONString(liveInfo));
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -343,9 +343,9 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (token == null || "".equals(token)) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
+			attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
 		} else if (id == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
 				boolean flag = accountCommonFacade.validateToken(token);
@@ -353,13 +353,13 @@ public class LiveController {
 					liveInfoFacade.delete(id);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				} else {
-					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
 					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
 				}
 			} catch (NumberFormatException nfe) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -378,9 +378,9 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (token == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
+			attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
 		} else if (liveId == null || !(content != null || imgUrl != null)) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 		} else {
 			TextLiveItem item = new TextLiveItem();
 			try {
@@ -393,13 +393,13 @@ public class LiveController {
 					textLiveItemFacade.add(item);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				} else {
-					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
 					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
 				}
 			} catch (NumberFormatException nfe) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -415,7 +415,7 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (liveId == null && createTimeLower == null && createTimeUpper == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
 				TextLiveItemVo vo = new TextLiveItemVo();
@@ -427,9 +427,9 @@ public class LiveController {
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -443,16 +443,16 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (id == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
 				TextLiveItem textLiveItem = textLiveItemFacade.getById(id);
 				attrMap.put("textLiveItem", JSON.toJSONString(textLiveItem));
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 
@@ -468,9 +468,9 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (token == null || "".equals(token)) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
+			attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
 		} else if (id == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 		} else {
 			try {
 				boolean flag = accountCommonFacade.validateToken(token);
@@ -478,13 +478,13 @@ public class LiveController {
 					textLiveItemFacade.deleteById(id);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				} else {
-					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.REQUEST_UNAUTHORIZED);
+					attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
 					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
 				}
 			} catch (NumberFormatException nfe) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -501,19 +501,19 @@ public class LiveController {
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 //		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
 		if (token == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.REQUEST_UNAUTHORIZED);
+			attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
 		} else if (liveId == null || liveId == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else if (content == null || "".equals(content)) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.LIVE_BARRAGE_NULL_CONTENT);
+			attrMap.put(LiveConstants.STATE, LiveConstants.LIVE_BARRAGE_NULL_CONTENT);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_LIVE_BARRAGE_NULL_CONTENT);
 		} else {
 			try {
 				Map<String, Object> rstMap = accountInfoFacade.queryAccountInfo(token, userId);
 				AccountInfoVo account = (AccountInfoVo) rstMap.get("result");
 				if (null == account) {
-					attrMap.put(LiveConstants.ERROR_CODE, AccountConstants.ACCOUNT_ERROR_CODE_50300);
+					attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50300);
 					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50300_MSG);
 				} else {
 					// 传入参数构造
@@ -529,12 +529,12 @@ public class LiveController {
 				}
 			} catch (NumberFormatException nfe) {
 				// nfe.printStackTrace();
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 			} catch (Exception e) {
 				// e.printStackTrace();
 				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
@@ -552,7 +552,7 @@ public class LiveController {
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
 		if (liveId == null) {
-			attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_MISS);
+			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
 		} else {
 			try {
@@ -566,11 +566,11 @@ public class LiveController {
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
 				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.PARAM_ILIGAL);
+				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			} catch (Exception e) {
 				e.printStackTrace();
 				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
-				attrMap.put(LiveConstants.ERROR_CODE, LiveConstants.ERROR);
+				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
