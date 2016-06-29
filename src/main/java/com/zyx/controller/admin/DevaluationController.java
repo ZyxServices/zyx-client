@@ -87,7 +87,7 @@ public class DevaluationController {
 				attrMap = activityDevaFacade.queryActivityDeva();
 				break;
 			case 2:// 直播首推
-				attrMap.put("data", JSON.toJSONString(liveInfoFacade.getDevaLives()));
+				attrMap.put("data", liveInfoFacade.getDevaLives());
 				break;
 			case 5:
 				attrMap  = userDevaFacade.queryUserDeva();

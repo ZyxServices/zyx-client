@@ -241,7 +241,7 @@ public class LiveController {
 					liveInfoVo.setPageSize(pageSize);
 				}
 				List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
-				attrMap.put("liveInfos", JSON.toJSONString(list));
+				attrMap.put("liveInfos", list);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -273,7 +273,7 @@ public class LiveController {
 			liveInfoVo.setPageNo(pageSize);
 			liveInfoVo.setPageSize(pageSize);
 			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
-			attrMap.put("liveInfos", JSON.toJSONString(list));
+			attrMap.put("liveInfos", list);
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -298,7 +298,7 @@ public class LiveController {
 //			liveSearchVo.setName(name);
 //			liveSearchVo.setKeyWord(keyWord);
 //			List<LiveInfo> list = liveInfoFacade.searchList(liveSearchVo);
-//			attrMap.put("liveInfos", JSON.toJSONString(list));
+//			attrMap.put("liveInfos", list);
 //			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 //		} catch (NumberFormatException nfe) {
 //			nfe.printStackTrace();
@@ -322,7 +322,7 @@ public class LiveController {
 		} else {
 			try {
 				LiveInfo liveInfo = liveInfoFacade.getById(id);
-				attrMap.put("liveInfo", JSON.toJSONString(liveInfo));
+				attrMap.put("liveInfo", liveInfo);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
@@ -332,7 +332,6 @@ public class LiveController {
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
-		System.out.println(JSON.toJSONString(attrMap));
 		return new ModelAndView(jsonView);
 	}
 
@@ -423,7 +422,7 @@ public class LiveController {
 				vo.setCreateTimeUpper(createTimeUpper);
 				vo.setLiveId(liveId);
 				List<TextLiveItem> list = textLiveItemFacade.getList(vo);
-				attrMap.put("textLiveItems", JSON.toJSONString(list));
+				attrMap.put("textLiveItems", list);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
@@ -447,7 +446,7 @@ public class LiveController {
 		} else {
 			try {
 				TextLiveItem textLiveItem = textLiveItemFacade.getById(id);
-				attrMap.put("textLiveItem", JSON.toJSONString(textLiveItem));
+				attrMap.put("textLiveItem", textLiveItem);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
@@ -561,7 +560,7 @@ public class LiveController {
 				vo.setCreateTimeLower(createTimeLower);
 				vo.setCreateTimeUpper(createTimeUpper);
 				List<Barrage> list = barrageFacade.getLast(vo);
-				attrMap.put("textLiveItems", JSON.toJSONString(list));
+				attrMap.put("textLiveItems", list);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
@@ -583,7 +582,7 @@ public class LiveController {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		List<LiveInfo> list = liveInfoFacade.getDevaLives();
-		attrMap.put("data", JSON.toJSONString(list));
+		attrMap.put("data", list);
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
