@@ -1,5 +1,7 @@
 package com.zyx.controller.activity;
 
+import com.zyx.rpc.account.AccountCommonFacade;
+import com.zyx.utils.ActivityUtils;
 import com.zyx.utils.FileUploadUtils;
 import com.zyx.constants.Constants;
 import com.zyx.constants.activity.ActivityConstants;
@@ -33,6 +35,8 @@ public class ActivityTopicController {
 
     @Resource
     private ActivityTopicFacade activityTopicFacade;
+    @Resource
+    private AccountCommonFacade accountCommonFacade;
 
     @RequestMapping(value = "/dynamic", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "发布活动动态")
@@ -45,6 +49,9 @@ public class ActivityTopicController {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
         Map<String, Object> map = new HashMap<>();
 
@@ -83,6 +90,9 @@ public class ActivityTopicController {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
         QueryTopicParm parm = new QueryTopicParm();
         parm.setActivityId(activitiId);

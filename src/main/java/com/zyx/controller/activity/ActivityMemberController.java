@@ -1,8 +1,10 @@
 package com.zyx.controller.activity;
 
 import com.zyx.entity.activity.parm.MemberInfoParm;
+import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.rpc.activity.ActivityMemberFacade;
 import com.zyx.entity.activity.parm.QueryMemberParm;
+import com.zyx.utils.ActivityUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,9 +32,12 @@ public class ActivityMemberController {
     @Resource
     private ActivityMemberFacade activityMemberFacade;
 
+    @Resource
+    private AccountCommonFacade accountCommonFacade;
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @ApiOperation(value = "活动接口", notes = "活动报名")
-    public ModelAndView signup(@RequestParam(name = "token", required = false) String token,
+    public ModelAndView signup(@RequestParam(name = "token", required = true) String token,
                                @RequestParam(name = "activityId", required = true) Integer activitiId,
                                @RequestParam(name = "userId", required = true) Integer userId,
                                @RequestParam(name = "userNick", required = true) String userNick,
@@ -41,6 +46,9 @@ public class ActivityMemberController {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
         MemberInfoParm addMemberInfoParm = new MemberInfoParm();
 
@@ -65,6 +73,9 @@ public class ActivityMemberController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
+
         MemberInfoParm memberInfoParm = new MemberInfoParm();
         memberInfoParm.setActivityId(activitiId);
         memberInfoParm.setUserId(userId);
@@ -84,6 +95,9 @@ public class ActivityMemberController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
+
         QueryMemberParm queryMemberParm = new QueryMemberParm();
 
         queryMemberParm.setActivityId(activitiId);
@@ -102,6 +116,9 @@ public class ActivityMemberController {
                                      @RequestParam(name = "id", required = true) Integer id) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
+
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
         Map<String, Object> map = activityMemberFacade.updateMemberByExamine(id);
 
