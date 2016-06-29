@@ -121,7 +121,7 @@ public class LiveController {
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		Map<Integer,String>  map = new HashMap<>();
 		map.put(1, "NBA");
-		attrMap.put("labs", map);
+		attrMap.put(LiveConstants.DATA, map);
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
@@ -241,7 +241,7 @@ public class LiveController {
 					liveInfoVo.setPageSize(pageSize);
 				}
 				List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
-				attrMap.put("liveInfos", list);
+				attrMap.put(LiveConstants.DATA, list);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -273,7 +273,7 @@ public class LiveController {
 			liveInfoVo.setPageNo(pageSize);
 			liveInfoVo.setPageSize(pageSize);
 			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
-			attrMap.put("liveInfos", list);
+			attrMap.put(LiveConstants.DATA, list);
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -322,7 +322,7 @@ public class LiveController {
 		} else {
 			try {
 				LiveInfo liveInfo = liveInfoFacade.getById(id);
-				attrMap.put("liveInfo", liveInfo);
+				attrMap.put(LiveConstants.DATA, liveInfo);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
@@ -422,7 +422,7 @@ public class LiveController {
 				vo.setCreateTimeUpper(createTimeUpper);
 				vo.setLiveId(liveId);
 				List<TextLiveItem> list = textLiveItemFacade.getList(vo);
-				attrMap.put("textLiveItems", list);
+				attrMap.put(LiveConstants.DATA, list);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				nfe.printStackTrace();
@@ -446,7 +446,7 @@ public class LiveController {
 		} else {
 			try {
 				TextLiveItem textLiveItem = textLiveItemFacade.getById(id);
-				attrMap.put("textLiveItem", textLiveItem);
+				attrMap.put(LiveConstants.DATA, textLiveItem);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (NumberFormatException nfe) {
 				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
