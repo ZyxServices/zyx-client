@@ -36,6 +36,8 @@
     <dubbo:reference interface="com.zyx.rpc.account.UserLoginFacade" id="userLoginFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.account.MarkFacade" id="markFacade" check="false"/>
 
-    <dubbo:reference interface="com.zyx.rpc.account.AccountAddressFacade" id="accountAddressFacade" check="false" />
+    <dubbo:reference interface="com.zyx.rpc.account.AccountAddressFacade" id="accountAddressFacade" check="false"/>
+    <!-- 用户首推 -->
+    <dubbo:reference interface="com.zyx.rpc.account.UserDevaFacade" id="userDevaFacade" check="false"/>
 
 </beans>
