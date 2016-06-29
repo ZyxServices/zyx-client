@@ -1,10 +1,8 @@
 package com.zyx.controller.activity;
 
 import com.zyx.entity.Devaluation;
-import com.zyx.entity.activity.Activity;
 import com.zyx.rpc.activity.ActivityDevaFacade;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +12,6 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
