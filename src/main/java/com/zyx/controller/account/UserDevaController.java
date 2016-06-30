@@ -4,6 +4,8 @@ import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.entity.Devaluation;
 import com.zyx.rpc.account.UserDevaFacade;
+import com.zyx.utils.MapUtils;
+import com.zyx.vo.account.AccountInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,8 +40,12 @@ public class UserDevaController {
     @ApiOperation(value = "用户首推查询接口", notes = "用户首推查询接口")
     public ModelAndView userDeva() {
         AbstractView jsonView = new MappingJackson2JsonView();
-//        Map<String, Object> map = userDevaFacade.queryUserDeva();
-//        jsonView.setAttributesMap(map);
+        final List<AccountInfoVo> accountInfoVos = userDevaFacade.queryUserDeva();
+        if (accountInfoVos == null || accountInfoVos.isEmpty()) {
+            jsonView.setAttributesMap(MapUtils.buildErrorMap(AccountConstants.NO_DATA, "暂无数据"));
+        } else {
+            jsonView.setAttributesMap(MapUtils.buildSuccessMap(AccountConstants.SUCCESS, "用户首推数据查询成功", accountInfoVos));
+        }
         return new ModelAndView(jsonView);
     }
 
