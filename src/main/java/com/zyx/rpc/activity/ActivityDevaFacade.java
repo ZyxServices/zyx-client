@@ -22,7 +22,7 @@ public interface ActivityDevaFacade {
      * 活动首推
      * @return
      */
-    Map<String, Object> queryActivityDeva();
+	List<Activity>  queryActivityDeva();
 
     /**
      * 活动首推

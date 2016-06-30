@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.alibaba.fastjson.JSON;
+import com.zyx.constants.Constants;
 import com.zyx.constants.live.LiveConstants;
 import com.zyx.rpc.account.UserDevaFacade;
 import com.zyx.rpc.activity.ActivityDevaFacade;
@@ -82,21 +82,42 @@ public class DevaluationController {
 			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
 		} else {
+			Map<String, Object> devasMap = new HashMap<>();
 			switch (model) {
 			case 1:
-				attrMap = activityDevaFacade.queryActivityDeva();
+				devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
 				break;
 			case 2:// 直播首推
-				attrMap.put("data", liveInfoFacade.getDevaLives());
+				devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
 				break;
 			case 5:
-				attrMap  = userDevaFacade.queryUserDeva();
+				devasMap.put("userDevas", userDevaFacade.queryUserDeva());
 				break;
 			default:
 				break;
 			}
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+		}
+		AbstractView jsonView = new MappingJackson2JsonView();
+		jsonView.setAttributesMap(attrMap);
+		return new ModelAndView(jsonView);
+	}
+
+	@RequestMapping(value = "/getAll", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
+	public ModelAndView getAllDeva() {
+		Map<String, Object> attrMap = new HashMap<>();
+		try {
+			Map<String, Object> devasMap = new HashMap<>();
+			devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
+			devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
+			devasMap.put("userDevas", userDevaFacade.queryUserDeva());
+			attrMap.put("data", devasMap);
+			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+			attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+		} catch (Exception e) {
+			attrMap = Constants.MAP_500;
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);

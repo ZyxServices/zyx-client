@@ -37,8 +37,8 @@ public class UserDevaController {
     @ApiOperation(value = "用户首推查询接口", notes = "用户首推查询接口")
     public ModelAndView userDeva() {
         AbstractView jsonView = new MappingJackson2JsonView();
-        Map<String, Object> map = userDevaFacade.queryUserDeva();
-        jsonView.setAttributesMap(map);
+//        Map<String, Object> map = userDevaFacade.queryUserDeva();
+//        jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
 

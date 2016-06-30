@@ -35,8 +35,8 @@ public class ActivityDevaController {
     @ApiOperation(value = "活动接口", notes = "首页首推")
     public ModelAndView activityDeva() {
         AbstractView jsonView = new MappingJackson2JsonView();
-        Map<String, Object> map = activityDevaFacade.queryActivityDeva();
-        jsonView.setAttributesMap(map);
+//        Map<String, Object> map = activityDevaFacade.queryActivityDeva();
+//        jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
 
