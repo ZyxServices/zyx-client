@@ -98,6 +98,7 @@ public class DevaluationController {
 			}
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+			attrMap.putAll(devasMap);
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);

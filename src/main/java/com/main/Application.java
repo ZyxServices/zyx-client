@@ -28,6 +28,7 @@ public class Application {
 //		User u=uf.getById((long) 1);
 //		System.out.println(u+"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
+
         SpringApplication.run(Application.class, args);
 
         //启动后访问这个地址，但是确保zyx-server的Dubbo-privider启动
