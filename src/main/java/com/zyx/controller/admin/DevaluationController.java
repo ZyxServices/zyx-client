@@ -3,6 +3,7 @@ package com.zyx.controller.admin;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.zyx.rpc.pg.PgFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,102 +27,113 @@ import io.swagger.annotations.ApiOperation;
 @Api(description = "首推相关接口")
 public class DevaluationController {
 
-	@Autowired
-	LiveInfoFacade liveInfoFacade;
-	@Autowired
-	private ActivityDevaFacade activityDevaFacade;
-	@Autowired
-	private UserDevaFacade userDevaFacade;
+    @Autowired
+    LiveInfoFacade liveInfoFacade;
+    @Autowired
+    private ActivityDevaFacade activityDevaFacade;
+    @Autowired
+    private UserDevaFacade userDevaFacade;
+    @Autowired
+    private PgFacade pgFacade;
 
-	@RequestMapping(value = "/refreshAll", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "首推-刷新 所有首推", notes = "-刷新 所有首推")
-	public ModelAndView refershAll() {
-		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 
-		// 直播首推
-		liveInfoFacade.refreshDevaLives();
-		AbstractView jsonView = new MappingJackson2JsonView();
-		jsonView.setAttributesMap(attrMap);
-		return new ModelAndView(jsonView);
-	}
+    @RequestMapping(value = "/refreshAll", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "首推-刷新 所有首推", notes = "-刷新 所有首推")
+    public ModelAndView refershAll() {
+        Map<String, Object> attrMap = new HashMap<>();
+        attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 
-	@RequestMapping(value = "/refreshModel", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "首推-刷新 所有单个首推", notes = "-刷新 所有单个首推")
-	public ModelAndView refershModel(@RequestParam(name = "model") Integer model) {
-		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_SUCCESS);
-		if (model == null || !(model != 1 || model != 2 || model != 3 || model != 4 || model != 5)) {
-			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
-		} else {
-			switch (model) {
-			case 1:
+        // 直播首推
+        liveInfoFacade.refreshDevaLives();
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
 
-			case 2:// 直播首推
-				liveInfoFacade.refreshDevaLives();
-				break;
-			default:
-				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
-				break;
-			}
-		}
-		AbstractView jsonView = new MappingJackson2JsonView();
-		jsonView.setAttributesMap(attrMap);
-		return new ModelAndView(jsonView);
-	}
+    @RequestMapping(value = "/refreshModel", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "首推-刷新 所有单个首推", notes = "-刷新 所有单个首推")
+    public ModelAndView refershModel(@RequestParam(name = "model") Integer model) {
+        Map<String, Object> attrMap = new HashMap<>();
+        attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+        attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_SUCCESS);
+        if (model == null || !(model != 1 || model != 2 || model != 3 || model != 4 || model != 5)) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+        } else {
+            switch (model) {
+                case 1:
 
-	@RequestMapping(value = "/get", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
-	public ModelAndView getDeva(@RequestParam(name = "model") Integer model) {
-		Map<String, Object> attrMap = new HashMap<>();
-		if (model == null || !(model != 1 || model != 2 || model != 3 || model != 4 || model != 5)) {
-			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
-		} else {
-			Map<String, Object> devasMap = new HashMap<>();
-			switch (model) {
-			case 1:
-				devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
-				break;
-			case 2:// 直播首推
-				devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
-				break;
-			case 5:
-				devasMap.put("userDevas", userDevaFacade.queryUserDeva());
-				break;
-			default:
-				break;
-			}
-			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-			attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
-			attrMap.putAll(devasMap);
-		}
-		AbstractView jsonView = new MappingJackson2JsonView();
-		jsonView.setAttributesMap(attrMap);
-		return new ModelAndView(jsonView);
-	}
+                case 2:// 直播首推
+                    liveInfoFacade.refreshDevaLives();
+                    break;
+                default:
+                    attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+                    attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
+                    attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+                    break;
+            }
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
 
-	@RequestMapping(value = "/getAll", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
-	public ModelAndView getAllDeva() {
-		Map<String, Object> attrMap = new HashMap<>();
-		try {
-			Map<String, Object> devasMap = new HashMap<>();
-			devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
-			devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
-			devasMap.put("userDevas", userDevaFacade.queryUserDeva());
-			attrMap.put("data", devasMap);
-			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-			attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
-		} catch (Exception e) {
-			attrMap = Constants.MAP_500;
-		}
-		AbstractView jsonView = new MappingJackson2JsonView();
-		jsonView.setAttributesMap(attrMap);
-		return new ModelAndView(jsonView);
-	}
+    @RequestMapping(value = "/get", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
+    public ModelAndView getDeva(@RequestParam(name = "model") Integer model) {
+        Map<String, Object> attrMap = new HashMap<>();
+        if (model == null || !(model != 1 || model != 2 || model != 3 || model != 4 || model != 5)) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+        } else {
+            Map<String, Object> devasMap = new HashMap<>();
+            switch (model) {
+                case 1:
+                    devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
+                    break;
+                case 2:// 直播首推
+                    devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
+                    break;
+                case 3:
+                    devasMap.put("cirleDevas", pgFacade.queryCircleDeva());
+                    break;
+                case 4:
+                    devasMap.put("concerDevas", pgFacade.queryConcernDeva());
+                    break;
+                case 5:
+                    devasMap.put("userDevas", userDevaFacade.queryUserDeva());
+                    break;
+                default:
+                    break;
+            }
+            attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+            attrMap.putAll(devasMap);
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/getAll", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
+    public ModelAndView getAllDeva() {
+        Map<String, Object> attrMap = new HashMap<>();
+        try {
+            Map<String, Object> devasMap = new HashMap<>();
+            devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
+            devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
+            devasMap.put("userDevas", userDevaFacade.queryUserDeva());
+            devasMap.put("cirleDevas", pgFacade.queryCircleDeva());
+            devasMap.put("concerDevas", pgFacade.queryConcernDeva());
+            attrMap.put("data", devasMap);
+            attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+        } catch (Exception e) {
+            attrMap = Constants.MAP_500;
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
 }
