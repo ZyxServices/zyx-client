@@ -1,6 +1,7 @@
 package com.zyx.rpc.live;
 
 import java.util.List;
+import java.util.Map;
 
 import com.zyx.entity.live.LiveInfo;
 import com.zyx.vo.live.LiveInfoVo;
@@ -128,5 +129,26 @@ public interface LiveInfoFacade {
 	 * @update 2016年6月29日 下午3:11:08
 	 */
 	public int countDevaLive();
+	
+
+	/**
+	 * 首推 直播观看人数
+	 * @return
+	 * @description TODO
+	 * @version 1.0
+	 * @author MrDeng
+	 * @update 2016年7月4日 下午2:39:12
+	 */
+	public Map<Integer,Integer>getLiveDevaWatchNum();
+	/**
+	 * 获取直播的观看人数
+	 * @param liveIds
+	 * @return
+	 * @description TODO
+	 * @version 1.0
+	 * @author MrDeng
+	 * @update 2016年7月4日 下午2:21:39
+	 */
+	public Map<Integer,Integer> getLiveWatchNum(List<Integer> liveIds);
 
 }
