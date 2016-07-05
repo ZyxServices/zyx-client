@@ -14,6 +14,9 @@
     <!-- 注册中心地址 -->
     <dubbo:registry protocol="zookeeper" address="112.74.78.74:2182"/>
 
+    <!-- 每次请求重试的等待时间 -->
+    <dubbo:consumer timeout="10000"/>
+
     <!-- 商城服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.shop.ShopService" id="shopService" check="false"/>
     <!-- 活动服务接口 -->
