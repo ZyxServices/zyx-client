@@ -2,6 +2,7 @@ package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
 import com.zyx.entity.account.param.UserMarkParam;
+import com.zyx.interceptor.Authorization;
 import com.zyx.rpc.account.MarkFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,7 @@ public class MarkController {
 
     @RequestMapping(value = "/sign", method = RequestMethod.GET)
     @ApiOperation(value = "签到", notes = "签到")
+    @Authorization
     public ModelAndView sign(@RequestParam(name = "token") String token, @RequestParam(name = "accountId") int userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -54,6 +56,7 @@ public class MarkController {
 
     @RequestMapping(value = "/querySign", method = RequestMethod.GET)
     @ApiOperation(value = "查询签到信息", notes = "查询用户签到信息")
+    @Authorization
     public ModelAndView querySign(@RequestParam(name = "token") String token, @RequestParam(name = "accountId") int userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
