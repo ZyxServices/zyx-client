@@ -237,7 +237,7 @@
         Snapshots</name> <url>https://repo.spring.io/libs-snapshot</url> <snapshots>
         <enabled>true</enabled> </snapshots> </repository> </repositories> -->
     <build>
-        <finalName>tiyujia-mobilecilent</finalName>
+        <finalName>tiyujia-cilent</finalName>
         <resources>
             <resource>
                 <targetPath>${project.build.directory}/classes</targetPath>
