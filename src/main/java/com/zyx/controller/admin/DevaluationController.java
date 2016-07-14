@@ -77,12 +77,12 @@ public class DevaluationController {
         jsonView.setAttributesMap(attrMap);
         return new ModelAndView(jsonView);
     }
-	
+
     @RequestMapping(value = "/get", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
     public ModelAndView getDeva(@RequestParam(name = "model") Integer model) {
         Map<String, Object> attrMap = new HashMap<>();
-        if (model == null || !(model != 1 || model != 2 || model != 3 || model != 4 || model != 5)) {
+        if (model == null || !(model < 1 && model > 5)) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
         } else {
@@ -92,8 +92,8 @@ public class DevaluationController {
                     devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
                     break;
                 case 2:// 直播首推
-                	devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
-    				devasMap.put("liveWatchNums", liveInfoFacade.getLiveDevaWatchNum());
+                    devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
+                    devasMap.put("liveWatchNums", liveInfoFacade.getLiveDevaWatchNum());
                     break;
                 case 3:
                     devasMap.put("cirleDevas", pgFacade.queryCircleDeva());
@@ -124,7 +124,7 @@ public class DevaluationController {
             Map<String, Object> devasMap = new HashMap<>();
             devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
             devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
-			devasMap.put("liveWatchNums", liveInfoFacade.getLiveDevaWatchNum());
+            devasMap.put("liveWatchNums", liveInfoFacade.getLiveDevaWatchNum());
             devasMap.put("userDevas", userDevaFacade.queryUserDeva());
             devasMap.put("cirleDevas", pgFacade.queryCircleDeva());
             devasMap.put("concerDevas", pgFacade.queryConcernDeva());
