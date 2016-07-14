@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.zyx.rpc.pg.PgFacade;
+import com.zyx.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -119,18 +120,16 @@ public class DevaluationController {
     @RequestMapping(value = "/getAll", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
     public ModelAndView getAllDeva() {
-        Map<String, Object> attrMap = new HashMap<>();
+        Map<String, Object> attrMap;
         try {
             Map<String, Object> devasMap = new HashMap<>();
-            devasMap.put("activtyDevas", activityDevaFacade.queryActivityDeva());
-            devasMap.put("liveDevas", liveInfoFacade.getDevaLives());
-            devasMap.put("liveWatchNums", liveInfoFacade.getLiveDevaWatchNum());
-            devasMap.put("userDevas", userDevaFacade.queryUserDeva());
-            devasMap.put("cirleDevas", pgFacade.queryCircleDeva());
-            devasMap.put("concerDevas", pgFacade.queryConcernDeva());
-            attrMap.put("data", devasMap);
-            attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-            attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+            devasMap.put("activtyDevas", getActivityDeva());
+            devasMap.put("liveDevas", getDevaLives());
+            devasMap.put("liveWatchNums", getLiveDevaWatchNum());
+            devasMap.put("userDevas", queryUserDeva());
+            devasMap.put("cirleDevas", queryCircleDeva());
+            devasMap.put("concerDevas", queryConcernDeva());
+            attrMap = MapUtils.buildSuccessMap(LiveConstants.SUCCESS, LiveConstants.MSG_SUCCESS, devasMap);
         } catch (Exception e) {
             attrMap = Constants.MAP_500;
         }
@@ -138,4 +137,53 @@ public class DevaluationController {
         jsonView.setAttributesMap(attrMap);
         return new ModelAndView(jsonView);
     }
+
+    private Object getActivityDeva() {
+        try {
+            return activityDevaFacade.queryActivityDeva();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private Object getDevaLives() {
+        try {
+            return liveInfoFacade.getDevaLives();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private Object getLiveDevaWatchNum() {
+        try {
+            return liveInfoFacade.getLiveDevaWatchNum();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private Object queryUserDeva() {
+        try {
+            return userDevaFacade.queryUserDeva();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private Object queryCircleDeva() {
+        try {
+            return pgFacade.queryCircleDeva();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private Object queryConcernDeva() {
+        try {
+            return pgFacade.queryConcernDeva();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
 }
