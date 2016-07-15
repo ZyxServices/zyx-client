@@ -45,7 +45,7 @@ public interface LiveInfoFacade {
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:30:44
 	 */
-	public LiveInfo getById(Long id);
+	public LiveInfo getById(Integer id);
 	/**
 	 * 
 	 * @param liveInfoVo
@@ -76,7 +76,7 @@ public interface LiveInfoFacade {
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:30:06
 	 */
-	public void delete(Long id);
+	public void delete(Integer id);
 	
 	/**
 	 * 
@@ -87,7 +87,7 @@ public interface LiveInfoFacade {
 	 * @author MrDeng
 	 * @update 2016年6月27日 下午6:18:28
 	 */
-	public String getLiveUrl(Long liveId);
+	public String getLiveUrl(Integer liveId);
 	
 	/**
 	 * 获取首推

@@ -26,10 +26,10 @@ public class ShopController {
 
 	@RequestMapping(value = "/view/{id}",method = RequestMethod.POST)
 	 @ApiOperation(value="商场接口", notes="登录商品信息")
-	public Goods view(@PathVariable Long id) {
+	public Goods view(@PathVariable Integer id) {
 		//Goods goods = shopService.getGoodsbyKey(id);
 		Goods goods = new Goods();
-		goods.setId(1234l);
+		goods.setId(1234);
 		
 		return goods;
 	}
@@ -43,7 +43,7 @@ public class ShopController {
 	    })
 	    public ResponseEntity test(  @ApiParam(required=true, name="id", value="用户id") @RequestParam(name = "id") Integer id) {
 	    	LiveInfo info = new LiveInfo();
-	    	info.setId((long)id);
+	    	info.setId(id);
 	    	info.setBgmUrl("www.baidu.com");
 	    	info.setCreateTime(12344l);
 	    	info.setEnd(22222l);

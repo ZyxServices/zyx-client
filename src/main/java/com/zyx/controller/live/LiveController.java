@@ -129,7 +129,7 @@ public class LiveController {
 	
 	@RequestMapping(value = "/update_live", method = RequestMethod.POST)
 	@ApiOperation(value = "直播更新修改", notes = "直播-直播更新修改")
-	public ModelAndView updateLive(@RequestParam(name = "token") String token, @RequestParam(name = "id") Long id,
+	public ModelAndView updateLive(@RequestParam(name = "token") String token, @RequestParam(name = "id") Integer id,
 			@RequestParam(name = "isPublic", required = false) Boolean isPublic,
 			@RequestParam(name = "type", required = false) Integer type,
 			@RequestParam(name = "start", required = false) Long start,
@@ -182,7 +182,7 @@ public class LiveController {
 
 	@RequestMapping(value = "/update_status", method = RequestMethod.POST)
 	@ApiOperation(value = "直播更新修改", notes = "直播-直播更新修改")
-	public ModelAndView updateLiveStatus(@RequestParam(name = "token") String token, @RequestParam(name = "id") Long id,
+	public ModelAndView updateLiveStatus(@RequestParam(name = "token") String token, @RequestParam(name = "id") Integer id,
 			@RequestParam(name = "status") Integer status) {
 		Map<String, Object> attrMap = new HashMap<>();
 		if (token == null || "".equals(token) || null == status || null == id) {
@@ -314,7 +314,7 @@ public class LiveController {
 
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")
-	public ModelAndView getLiveByKey(@RequestParam(name = "id") Long id) {
+	public ModelAndView getLiveByKey(@RequestParam(name = "id") Integer id) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (id == null) {
@@ -338,7 +338,7 @@ public class LiveController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ApiOperation(value = "直播-删除直播", notes = "直播-删除直播")
 	public ModelAndView deleteLiveByKey(@RequestParam(name = "token") String token,
-			@RequestParam(name = "id") Long id) {
+			@RequestParam(name = "id") Integer id) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (token == null || "".equals(token)) {
@@ -438,7 +438,7 @@ public class LiveController {
 
 	@RequestMapping(value = "/text/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取单条直播图文内容", notes = "直播-获取单条直播图文内容")
-	public ModelAndView getTextLiveItemByKey(@RequestParam(name = "id") Long id) {
+	public ModelAndView getTextLiveItemByKey(@RequestParam(name = "id") Integer id) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (id == null) {
@@ -463,7 +463,7 @@ public class LiveController {
 	@RequestMapping(value = "/text/delete", method = RequestMethod.POST)
 	@ApiOperation(value = "直播-删除图文直播", notes = "直播-删除图文直播")
 	public ModelAndView deleteTextLiveItemByKey(@RequestParam(name = "token") String token,
-			@RequestParam(name = "id") Long id) {
+			@RequestParam(name = "id") Integer id) {
 		Map<String, Object> attrMap = new HashMap<>();
 		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
 		if (token == null || "".equals(token)) {
