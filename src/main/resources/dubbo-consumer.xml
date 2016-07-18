@@ -28,6 +28,7 @@
     <dubbo:reference interface="com.zyx.rpc.live.LiveInfoFacade" id="liveInfoFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.live.TextLiveItemFacade" id="textLiveItemFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.live.BarrageFacade" id="barrageFacade" check="false"/>
+    <dubbo:reference interface="com.zyx.rpc.live.LiveLabFacade" id="liveLabFacade" check="false"/>
     <!--操场服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.pg.PgFacade" id="pgFacade" check="false"/>
 

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zyx.rpc.live.LiveLabFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,6 +59,8 @@ public class LiveController {
 	@Autowired
 	AccountInfoFacade accountInfoFacade;
 
+	@Autowired
+	LiveLabFacade liveLabFacade;
 	@Autowired
 	AccountCommonFacade accountCommonFacade;
 
@@ -118,10 +121,10 @@ public class LiveController {
 	@ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
 	public ModelAndView getLabs() {
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		Map<Integer,String>  map = new HashMap<>();
-		map.put(1, "NBA");
-		attrMap.put(LiveConstants.DATA, map);
+		attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+		attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+		List<String> list = liveLabFacade.getAllLabs();
+		attrMap.put(LiveConstants.DATA, list);
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
