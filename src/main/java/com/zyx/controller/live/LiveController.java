@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zyx.entity.live.dto.LiveInfoDto;
 import com.zyx.rpc.live.LiveLabFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -200,7 +201,7 @@ public class LiveController {
 				if (flag) {
 					LiveInfo liveInfo = new LiveInfo();
 					liveInfo.setId(id);
-					liveInfo.setStatus(status);
+					liveInfo.setState(status);
 					liveInfoFacade.updateNotNull(liveInfo);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				} else {
@@ -243,7 +244,7 @@ public class LiveController {
 					liveInfoVo.setPageNo(pageSize);
 					liveInfoVo.setPageSize(pageSize);
 				}
-				List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
+				List<LiveInfoDto> list = liveInfoFacade.getList(liveInfoVo);
 				attrMap.put(LiveConstants.DATA, list);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (Exception e) {
@@ -275,7 +276,7 @@ public class LiveController {
 			}
 			liveInfoVo.setPageNo(pageSize);
 			liveInfoVo.setPageSize(pageSize);
-			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
+			List<LiveInfoDto> list = liveInfoFacade.getList(liveInfoVo);
 			attrMap.put(LiveConstants.DATA, list);
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (Exception e) {
@@ -287,33 +288,6 @@ public class LiveController {
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
 	}
-
-//	@RequestMapping(value = "/search", method = RequestMethod.POST)
-//	@ApiOperation(value = "直播-直播模块搜索", notes = "直播-直播模块搜索")
-//	public ModelAndView searchLiveList(@RequestParam(name = "lab", required = false) Integer lab,
-//			@RequestParam(name = "name", required = false) String name,
-//			@RequestParam(name = "keyWord", required = false) String keyWord) {
-//		Map<String, Object> attrMap = new HashMap<>();
-//		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//		try {
-//			LiveSearchVo liveSearchVo = new LiveSearchVo();
-//			liveSearchVo.setLab(lab);
-//			liveSearchVo.setName(name);
-//			liveSearchVo.setKeyWord(keyWord);
-//			List<LiveInfo> list = liveInfoFacade.searchList(liveSearchVo);
-//			attrMap.put("liveInfos", list);
-//			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-//		} catch (NumberFormatException nfe) {
-//			nfe.printStackTrace();
-//			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//		}
-//		AbstractView jsonView = new MappingJackson2JsonView();
-//		jsonView.setAttributesMap(attrMap);
-//		return new ModelAndView(jsonView);
-//	}
 
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")

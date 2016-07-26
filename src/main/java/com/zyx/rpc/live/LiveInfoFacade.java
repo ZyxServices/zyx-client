@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.zyx.entity.live.LiveInfo;
+import com.zyx.entity.live.dto.LiveInfoDto;
 import com.zyx.vo.live.LiveInfoVo;
 import com.zyx.vo.live.LiveSearchVo;
 
@@ -19,7 +20,7 @@ import com.zyx.vo.live.LiveSearchVo;
  */
 public interface LiveInfoFacade {
 	/**
-	 * 
+	 *
 	 * @param liveInfo
 	 * @description T添加直播 需要Token 验证
 	 * @version 1.0
@@ -28,7 +29,7 @@ public interface LiveInfoFacade {
 	 */
 	public void add(LiveInfo liveInfo);
 	/**
-	 * 
+	 *
 	 * @param liveInfo
 	 * @description 更新直播 需要Token验证
 	 * @version 1.0
@@ -37,7 +38,7 @@ public interface LiveInfoFacade {
 	 */
 	public void updateNotNull(LiveInfo liveInfo);
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 * @description 获取直播 单个
@@ -47,7 +48,7 @@ public interface LiveInfoFacade {
 	 */
 	public LiveInfo getById(Integer id);
 	/**
-	 * 
+	 *
 	 * @param liveInfoVo
 	 * @return
 	 * @description 获取直播列表
@@ -55,10 +56,10 @@ public interface LiveInfoFacade {
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:30:21
 	 */
-	public List<LiveInfo> getList( LiveInfoVo liveInfoVo);
-	
+	public List<LiveInfoDto> getList(LiveInfoVo liveInfoVo);
+
 	/**
-	 * 
+	 *
 	 * @param liveSearchVo
 	 * @return
 	 * @description 搜索直播列表
@@ -68,8 +69,7 @@ public interface LiveInfoFacade {
 	 */
 	public List<LiveInfo> searchList( LiveSearchVo liveSearchVo);
 	/**
-	 * 
-	 * @param token
+	 *
 	 * @param id
 	 * @description 删除直播 需要Token验证
 	 * @version 1.0
@@ -77,9 +77,9 @@ public interface LiveInfoFacade {
 	 * @update 2016年6月22日 上午10:30:06
 	 */
 	public void delete(Integer id);
-	
+
 	/**
-	 * 
+	 *
 	 * @param liveId
 	 * @return
 	 * @description 获取直播地址
@@ -88,10 +88,9 @@ public interface LiveInfoFacade {
 	 * @update 2016年6月27日 下午6:18:28
 	 */
 	public String getLiveUrl(Integer liveId);
-	
+
 	/**
 	 * 获取首推
-	 * @param vo
 	 * @return
 	 * @description TODO
 	 * @version 1.0
@@ -99,37 +98,36 @@ public interface LiveInfoFacade {
 	 * @update 2016年6月29日 上午10:35:22
 	 */
 	public List<LiveInfo> getDevaLives();
-	
+
 	/**
 	 * 刷新首推
-	 * 
+	 *
 	 * @description TODO
 	 * @version 1.0
 	 * @author MrDeng
 	 * @update 2016年6月29日 下午2:52:40
 	 */
 	public void refreshDevaLives();
-	
+
 	/**
-	 * 
+	 * 添加首推
 	 * @param lvieId
-	 * @description 添加首推
+	 * @description TODO
 	 * @version 1.0
 	 * @author MrDeng
-	 * @update 2016年6月29日 下午3:11:04
+	 * @update 2016年7月4日 下午2:19:34
 	 */
 	public void addDevaLive(Integer lvieId);
-	
+
 	/**
-	 * 
+	 * 首推个数
 	 * @return
-	 * @description 获取首推条数
+	 * @description TODO
 	 * @version 1.0
 	 * @author MrDeng
-	 * @update 2016年6月29日 下午3:11:08
+	 * @update 2016年7月4日 下午2:19:46
 	 */
 	public int countDevaLive();
-	
 
 	/**
 	 * 首推 直播观看人数
