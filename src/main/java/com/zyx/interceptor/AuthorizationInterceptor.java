@@ -1,6 +1,6 @@
 package com.zyx.interceptor;
 
-import com.zyx.config.Constants;
+import com.zyx.constants.Constants;
 import com.zyx.rpc.common.TokenFacade;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
