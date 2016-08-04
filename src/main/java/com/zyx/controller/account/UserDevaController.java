@@ -36,34 +36,34 @@ public class UserDevaController {
     @Autowired
     private UserDevaFacade userDevaFacade;
 
-    @RequestMapping(value = "/user", method = {RequestMethod.GET, RequestMethod.POST})
-    @ApiOperation(value = "用户首推查询接口", notes = "用户首推查询接口")
-    public ModelAndView userDeva() {
-        AbstractView jsonView = new MappingJackson2JsonView();
-        final List<AccountInfoVo> accountInfoVos = userDevaFacade.queryUserDeva();
-        if (accountInfoVos == null || accountInfoVos.isEmpty()) {
-            jsonView.setAttributesMap(MapUtils.buildErrorMap(AccountConstants.NO_DATA, "暂无数据"));
-        } else {
-            jsonView.setAttributesMap(MapUtils.buildSuccessMap(AccountConstants.SUCCESS, "用户首推数据查询成功", accountInfoVos));
-        }
-        return new ModelAndView(jsonView);
-    }
+//    @RequestMapping(value = "/user", method = {RequestMethod.GET, RequestMethod.POST})
+//    @ApiOperation(value = "用户首推查询接口", notes = "用户首推查询接口")
+//    public ModelAndView userDeva() {
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        final List<AccountInfoVo> accountInfoVos = userDevaFacade.queryUserDeva();
+//        if (accountInfoVos == null || accountInfoVos.isEmpty()) {
+//            jsonView.setAttributesMap(MapUtils.buildErrorMap(AccountConstants.NO_DATA, "暂无数据"));
+//        } else {
+//            jsonView.setAttributesMap(MapUtils.buildSuccessMap(AccountConstants.SUCCESS, "用户首推数据查询成功", accountInfoVos));
+//        }
+//        return new ModelAndView(jsonView);
+//    }
 
-    @RequestMapping(value = "/user/insert", method = RequestMethod.POST)
-    @ApiOperation(value = "用户首推插入接口", notes = "用户首推插入接口")
-    public ModelAndView insert(@RequestParam(name = "devaluationId") Integer devaluationId) {
-        AbstractView jsonView = new MappingJackson2JsonView();
-        if (StringUtils.isEmpty(devaluationId)) {
-            jsonView.setAttributesMap(Constants.MAP_500);
-        } else {
-            // 构建首推纪录
-            Devaluation devaluation = new Devaluation();
-            devaluation.setTypes(AccountConstants.USER_DEVA_MODEL);
-            devaluation.setDevaluationId(devaluationId);
-            devaluation.setCreateTime(System.currentTimeMillis());
-            // 操作
-            jsonView.setAttributesMap(userDevaFacade.insertUserDeva(devaluation));
-        }
-        return new ModelAndView(jsonView);
-    }
+//    @RequestMapping(value = "/user/insert", method = RequestMethod.POST)
+//    @ApiOperation(value = "用户首推插入接口", notes = "用户首推插入接口")
+//    public ModelAndView insert(@RequestParam(name = "devaluationId") Integer devaluationId) {
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        if (StringUtils.isEmpty(devaluationId)) {
+//            jsonView.setAttributesMap(Constants.MAP_500);
+//        } else {
+//            // 构建首推纪录
+//            Devaluation devaluation = new Devaluation();
+//            devaluation.setTypes(AccountConstants.USER_DEVA_MODEL);
+//            devaluation.setDevaluationId(devaluationId);
+//            devaluation.setCreateTime(System.currentTimeMillis());
+//            // 操作
+//            jsonView.setAttributesMap(userDevaFacade.insertUserDeva(devaluation));
+//        }
+//        return new ModelAndView(jsonView);
+//    }
 }

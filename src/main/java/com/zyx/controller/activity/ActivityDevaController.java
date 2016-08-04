@@ -31,41 +31,41 @@ public class ActivityDevaController {
     @Resource
     private ActivityDevaFacade activityDevaFacade;
 
-    @RequestMapping(value = "/activityDeva", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "首页首推")
-    public ModelAndView activityDeva() {
-        AbstractView jsonView = new MappingJackson2JsonView();
-//        Map<String, Object> map = activityDevaFacade.queryActivityDeva();
+//    @RequestMapping(value = "/activityDeva", method = RequestMethod.POST)
+//    @ApiOperation(value = "活动接口", notes = "首页首推")
+//    public ModelAndView activityDeva() {
+//        AbstractView jsonView = new MappingJackson2JsonView();
+////        Map<String, Object> map = activityDevaFacade.queryActivityDeva();
+////        jsonView.setAttributesMap(map);
+//        return new ModelAndView(jsonView);
+//    }
+
+//
+//    @RequestMapping(value = "/insterDevaluation", method = RequestMethod.POST)
+//    @ApiOperation(value = "首推接口", notes = "首页首推")
+//    public ModelAndView inster(@RequestParam(name = "types", required = true) Integer types,
+//                               @RequestParam(name = "devaluationId", required = true) Integer devaluationId) {
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        Devaluation devaluation = new Devaluation();
+//        devaluation.setTypes(types);
+//        devaluation.setDevaluationId(devaluationId);
+//        Map<String, Object> map = activityDevaFacade.insterActivityDeva(devaluation);
 //        jsonView.setAttributesMap(map);
-        return new ModelAndView(jsonView);
-    }
-
-
-    @RequestMapping(value = "/insterDevaluation", method = RequestMethod.POST)
-    @ApiOperation(value = "首推接口", notes = "首页首推")
-    public ModelAndView inster(@RequestParam(name = "types", required = true) Integer types,
-                               @RequestParam(name = "devaluationId", required = true) Integer devaluationId) {
-        AbstractView jsonView = new MappingJackson2JsonView();
-        Devaluation devaluation = new Devaluation();
-        devaluation.setTypes(types);
-        devaluation.setDevaluationId(devaluationId);
-        Map<String, Object> map = activityDevaFacade.insterActivityDeva(devaluation);
-        jsonView.setAttributesMap(map);
-        return new ModelAndView(jsonView);
-    }
-
-    @RequestMapping(value = "/delDevaluation", method = RequestMethod.POST)
-    @ApiOperation(value = "首推接口", notes = "取消首页首推")
-    public ModelAndView delDevaluation(@RequestParam(name = "types", required = true) Integer types,
-                                       @RequestParam(name = "devaluationId", required = true) Integer devaluationId) {
-
-
-        AbstractView jsonView = new MappingJackson2JsonView();
-        Devaluation devaluation = new Devaluation();
-        devaluation.setTypes(types);
-        devaluation.setDevaluationId(devaluationId);
-        Map<String, Object> map = activityDevaFacade.delActivityDeva(devaluation);
-        jsonView.setAttributesMap(map);
-        return new ModelAndView(jsonView);
-    }
+//        return new ModelAndView(jsonView);
+//    }
+//
+//    @RequestMapping(value = "/delDevaluation", method = RequestMethod.POST)
+//    @ApiOperation(value = "首推接口", notes = "取消首页首推")
+//    public ModelAndView delDevaluation(@RequestParam(name = "types", required = true) Integer types,
+//                                       @RequestParam(name = "devaluationId", required = true) Integer devaluationId) {
+//
+//
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        Devaluation devaluation = new Devaluation();
+//        devaluation.setTypes(types);
+//        devaluation.setDevaluationId(devaluationId);
+//        Map<String, Object> map = activityDevaFacade.delActivityDeva(devaluation);
+//        jsonView.setAttributesMap(map);
+//        return new ModelAndView(jsonView);
+//    }
 }
