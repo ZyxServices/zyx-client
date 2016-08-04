@@ -42,6 +42,8 @@
     <dubbo:reference interface="com.zyx.rpc.account.AccountAddressFacade" id="accountAddressFacade" check="false"/>
     <!-- 用户首推 -->
     <dubbo:reference interface="com.zyx.rpc.account.UserDevaFacade" id="userDevaFacade" check="false"/>
-
     <dubbo:reference interface="com.zyx.rpc.common.TokenFacade" id="tokenFacade" check="false"/>
+
+    <!--系统服务接口-->
+    <dubbo:reference interface="com.zyx.rpc.system.DevaFacade" id="devaFacade" check="false"/>
 </beans>
