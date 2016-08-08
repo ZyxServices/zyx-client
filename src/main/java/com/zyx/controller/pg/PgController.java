@@ -36,9 +36,9 @@ public class PgController {
                                   @RequestParam("title") String title,
                                   @RequestParam("createId") Integer createId,
                                   @RequestParam("state") Integer state,
-                                  @RequestParam("type") Integer type,
+//                                  @RequestParam("type") Integer type,
                                   @RequestParam("details") String details,
-                                  @RequestPart("headImgUrl") MultipartFile headImgUrl) {
+                                  @RequestPart(value = "headImgUrl", required = false) MultipartFile headImgUrl) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         String imgDbUrl = FileUploadUtils.uploadFile(headImgUrl);
@@ -47,7 +47,7 @@ public class PgController {
             jsonView.setAttributesMap(returnResult);
             return new ModelAndView(jsonView);
         }
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, state, type, details, imgDbUrl);
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, state, details, imgDbUrl);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
@@ -234,5 +234,15 @@ public class PgController {
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
     }
+
+    @RequestMapping(value = "/v1/circle/getOne/{circleId}/{accountId}", method = RequestMethod.GET)
+    @ApiOperation(value = "获取圈子单条数据", notes = "根据圈子id，用户id查询，范围帖子数，关注数，是否关注等信息")
+    public ModelAndView queryConcernDeva(@PathVariable Integer circleId, @PathVariable Integer accountId) {
+        Map<String, Object> returnMap = pgFacade.findCircle(circleId, accountId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
 
 }
