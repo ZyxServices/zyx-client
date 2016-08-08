@@ -1,11 +1,14 @@
 package com.zyx.controller.admin;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.zyx.config.BaseResponse;
+import com.zyx.config.responses.DevaResponse;
 import com.zyx.constants.Constants;
+import com.zyx.constants.live.LiveConstants;
 import com.zyx.rpc.system.DevaFacade;
 import com.zyx.utils.MapUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,10 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.zyx.constants.live.LiveConstants;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/deva")
@@ -26,10 +27,10 @@ import io.swagger.annotations.ApiOperation;
 public class DevaluationController {
     @Autowired
     private DevaFacade devaFacade;
-
+//    /*@ApiParam(required = true,name = "model",value ="所在模块")*/
     @RequestMapping(value = "/get", method = {RequestMethod.GET, RequestMethod.POST})
-    @ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推")
-    public ModelAndView getDeva(@RequestParam(name = "model") Integer model) {
+    @ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推",response = BaseResponse.class)
+    public ModelAndView getDeva(@ApiParam(required = true,name = "model",value ="首推所在模块")@RequestParam(name = "model",required = true) Integer model) {
         Map<String, Object> attrMap = new HashMap<>();
         if (model == null || Constants.devaNames.get(model)==null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
