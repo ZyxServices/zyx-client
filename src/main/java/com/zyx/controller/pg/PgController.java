@@ -211,29 +211,29 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circle/queryCircleDeva/{token}", method = RequestMethod.GET)
-    @ApiOperation(value = "圈子首推数据", notes = "圈子首推数据")
-    public ModelAndView queryCircleDeva(@PathVariable String token) {
-        List<Circle> list = pgFacade.queryCircleDeva();
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put(Constants.STATE, Constants.SUCCESS);
-        returnMap.put(Constants.DATA, list);
-        AbstractView jsonView = new MappingJackson2JsonView();
-        jsonView.setAttributesMap(returnMap);
-        return new ModelAndView(jsonView);
-    }
+//    @RequestMapping(value = "/v1/circle/queryCircleDeva/{token}", method = RequestMethod.GET)
+//    @ApiOperation(value = "圈子首推数据", notes = "圈子首推数据")
+//    public ModelAndView queryCircleDeva(@PathVariable String token) {
+//        List<Circle> list = pgFacade.queryCircleDeva();
+//        Map<String, Object> returnMap = new HashMap<>();
+//        returnMap.put(Constants.STATE, Constants.SUCCESS);
+//        returnMap.put(Constants.DATA, list);
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        jsonView.setAttributesMap(returnMap);
+//        return new ModelAndView(jsonView);
+//    }
 
-    @RequestMapping(value = "/v1/concern/queryConcernDeva/{token}", method = RequestMethod.GET)
-    @ApiOperation(value = "动态首推数据", notes = "动态首推数据")
-    public ModelAndView queryConcernDeva(@PathVariable String token) {
-        List<Concern> list = pgFacade.queryConcernDeva();
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put(Constants.STATE, Constants.SUCCESS);
-        returnMap.put(Constants.DATA, list);
-        AbstractView jsonView = new MappingJackson2JsonView();
-        jsonView.setAttributesMap(returnMap);
-        return new ModelAndView(jsonView);
-    }
+//    @RequestMapping(value = "/v1/concern/queryConcernDeva/{token}", method = RequestMethod.GET)
+//    @ApiOperation(value = "动态首推数据", notes = "动态首推数据")
+//    public ModelAndView queryConcernDeva(@PathVariable String token) {
+//        List<Concern> list = pgFacade.queryConcernDeva();
+//        Map<String, Object> returnMap = new HashMap<>();
+//        returnMap.put(Constants.STATE, Constants.SUCCESS);
+//        returnMap.put(Constants.DATA, list);
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        jsonView.setAttributesMap(returnMap);
+//        return new ModelAndView(jsonView);
+//    }
 
     @RequestMapping(value = "/v1/circle/getOne/{circleId}/{accountId}", method = RequestMethod.GET)
     @ApiOperation(value = "获取圈子单条数据", notes = "根据圈子id，用户id查询，范围帖子数，关注数，是否关注等信息")

@@ -1,9 +1,12 @@
 package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
+import com.zyx.entity.account.param.AccountInfoParam;
 import com.zyx.rpc.account.AccountInfoFacade;
+import com.zyx.vo.account.AccountInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,13 +34,46 @@ public class AccountController {
 
     @RequestMapping(value = "/info", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "通过用户ID查询用户信息", notes = "通过用户ID查询用户信息")
-    public ModelAndView login(@RequestParam(name = "token") String token, @RequestParam(name = "account_id") Integer userId) {
+    public ModelAndView info(@RequestParam(name = "token") String token, @RequestParam(name = "account_id") Integer userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             jsonView.setAttributesMap(accountInfoFacade.queryAccountInfo(token, userId));
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/info/edit", method = {RequestMethod.POST})
+    @ApiOperation(value = "通过用户ID编辑用户信息", notes = "通过用户ID编辑用户信息")
+    public ModelAndView edit(@RequestParam(name = "token") String token,
+                             @RequestParam(name = "account_id") Integer userId,
+                             @RequestParam(required = false) String avatar,
+                             @RequestParam(required = false) String nickname,
+                             @RequestParam(required = false) Integer sex,
+                             @RequestParam(required = false) Long birthday,
+                             @RequestParam(required = false) String address,
+                             @RequestParam(required = false) String signature) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            // 判断属性是否存在
+            if (StringUtils.isEmpty(avatar) && StringUtils.isEmpty(nickname) && StringUtils.isEmpty(sex) && StringUtils.isEmpty(birthday) && StringUtils.isEmpty(address) && StringUtils.isEmpty(signature)) {
+                // 必须包含一个参数值
+                jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+            } else {
+                AccountInfoParam param = new AccountInfoParam();
+                param.setAvatar(avatar);
+                param.setNickname(nickname);
+                param.setSex(sex);
+                param.setBirthday(birthday);
+                param.setAddress(address);
+                param.setSignature(signature);
+                jsonView.setAttributesMap(accountInfoFacade.editAccountInfo(token, userId, param));
+            }
         }
         return new ModelAndView(jsonView);
     }

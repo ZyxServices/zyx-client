@@ -1,10 +1,23 @@
 package com.zyx.controller.live;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.zyx.constants.account.AccountConstants;
+import com.zyx.constants.live.LiveConstants;
+import com.zyx.entity.live.Barrage;
+import com.zyx.entity.live.LiveInfo;
+import com.zyx.entity.live.TextLiveItem;
+import com.zyx.entity.live.dto.LiveInfoDto;
+import com.zyx.rpc.account.AccountCommonFacade;
+import com.zyx.rpc.account.AccountInfoFacade;
+import com.zyx.rpc.live.BarrageFacade;
+import com.zyx.rpc.live.LiveInfoFacade;
+import com.zyx.rpc.live.LiveLabFacade;
+import com.zyx.rpc.live.TextLiveItemFacade;
+import com.zyx.vo.account.AccountInfoVo;
+import com.zyx.vo.live.BarrageVo;
+import com.zyx.vo.live.LiveInfoVo;
+import com.zyx.vo.live.TextLiveItemVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,26 +27,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.alibaba.fastjson.JSON;
-import com.zyx.common.page.PageParam;
-import com.zyx.constants.account.AccountConstants;
-import com.zyx.constants.live.LiveConstants;
-import com.zyx.entity.live.Barrage;
-import com.zyx.entity.live.LiveInfo;
-import com.zyx.entity.live.TextLiveItem;
-import com.zyx.rpc.account.AccountCommonFacade;
-import com.zyx.rpc.account.AccountInfoFacade;
-import com.zyx.rpc.live.BarrageFacade;
-import com.zyx.rpc.live.LiveInfoFacade;
-import com.zyx.rpc.live.TextLiveItemFacade;
-import com.zyx.vo.account.AccountInfoVo;
-import com.zyx.vo.live.BarrageVo;
-import com.zyx.vo.live.LiveInfoVo;
-import com.zyx.vo.live.LiveSearchVo;
-import com.zyx.vo.live.TextLiveItemVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -57,7 +54,8 @@ public class LiveController {
 	BarrageFacade barrageFacade;
 	@Autowired
 	AccountInfoFacade accountInfoFacade;
-
+	@Autowired
+	LiveLabFacade liveLabFacade;
 	@Autowired
 	AccountCommonFacade accountCommonFacade;
 
@@ -118,10 +116,10 @@ public class LiveController {
 	@ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
 	public ModelAndView getLabs() {
 		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-		Map<Integer,String>  map = new HashMap<>();
-		map.put(1, "NBA");
-		attrMap.put(LiveConstants.DATA, map);
+		attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+		attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
+		List<String> list = liveLabFacade.getAllLabs();
+		attrMap.put(LiveConstants.DATA, list);
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
@@ -197,7 +195,7 @@ public class LiveController {
 				if (flag) {
 					LiveInfo liveInfo = new LiveInfo();
 					liveInfo.setId(id);
-					liveInfo.setStatus(status);
+					liveInfo.setState(status);
 					liveInfoFacade.updateNotNull(liveInfo);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 				} else {
@@ -240,7 +238,7 @@ public class LiveController {
 					liveInfoVo.setPageNo(pageSize);
 					liveInfoVo.setPageSize(pageSize);
 				}
-				List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
+				List<LiveInfoDto> list = liveInfoFacade.getList(liveInfoVo);
 				attrMap.put(LiveConstants.DATA, list);
 				attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 			} catch (Exception e) {
@@ -272,7 +270,7 @@ public class LiveController {
 			}
 			liveInfoVo.setPageNo(pageSize);
 			liveInfoVo.setPageSize(pageSize);
-			List<LiveInfo> list = liveInfoFacade.getList(liveInfoVo);
+			List<LiveInfoDto> list = liveInfoFacade.getList(liveInfoVo);
 			attrMap.put(LiveConstants.DATA, list);
 			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
 		} catch (Exception e) {
@@ -284,33 +282,6 @@ public class LiveController {
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
 	}
-
-//	@RequestMapping(value = "/search", method = RequestMethod.POST)
-//	@ApiOperation(value = "直播-直播模块搜索", notes = "直播-直播模块搜索")
-//	public ModelAndView searchLiveList(@RequestParam(name = "lab", required = false) Integer lab,
-//			@RequestParam(name = "name", required = false) String name,
-//			@RequestParam(name = "keyWord", required = false) String keyWord) {
-//		Map<String, Object> attrMap = new HashMap<>();
-//		attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//		try {
-//			LiveSearchVo liveSearchVo = new LiveSearchVo();
-//			liveSearchVo.setLab(lab);
-//			liveSearchVo.setName(name);
-//			liveSearchVo.setKeyWord(keyWord);
-//			List<LiveInfo> list = liveInfoFacade.searchList(liveSearchVo);
-//			attrMap.put("liveInfos", list);
-//			attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-//		} catch (NumberFormatException nfe) {
-//			nfe.printStackTrace();
-//			attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//		}
-//		AbstractView jsonView = new MappingJackson2JsonView();
-//		jsonView.setAttributesMap(attrMap);
-//		return new ModelAndView(jsonView);
-//	}
 
 	@RequestMapping(value = "/get", method = {RequestMethod.POST,RequestMethod.GET})
 	@ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")
@@ -508,33 +479,33 @@ public class LiveController {
 			attrMap.put(LiveConstants.STATE, LiveConstants.LIVE_BARRAGE_NULL_CONTENT);
 			attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_LIVE_BARRAGE_NULL_CONTENT);
 		} else {
-			try {
+//			try {
 				Map<String, Object> rstMap = accountInfoFacade.queryAccountInfo(token, userId);
-				AccountInfoVo account = (AccountInfoVo) rstMap.get("result");
-				if (null == account) {
-					attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50300);
-					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50300_MSG);
-				} else {
+//				AccountInfoVo account = (AccountInfoVo) rstMap.get("result");
+//				if (null == account) {
+//					attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50300);
+//					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50300_MSG);
+//				} else {
 					// 传入参数构造
 					Barrage entity = new Barrage();
 					entity.setLiveId(liveId);
 					entity.setContent(content);
-					entity.setUserId(account.getId());
-					entity.setNickName(account.getNickname());
-					entity.setAvatar(account.getAvatar());
+					entity.setUserId(10);
+					entity.setNickName("mrdeng");
+					entity.setAvatar("tgest");
 					entity.setCreateTime(System.currentTimeMillis());
 					barrageFacade.add(entity);
 					attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-				}
-			} catch (NumberFormatException nfe) {
-				// nfe.printStackTrace();
-				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
-			} catch (Exception e) {
-				// e.printStackTrace();
-				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
-				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-			}
+//				}
+//			} catch (NumberFormatException nfe) {
+//				// nfe.printStackTrace();
+//				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
+//				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+//			} catch (Exception e) {
+//				// e.printStackTrace();
+//				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
+//				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+//			}
 		}
 		AbstractView jsonView = new MappingJackson2JsonView();
 		jsonView.setAttributesMap(attrMap);
@@ -576,16 +547,4 @@ public class LiveController {
 		jsonView.setAttributesMap(attrMap);
 		return new ModelAndView(jsonView);
 	}
-	@RequestMapping(value = "/deva/get", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "直播-获取所有首推", notes = "直播-获取所有首推")
-	public ModelAndView getDeva() {
-		Map<String, Object> attrMap = new HashMap<>();
-		attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-		List<LiveInfo> list = liveInfoFacade.getDevaLives();
-		attrMap.put("data", list);
-		AbstractView jsonView = new MappingJackson2JsonView();
-		jsonView.setAttributesMap(attrMap);
-		return new ModelAndView(jsonView);
-	}
-		
 }

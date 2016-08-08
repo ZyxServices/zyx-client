@@ -2,7 +2,6 @@ package com.zyx.controller.activity;
 
 
 import com.zyx.constants.Constants;
-import com.zyx.entity.activity.parm.UpdateDevaluationParm;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.utils.ActivityUtils;
 import com.zyx.utils.FileUploadUtils;
