@@ -38,7 +38,7 @@ public class ActivityController {
     private AccountCommonFacade accountCommonFacade;
 
     @RequestMapping(value = "/release", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "活动发布")
+    @ApiOperation(value = "活动发布", notes = "活动发布")
     public ModelAndView release(@RequestParam(name = "token", required = true) String token,
                                 @RequestParam(name = "createId", required = true) Integer createId,
                                 @RequestParam(name = "title", required = true) String title,
@@ -77,7 +77,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "活动查询")
+    @ApiOperation(value = "活动查询", notes = "活动查询")
     public ModelAndView query(@RequestParam(name = "token", required = true) String token,
                               @RequestParam(name = "createId", required = false) Integer createId,
                               @RequestParam(name = "id", required = false) Integer id,
@@ -110,7 +110,7 @@ public class ActivityController {
 
 
     @RequestMapping(value = "/memberTemplate", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "活动报名模板查询")
+    @ApiOperation(value = "活动报名模板查询", notes = "活动报名模板查询")
     public ModelAndView memberTemplate(@RequestParam(name = "token", required = true) String token,
                                        @RequestParam(name = "id", required = true) Integer activitiId) {
 
@@ -127,7 +127,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "查询历史活动")
+    @ApiOperation(value = "查询历史活动", notes = "查询历史活动")
     public ModelAndView history(@RequestParam(name = "token", required = true) String token,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
                                 @RequestParam(name = "page", required = true) Integer page) {

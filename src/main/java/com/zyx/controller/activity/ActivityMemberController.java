@@ -36,7 +36,7 @@ public class ActivityMemberController {
     private AccountCommonFacade accountCommonFacade;
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "活动报名")
+    @ApiOperation(value = "活动报名", notes = "活动报名")
     public ModelAndView signup(@RequestParam(name = "token", required = true) String token,
                                @RequestParam(name = "activityId", required = true) Integer activitiId,
                                @RequestParam(name = "userId", required = true) Integer userId,
@@ -65,7 +65,7 @@ public class ActivityMemberController {
     }
 
     @RequestMapping(value = "/cancelSignup", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "取消对的活动报名")
+    @ApiOperation(value = "取消对的活动报名", notes = "取消对的活动报名")
     public ModelAndView cancelSignup(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "activityId", required = true) Integer activitiId,
                                      @RequestParam(name = "userId", required = true) Integer userId) {
@@ -87,7 +87,7 @@ public class ActivityMemberController {
     }
 
     @RequestMapping(value = "/memberPeople", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "查询参与活动人列表（详细信息）可查寻当前用户参加过到活动")
+    @ApiOperation(value = "查询参与活动人列表（详细信息）/可查寻当前用户参加过到活动", notes = "查询参与活动人列表（详细信息）/可查寻当前用户参加过到活动")
     public ModelAndView memberPeople(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "activityId", required = false) Integer activitiId,
                                      @RequestParam(name = "userId", required = false) Integer userId) {
@@ -111,7 +111,7 @@ public class ActivityMemberController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "发起者审核报名用户")
+    @ApiOperation(value = "发起者审核报名用户", notes = "发起者审核报名用户")
     public ModelAndView update(@RequestParam(name = "token", required = false) String token,
                                      @RequestParam(name = "id", required = true) Integer id) {
 
