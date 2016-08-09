@@ -32,14 +32,14 @@ public class PageViwesController {
     private PageViwesFacade pageViwesFacade;
 
     @RequestMapping(value = "/pageViwes", method = RequestMethod.POST)
-    @ApiOperation(value = "浏览量", notes = "浏览量（0 直播  1 动态  2 活动  3 帖子  4 个人主页）")
+    @ApiOperation(value = "浏览量（0 直播  1 动态  2 活动  3 帖子  4 个人主页）", notes = "浏览量（0 直播  1 动态  2 活动  3 帖子  4 个人主页）")
     public void pageViwes(@RequestParam(name = "types", required = true) Integer types,
                           @RequestParam(name = "typeId", required = true) Integer typeId) {
         pageViwesFacade.pageViwes(types, typeId);
     }
 
     @RequestMapping(value = "/getPageViwes", method = RequestMethod.POST)
-    @ApiOperation(value = "浏览量", notes = "获取浏览量")
+    @ApiOperation(value = "获取浏览量", notes = "获取浏览量")
     public ModelAndView getPageViwes(@RequestParam(name = "types", required = true) Integer types,
                                      @RequestParam(name = "typeId", required = true) Integer typeId) {
         AbstractView jsonView = new MappingJackson2JsonView();

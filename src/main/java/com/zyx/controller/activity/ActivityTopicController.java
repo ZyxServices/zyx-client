@@ -39,7 +39,7 @@ public class ActivityTopicController {
     private AccountCommonFacade accountCommonFacade;
 
     @RequestMapping(value = "/dynamic", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "发布活动动态")
+    @ApiOperation(value = "发布活动动态", notes = "发布活动动态")
     public ModelAndView dynamic(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "activityId", required = true) Integer activitiId,
                                 @RequestParam(name = "userId", required = true) Integer userId,
@@ -82,7 +82,7 @@ public class ActivityTopicController {
     }
 
     @RequestMapping(value = "/dynamicQuery", method = RequestMethod.POST)
-    @ApiOperation(value = "活动接口", notes = "查询当前活动的发布动态")
+    @ApiOperation(value = "查询当前活动的发布动态", notes = "查询当前活动的发布动态")
     public ModelAndView dynamicQuery(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "activityId", required = true) Integer activitiId,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
