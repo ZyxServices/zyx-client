@@ -10,7 +10,7 @@
     <name>tiyujia</name>
     <url>http://maven.apache.org</url>
 
-    <repositories>
+    <!--<repositories>
         <repository>
             <id>nexus</id>
             <name>local private nexus</name>
@@ -23,7 +23,7 @@
             </snapshots>
         </repository>
     </repositories>
-
+-->
     <properties>
         <maven-compiler-plugin-version>3.3</maven-compiler-plugin-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

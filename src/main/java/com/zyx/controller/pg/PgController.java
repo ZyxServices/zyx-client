@@ -35,8 +35,7 @@ public class PgController {
     public ModelAndView addCircle(@RequestParam("token") String token,
                                   @RequestParam("title") String title,
                                   @RequestParam("createId") Integer createId,
-                                  @RequestParam("state") Integer state,
-//                                  @RequestParam("type") Integer type,
+                                  @RequestParam("circleType") Integer circleType,
                                   @RequestParam("details") String details,
                                   @RequestPart(value = "headImgUrl", required = false) MultipartFile headImgUrl) {
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -47,7 +46,7 @@ public class PgController {
             jsonView.setAttributesMap(returnResult);
             return new ModelAndView(jsonView);
         }
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, state, details, imgDbUrl);
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, imgDbUrl);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
@@ -170,10 +169,10 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/list/{token}/{max}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/circleItem/list/{token}/{max}/{circleId}", method = RequestMethod.GET)
     @ApiOperation(value = "帖子列表", notes = "帖子列表")
-    public ModelAndView circleItemList(@PathVariable String token, @PathVariable Integer max) {
-        Map<String, Object> map = pgFacade.circleItemList(max);
+    public ModelAndView circleItemList(@PathVariable String token, @PathVariable Integer max, @PathVariable Integer circleId) {
+        Map<String, Object> map = pgFacade.circleItemList(max, circleId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -189,10 +188,10 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/top/{token}/{max}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/circleItem/top/{token}/{max}/{circleId}", method = RequestMethod.GET)
     @ApiOperation(value = "获取置顶帖子列表", notes = "获取置顶帖子列表")
-    public ModelAndView top(@PathVariable String token, @PathVariable Integer max) {
-        Map<String, Object> map = pgFacade.top(max);
+    public ModelAndView top(@PathVariable String token, @PathVariable Integer max, @PathVariable Integer circleId) {
+        Map<String, Object> map = pgFacade.top(max, circleId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
