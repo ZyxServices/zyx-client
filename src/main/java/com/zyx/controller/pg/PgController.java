@@ -235,7 +235,7 @@ public class PgController {
 //    }
 
     @RequestMapping(value = "/v1/circle/getOne/{circleId}/{accountId}", method = RequestMethod.GET)
-    @ApiOperation(value = "获取圈子单条数据", notes = "根据圈子id，用户id查询，范围帖子数，关注数，是否关注等信息")
+    @ApiOperation(value = "获取圈子数据", notes = "根据圈子id，用户id查询，范围帖子数，关注数，是否关注等信息")
     public ModelAndView queryConcernDeva(@PathVariable Integer circleId, @PathVariable Integer accountId) {
         Map<String, Object> returnMap = pgFacade.findCircle(circleId, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
