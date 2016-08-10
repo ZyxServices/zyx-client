@@ -243,5 +243,14 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
+    @RequestMapping(value = "/v1/cern/findParams/{token}/{concernId}/{concernType}", method = RequestMethod.GET)
+    @ApiOperation(value = "关注列表条件查询", notes = "concernId，与concernType，自行去github查看")
+    public ModelAndView findMyconcernParams(@PathVariable Integer token, @PathVariable Integer concernId, @PathVariable Integer concernType) {
+        Map<String, Object> returnMap = pgFacade.findMyConcernParams(concernId, concernType);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
 
 }
