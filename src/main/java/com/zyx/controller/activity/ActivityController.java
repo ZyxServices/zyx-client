@@ -43,6 +43,7 @@ public class ActivityController {
                                 @RequestParam(name = "createId", required = true) Integer createId,
                                 @RequestParam(name = "title", required = true) String title,
                                 @RequestParam(name = "desc", required = true) String desc,
+                                @RequestParam(name = "descimage", required = false) String[] descimage,
                                 @RequestPart(name = "image", required = true) MultipartFile image,
                                 @RequestParam(name = "startTime", required = true) Long startTime,
                                 @RequestParam(name = "endTime", required = true) Long endTime,
@@ -65,7 +66,14 @@ public class ActivityController {
         String uploadFile = FileUploadUtils.uploadFile(image);
 
         Map<String, Object> verify = ImagesVerifyUtils.verify(uploadFile);
-
+        if (descimage != null && descimage.length >= 0) {
+            String htmlImage = "";
+            for (String s : descimage) {
+                String html = "<img src=http://image.tiyujia.com/" + s + "/><br/>";
+                htmlImage += html;
+            }
+            desc = desc + "<br/>" + htmlImage;
+        }
         if (verify != null) {
             jsonView.setAttributesMap(verify);
             return new ModelAndView(jsonView);
@@ -85,7 +93,8 @@ public class ActivityController {
                               @RequestParam(name = "startTime", required = false) Long startTime,
                               @RequestParam(name = "endTime", required = false) Long endTime,
                               @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
-                              @RequestParam(name = "page", required = true) Integer page) {
+                              @RequestParam(name = "page", required = true) Integer page,
+                              @RequestParam(name = "editState", required = false) Integer editState) {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -101,6 +110,7 @@ public class ActivityController {
         parm.setEndTime(endTime);
         parm.setPageNumber(pageNumber);
         parm.setPage(page);
+        parm.setEditState(editState != null ? editState : 0);
 
         Map<String, Object> map = activityFacade.queryActivity(parm);
 
