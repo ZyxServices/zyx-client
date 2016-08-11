@@ -30,7 +30,7 @@ public interface PgFacade {
      * @param details    内容
      * @param headImgUrl 圈子头像url
      */
-    Map<String, Object> insertCircle(String title, Integer createId, Integer circleType, String details, String headImgUrl);
+    Map<String, Object> insertCircle(String title, Integer createId, Integer circleType, String details, String headImgUrl, Integer tag);
 
 
     /**
@@ -175,11 +175,49 @@ public interface PgFacade {
 
     /**
      * 根据关注类型跟对应id查询关注列表
+     *
      * @param concernId
      * @param concernType
      * @return
      */
-    Map<String,Object> findMyConcernParams(Integer concernId,Integer concernType);
+    Map<String, Object> findMyConcernParams(Integer concernId, Integer concernType);
+
+    /**
+     * 根据用户id删除帖子
+     *
+     * @param createThisId
+     * @param circleItemId
+     * @return
+     */
+    Map<String, Object> deleteCircleItem(Integer createThisId, Integer circleItemId);
+
+    /**
+     * 取消圈主
+     *
+     * @param circleId
+     * @param accountId
+     * @return
+     */
+    Map<String, Object> closeMaster(Integer circleId, Integer accountId);
+
+    /**
+     * 修改圈子图片
+     *
+     * @param imgUrl
+     * @param circleId
+     * @return
+     */
+    Map<String, Object> updateCircleImg(String imgUrl, Integer circleId);
+
+    /**
+     * 设置管理员
+     *
+     * @param createId
+     * @param adminIds
+     * @param circleId
+     * @return
+     */
+    Map<String, Object> setAdmins(Integer createId, String adminIds, Integer circleId);
 
 
 }

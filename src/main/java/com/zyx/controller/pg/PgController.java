@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author XiaoWei
@@ -37,16 +38,19 @@ public class PgController {
                                   @RequestParam("createId") Integer createId,
                                   @RequestParam("circleType") Integer circleType,
                                   @RequestParam("details") String details,
+                                  @RequestParam("tag") Integer tag,
                                   @RequestPart(value = "headImgUrl", required = false) MultipartFile headImgUrl) {
         AbstractView jsonView = new MappingJackson2JsonView();
-
-        String imgDbUrl = FileUploadUtils.uploadFile(headImgUrl);
-        Map<String, Object> returnResult = ImagesVerifyUtils.verify(imgDbUrl);
-        if (returnResult != null) {
-            jsonView.setAttributesMap(returnResult);
-            return new ModelAndView(jsonView);
+        String imgDbUrl = null;
+        if (!Objects.equals(headImgUrl, null)) {
+            imgDbUrl = FileUploadUtils.uploadFile(headImgUrl);
+            Map<String, Object> returnResult = ImagesVerifyUtils.verify(imgDbUrl);
+            if (returnResult != null) {
+                jsonView.setAttributesMap(returnResult);
+                return new ModelAndView(jsonView);
+            }
         }
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, imgDbUrl);
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, imgDbUrl, tag);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
@@ -169,9 +173,11 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/list/{token}/{max}/{circleId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/circleItem/list", method = RequestMethod.POST)
     @ApiOperation(value = "帖子列表", notes = "帖子列表")
-    public ModelAndView circleItemList(@PathVariable String token, @PathVariable Integer max, @PathVariable Integer circleId) {
+    public ModelAndView circleItemList(@RequestParam(value = "token", required = false) String token,
+                                       @RequestParam(value = "max") Integer max,
+                                       @RequestParam(value = "circleId", required = false) Integer circleId) {
         Map<String, Object> map = pgFacade.circleItemList(max, circleId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -245,12 +251,66 @@ public class PgController {
 
     @RequestMapping(value = "/v1/cern/findParams/{token}/{concernId}/{concernType}", method = RequestMethod.GET)
     @ApiOperation(value = "关注列表条件查询", notes = "concernId，与concernType，自行去github查看")
-    public ModelAndView findMyconcernParams(@PathVariable Integer token, @PathVariable Integer concernId, @PathVariable Integer concernType) {
+    public ModelAndView findMyconcernParams(@PathVariable String token, @PathVariable Integer concernId, @PathVariable Integer concernType) {
         Map<String, Object> returnMap = pgFacade.findMyConcernParams(concernId, concernType);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
     }
 
+    @RequestMapping(value = "/v1/circleItem/delete", method = RequestMethod.POST)
+    @ApiOperation(value = "删除帖子", notes = "createId 户名id,circleItemId 帖子id")
+    public ModelAndView deleteCircleItemByThisUser(
+            @RequestParam(value = "createId") Integer createId,
+            @RequestParam(value = "circleItemId") Integer circleItemId) {
+        Map<String, Object> returnMap = pgFacade.deleteCircleItem(createId, circleItemId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circle/closeMaster", method = RequestMethod.PUT)
+    @ApiOperation(value = "取消圈主", notes = "circleId 圈子id,accountId 用户id")
+    public ModelAndView closeMaster(
+            @RequestParam(value = "circleId") Integer circleId,
+            @RequestParam(value = "accountId") Integer accountId) {
+        Map<String, Object> returnMap = pgFacade.closeMaster(circleId, accountId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circle/updateImg", method = RequestMethod.POST)
+    @ApiOperation(value = "修改圈子图片", notes = "circleId 圈子id,accountId 用户id")
+    public ModelAndView updateCircleImg(
+            @RequestParam(value = "circleId") Integer circleId,
+            @RequestPart(value = "imgFile") MultipartFile imgFile) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        String imgDbUrl = null;
+        if (!Objects.equals(imgFile, null)) {
+            imgDbUrl = FileUploadUtils.uploadFile(imgFile);
+            Map<String, Object> returnResult = ImagesVerifyUtils.verify(imgDbUrl);
+            if (returnResult != null) {
+                jsonView.setAttributesMap(returnResult);
+                return new ModelAndView(jsonView);
+            }
+        }
+        Map<String, Object> returnMap = pgFacade.updateCircleImg(imgDbUrl, circleId);
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circle/setAdminIds", method = RequestMethod.PUT)
+    @ApiOperation(value = "设置管理员", notes = "circleId 圈子id,accountId 当前操作用户id,adminIds 管理员id字符串，设置管理员与取消管理员同样适用")
+    public ModelAndView setAdminIds(
+            @RequestParam(value = "accountId") Integer accountId,
+            @RequestParam(value = "adminIds") String adminIds,
+            @RequestParam(value = "circleId") Integer circleId) {
+        Map<String, Object> returnMap = pgFacade.setAdmins(accountId, adminIds, circleId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
 
 }
