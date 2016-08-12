@@ -124,10 +124,10 @@ public interface PgFacade {
     /**
      * 设置置顶圈子
      *
-     * @param circle
+     * @param circleItemId
      * @return
      */
-    Map<String, Object> setTop(Integer circle);
+    Map<String, Object> setTop(Integer tooSize, Integer circleItemId);
 
     /**
      * 获取圈子置顶数据

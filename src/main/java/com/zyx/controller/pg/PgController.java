@@ -185,10 +185,12 @@ public class PgController {
     }
 
 
-    @RequestMapping(value = "/v1/circleItem/setTop/{token}/{circle_id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/v1/circleItem/setTop", method = RequestMethod.POST)
     @ApiOperation(value = "设置置顶帖子", notes = "设置置顶帖子")
-    public ModelAndView setTop(@PathVariable String token, @PathVariable Integer circle_id) {
-        Map<String, Object> map = pgFacade.setTop(circle_id);
+    public ModelAndView setTop(@RequestParam("token") String token,
+                               @RequestParam("circle_id") Integer circle_id,
+                               @RequestParam("topSize") Integer topSize) {
+        Map<String, Object> map = pgFacade.setTop(topSize, circle_id);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -258,18 +260,18 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/circleItem/delete/{createId}/{circleItemId}", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除帖子", notes = "createId 户名id,circleItemId 帖子id")
     public ModelAndView deleteCircleItemByThisUser(
-            @RequestParam(value = "createId") Integer createId,
-            @RequestParam(value = "circleItemId") Integer circleItemId) {
+            @PathVariable("createId") Integer createId,
+            @PathVariable("circleItemId") Integer circleItemId) {
         Map<String, Object> returnMap = pgFacade.deleteCircleItem(createId, circleItemId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circle/closeMaster", method = RequestMethod.PUT)
+    @RequestMapping(value = "/v1/circle/closeMaster", method = RequestMethod.POST)
     @ApiOperation(value = "取消圈主", notes = "circleId 圈子id,accountId 用户id")
     public ModelAndView closeMaster(
             @RequestParam(value = "circleId") Integer circleId,
@@ -301,7 +303,7 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circle/setAdminIds", method = RequestMethod.PUT)
+    @RequestMapping(value = "/v1/circle/setAdminIds", method = RequestMethod.POST)
     @ApiOperation(value = "设置管理员", notes = "circleId 圈子id,accountId 当前操作用户id,adminIds 管理员id字符串，设置管理员与取消管理员同样适用")
     public ModelAndView setAdminIds(
             @RequestParam(value = "accountId") Integer accountId,
