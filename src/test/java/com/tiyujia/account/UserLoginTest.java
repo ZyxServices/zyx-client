@@ -13,6 +13,7 @@ import org.junit.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.Assert.fail;
@@ -45,18 +46,22 @@ public class UserLoginTest {
 
     @Test
     public void testMethod1() throws IOException {
-        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/account/login");
-        try {
-            CloseableHttpClient client = HttpClients.createDefault();
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("phone", "18502826672"));
-            params.add(new BasicNameValuePair("pwd", "7788119"));
-            UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
-            httpPost.setEntity(httpEntity );
-            CloseableHttpResponse response = client.execute(httpPost);
-            System.out.println(EntityUtils.toString(response.getEntity()));
-        } finally {
-            httpPost.releaseConnection();
-        }
+//        HttpPost httpPost = new HttpPost("http://localhost:8080/v1/account/login");
+//        try {
+//            CloseableHttpClient client = HttpClients.createDefault();
+//            List<NameValuePair> params = new ArrayList<NameValuePair>();
+//            params.add(new BasicNameValuePair("phone", "18502826672"));
+//            params.add(new BasicNameValuePair("pwd", "7788119"));
+//            UrlEncodedFormEntity httpEntity = new UrlEncodedFormEntity( params, "UTF-8");
+//            httpPost.setEntity(httpEntity );
+//            CloseableHttpResponse response = client.execute(httpPost);
+//            System.out.println(EntityUtils.toString(response.getEntity()));
+//        } finally {
+//            httpPost.releaseConnection();
+//        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(650697901065l);
+        System.out.println(calendar.getTime());
     }
 }

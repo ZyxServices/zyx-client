@@ -45,6 +45,19 @@ public class AccountController {
         return new ModelAndView(jsonView);
     }
 
+    @RequestMapping(value = "/center_info", method = {RequestMethod.GET})
+    @ApiOperation(value = "通过用户ID查询个人中心用户信息", notes = "通过用户ID查询个人中心用户信息")
+    public ModelAndView centerInfo(@RequestParam(name = "token") String token, @RequestParam(name = "account_id") Integer userId) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            jsonView.setAttributesMap(accountInfoFacade.queryMyCenterInfo(token, userId));
+        }
+        return new ModelAndView(jsonView);
+    }
+
     @RequestMapping(value = "/info/edit", method = {RequestMethod.POST})
     @ApiOperation(value = "通过用户ID编辑用户信息", notes = "通过用户ID编辑用户信息")
     public ModelAndView edit(@RequestParam(name = "token") String token,

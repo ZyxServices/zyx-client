@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/v1/my/circle")
-@Api(description = "我的圈子相关接口。1、查询我的圈子列表。")
+@Api(description = "我的圈子相关接口。1、查询我的圈子列表。2、查询我创建的圈子列表。3、查询我关注的圈子列表。")
 public class MyCircleController {
 
     @Resource
@@ -31,7 +31,7 @@ public class MyCircleController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ApiOperation(value = "我的圈子列表", notes = "我的圈子列表")
     public ModelAndView myCircleList(@RequestParam String token, @RequestParam Integer accountId) {
-        Map<String, Object> map = myCircleFacade.myCircleList(accountId);
+        Map<String, Object> map = myCircleFacade.myCircleList(token, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -40,7 +40,7 @@ public class MyCircleController {
     @RequestMapping(value = "/create/ist", method = RequestMethod.GET)
     @ApiOperation(value = "我创建的圈子列表", notes = "我创建的圈子列表")
     public ModelAndView circleList(@RequestParam String token, @RequestParam Integer accountId) {
-        Map<String, Object> map = myCircleFacade.myCreateList(accountId);
+        Map<String, Object> map = myCircleFacade.myCreateList(token, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -49,7 +49,7 @@ public class MyCircleController {
     @RequestMapping(value = "/concern/list", method = RequestMethod.GET)
     @ApiOperation(value = "我关注的圈子列表", notes = "我关注的圈子列表")
     public ModelAndView concernList(@RequestParam String token, @RequestParam Integer accountId) {
-        Map<String, Object> map = myCircleFacade.myConcernList(accountId);
+        Map<String, Object> map = myCircleFacade.myConcernList(token, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
