@@ -241,6 +241,14 @@ public class PgController {
 //        jsonView.setAttributesMap(returnMap);
 //        return new ModelAndView(jsonView);
 //    }
+    @RequestMapping(value = "/v1/circle/getOne/{circleId}/{accountId}", method = RequestMethod.GET)
+    @ApiOperation(value = "获取圈子数据", notes = "根据圈子id，用户id查询，范围帖子数，关注数，是否关注等信息")
+    public ModelAndView getOne(@PathVariable Integer circleId, @PathVariable Integer accountId) {
+        Map<String, Object> returnMap = pgFacade.findCircle(circleId, accountId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
 
     @RequestMapping(value = "/v1/cern/findParams/{token}/{concernId}/{concernType}", method = RequestMethod.GET)
     @ApiOperation(value = "关注列表条件查询", notes = "concernId，与concernType，自行去github查看")
@@ -305,5 +313,16 @@ public class PgController {
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
     }
+
+    @RequestMapping(value = "/v1/circle/jxCircle/{max}", method = RequestMethod.GET)
+    @ApiOperation(value = "获取精选圈子", notes = "max为查询最大条数")
+    public ModelAndView jxCircle(
+            @PathVariable(value = "max") Integer max) {
+        Map<String, Object> returnMap = pgFacade.jxCircle(max);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
 
 }
