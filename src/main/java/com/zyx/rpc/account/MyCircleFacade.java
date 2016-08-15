@@ -11,9 +11,9 @@ import java.util.Map;
  * @title MyCircleFacade.java
  */
 public interface MyCircleFacade {
-    Map<String, Object> myCircleList(Integer accountId);
+    Map<String, Object> myCircleList(String token, Integer accountId);
 
-    Map<String, Object> myCreateList(Integer createId);
+    Map<String, Object> myCreateList(String token, Integer createId);
 
-    Map<String, Object> myConcernList(Integer accountId);
+    Map<String, Object> myConcernList(String token, Integer accountId);
 }
