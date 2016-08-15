@@ -230,7 +230,7 @@ public class PgController {
 //        return new ModelAndView(jsonView);
 //    }
 
-//    @RequestMapping(value = "/v1/concern/queryConcernDeva/{token}", method = RequestMethod.GET)
+    //    @RequestMapping(value = "/v1/concern/queryConcernDeva/{token}", method = RequestMethod.GET)
 //    @ApiOperation(value = "动态首推数据", notes = "动态首推数据")
 //    public ModelAndView queryConcernDeva(@PathVariable String token) {
 //        List<Concern> list = pgFacade.queryConcernDeva();
@@ -319,6 +319,26 @@ public class PgController {
     public ModelAndView jxCircle(
             @PathVariable(value = "max") Integer max) {
         Map<String, Object> returnMap = pgFacade.jxCircle(max);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circleItem/lbCircleItem/{max}", method = RequestMethod.GET)
+    @ApiOperation(value = "获取精选圈子模块帖子轮播图", notes = "max为查询最大条数")
+    public ModelAndView lbCircleItem(
+            @PathVariable(value = "max") Integer max) {
+        Map<String, Object> returnMap = pgFacade.lbCircleItem(max);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/concern/getFollow/{loginUserId}", method = RequestMethod.GET)
+    @ApiOperation(value = "根据登录用户查询当前用户的关注的动态列表", notes = "loginUserId：登录用户id")
+    public ModelAndView getFollow(
+            @PathVariable(value = "loginUserId") Integer loginUserId) {
+        Map<String, Object> returnMap = pgFacade.getMyFollowList(loginUserId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
