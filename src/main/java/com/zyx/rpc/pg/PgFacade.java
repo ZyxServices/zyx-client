@@ -148,21 +148,6 @@ public interface PgFacade {
      */
     Map<String, Object> addReply(Integer reply_type, Integer reply_id, Integer account_id, String content);
 
-
-    /**
-     * 获取圈子首推数据
-     *
-     * @return
-     */
-    List<Circle> queryCircleDeva();
-
-    /**
-     * 获取动态首推数据
-     *
-     * @return
-     */
-    List<Concern> queryConcernDeva();
-
     /**
      * 根据圈子id和用户id获取圈子相关数据
      *

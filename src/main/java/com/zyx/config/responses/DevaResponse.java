@@ -1,7 +1,7 @@
 package com.zyx.config.responses;
 
 import com.zyx.config.BaseResponse;
-import com.zyx.entity.Devaluation;
+import com.zyx.entity.system.Devaluation;
 
 import java.util.List;
 
