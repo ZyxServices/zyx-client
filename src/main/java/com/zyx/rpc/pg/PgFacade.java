@@ -226,4 +226,11 @@ public interface PgFacade {
      * @return
      */
     Map<String, Object> getMyFollowList(Integer loginUserId);
+
+    /**
+     *大咖动态
+     * @param max
+     * @return
+     */
+    Map<String, Object> starConcern(Integer max);
 }

@@ -39,18 +39,9 @@ public class PgController {
                                   @RequestParam("circleType") Integer circleType,
                                   @RequestParam("details") String details,
                                   @RequestParam("tag") Integer tag,
-                                  @RequestPart(value = "headImgUrl", required = false) MultipartFile headImgUrl) {
+                                  @RequestParam(value = "headImgUrl", required = false) String headImgUrl) {
         AbstractView jsonView = new MappingJackson2JsonView();
-        String imgDbUrl = null;
-        if (!Objects.equals(headImgUrl, null)) {
-            imgDbUrl = FileUploadUtils.uploadFile(headImgUrl);
-            Map<String, Object> returnResult = ImagesVerifyUtils.verify(imgDbUrl);
-            if (returnResult != null) {
-                jsonView.setAttributesMap(returnResult);
-                return new ModelAndView(jsonView);
-            }
-        }
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, imgDbUrl, tag);
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, headImgUrl, tag);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
@@ -73,17 +64,11 @@ public class PgController {
                                 @RequestParam(name = "type") Integer type,
                                 @RequestParam(name = "cernTitle") String cernTitle,
                                 @RequestParam(name = "content") String content,
-                                @RequestPart(name = "imgUrl") MultipartFile imgUrl,
-                                @RequestParam(name = "videoUrl") String videoUrl,
+                                @RequestParam(name = "imgUrl",required = false) String imgUrl,
+                                @RequestParam(name = "videoUrl",required = false) String videoUrl,
                                 @RequestParam(name = "visible") Integer visible) {
         AbstractView jsonView = new MappingJackson2JsonView();
-        String imgDbUrl = FileUploadUtils.uploadFile(imgUrl);
-        Map<String, Object> returnResult = ImagesVerifyUtils.verify(imgDbUrl);
-        if (returnResult != null) {
-            jsonView.setAttributesMap(returnResult);
-            return new ModelAndView(jsonView);
-        }
-        Map<String, Object> map = pgFacade.addCern(userId, type, cernTitle, content, imgDbUrl, videoUrl, visible);
+        Map<String, Object> map = pgFacade.addCern(userId, type, cernTitle, content, imgUrl, videoUrl, visible);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
@@ -339,6 +324,16 @@ public class PgController {
     public ModelAndView getFollow(
             @PathVariable(value = "loginUserId") Integer loginUserId) {
         Map<String, Object> returnMap = pgFacade.getMyFollowList(loginUserId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/concern/starConcern/{max}", method = RequestMethod.GET)
+    @ApiOperation(value = "大咖动态", notes = "max：最大条数")
+    public ModelAndView starConcern(
+            @PathVariable(value = "max") Integer max) {
+        Map<String, Object> returnMap = pgFacade.starConcern(max);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
