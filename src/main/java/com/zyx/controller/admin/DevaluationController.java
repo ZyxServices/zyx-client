@@ -1,7 +1,6 @@
 package com.zyx.controller.admin;
 
 import com.zyx.config.BaseResponse;
-import com.zyx.config.responses.DevaResponse;
 import com.zyx.constants.Constants;
 import com.zyx.constants.live.LiveConstants;
 import com.zyx.rpc.system.DevaFacade;
