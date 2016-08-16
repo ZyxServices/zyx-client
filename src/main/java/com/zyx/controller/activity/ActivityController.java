@@ -136,6 +136,19 @@ public class ActivityController {
         return new ModelAndView(jsonView);
     }
 
+    @RequestMapping(value = "/queryGroupName", method = RequestMethod.POST)
+    @ApiOperation(value = "活动组合查询", notes = "活动组合查询")
+    public ModelAndView queryGroupName(@RequestParam(name = "name") String name) {
+
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        Map<String, Object> map = activityFacade.queryActivityGroupName(name);
+
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     @ApiOperation(value = "查询历史活动", notes = "查询历史活动")
     public ModelAndView history(@RequestParam(name = "token", required = true) String token,
