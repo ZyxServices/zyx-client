@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.zyx.entity.live.LiveInfo;
 import com.zyx.entity.live.dto.LiveInfoDto;
+import com.zyx.param.live.LiveInfoParam;
 import com.zyx.vo.live.LiveInfoVo;
 import com.zyx.vo.live.LiveSearchVo;
 
@@ -49,14 +50,14 @@ public interface LiveInfoFacade {
 	public LiveInfo getById(Integer id);
 	/**
 	 *
-	 * @param liveInfoVo
+	 * @param liveInfoParam
 	 * @return
 	 * @description 获取直播列表
 	 * @version 1.0
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:30:21
 	 */
-	public List<LiveInfoDto> getList(LiveInfoVo liveInfoVo);
+	public List<LiveInfoVo> getList(LiveInfoParam liveInfoParam);
 
 	/**
 	 *
