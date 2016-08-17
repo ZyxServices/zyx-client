@@ -3,7 +3,6 @@ package com.zyx.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -103,7 +102,7 @@ public class SwaggerConfig {
                 .build()
                 .apiInfo(activityApiInfo());
     }
-    
+
     @Bean
     public Docket liveApi() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -126,14 +125,38 @@ public class SwaggerConfig {
                 .apiInfo(liveApiInfo());
     }
 
+    @Bean
+    public Docket attentionApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("attention")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.attention"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build()
+                .apiInfo(attentionApiInfo());
+    }
 
+    private ApiInfo attentionApiInfo() {
+
+        ApiInfo apiInfo = new ApiInfo("关注接口API",//大标题
+                "1、关注相关接口",//小标题
+                "1.0",//版本
+                "NO terms of service",
+                new Contact("魏民升", "http://112.74.112.143:8081/ui/Delta/index.html", "449598723@qq.com"),// 作者
+                "体育家",//链接显示文字
+                "http://112.74.112.143:8081/ui/Delta/index.html"//网站链接
+        );
+
+
+        return apiInfo;
+    }
 
     private ApiInfo testApiInfo() {
         ApiInfo apiInfo = new ApiInfo("用户接口API",//大标题
                 "1、用户收货地址服务API。2、用户公共接口API。3、用户登录相关API。4、用户签到接口API。5、用户注册接口API。6、用户密码修改API。7、用户信息相关接口。",//小标题
                 "1.0",//版本
                 "NO terms of service",
-                "魏民升",//作者
+                new Contact("魏民升", "http://112.74.112.143:8081/ui/Delta/index.html", "449598723@qq.com"),// 作者
                 "体育家",//链接显示文字
                 "http://112.74.112.143:8081/ui/Delta/index.html"//网站链接
         );
@@ -146,29 +169,29 @@ public class SwaggerConfig {
                 "活动",//小标题
                 "0.1",//版本
                 "成都term",
-                "舒子栋",//作者
+                new Contact("舒子栋", "http://112.74.112.143:8081/ui/Delta/index.html", ""),// 作者
                 "体育家",//链接显示文字
                 "http://112.74.112.143:8081/ui/Delta/index.html "//网站链接
         );
 
         return apiInfo;
     }
-    
-    
-    
+
+
     private ApiInfo liveApiInfo() {
         ApiInfo apiInfo = new ApiInfo("直播接口API",//大标题
                 "图文直播，视频直播",//小标题
                 "0.1",//版本
                 "成都term",
-                "邓清海",//作者
+                new Contact("邓清海", "http://112.74.112.143:8081/ui/Delta/index.html", ""),// 作者
                 "智悠行",//链接显示文字
                 "http://112.74.112.143:8081/ui/Delta/index.html "//网站链接
         );
 
         return apiInfo;
     }
-//    this.title = title;
+
+    //    this.title = title;
 //    this.description = description;
 //    this.version = version;
 //    this.termsOfServiceUrl = termsOfServiceUrl;
