@@ -20,7 +20,7 @@
     <!-- 商城服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.shop.ShopService" id="shopService" check="false"/>
     <!-- 活动服务接口 -->
-    <dubbo:reference interface="com.zyx.rpc.activity.ActivityFacade" id="activityFacade" check="false"/>
+    <dubbo:reference interface="com.zyx.rpc.activity.ActivityFacade" id="activityFacade" check="false" timeout="10000"/>
     <dubbo:reference interface="com.zyx.rpc.activity.ActivityMemberFacade" id="activityMemberFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.activity.ActivityTopicFacade" id="activityTopicFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.activity.PageViwesFacade" id="pageViwesFacade" check="false"/>

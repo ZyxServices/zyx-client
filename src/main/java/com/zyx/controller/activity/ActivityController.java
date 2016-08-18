@@ -1,7 +1,6 @@
 package com.zyx.controller.activity;
 
 
-import com.zyx.constants.Constants;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.utils.ActivityUtils;
 import com.zyx.utils.FileUploadUtils;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -89,7 +87,6 @@ public class ActivityController {
     public ModelAndView query(@RequestParam(name = "token", required = true) String token,
                               @RequestParam(name = "createId", required = false) Integer createId,
                               @RequestParam(name = "id", required = false) Integer id,
-                              @RequestParam(name = "groupsName", required = false) String groupName,
                               @RequestParam(name = "startTime", required = false) Long startTime,
                               @RequestParam(name = "endTime", required = false) Long endTime,
                               @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
@@ -104,7 +101,6 @@ public class ActivityController {
 
         QueryActivityParm parm = new QueryActivityParm();
         parm.setCreateId(createId);
-        parm.setGroupName(groupName);
         parm.setId(id);
         parm.setStartTime(startTime);
         parm.setEndTime(endTime);
