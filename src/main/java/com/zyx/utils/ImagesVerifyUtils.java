@@ -28,7 +28,7 @@ public class ImagesVerifyUtils {
         }
 
         if (uploadFile.equals(Constants.AUTH_ERROR_901 + "")) {
-            return MapUtils.buildErrorMap(Constants.AUTH_ERROR_901, "图片大小不能超过5MB");
+            return MapUtils.buildErrorMap(Constants.AUTH_ERROR_901, "图片大小不能超过20MB");
         }
         return null;
     }

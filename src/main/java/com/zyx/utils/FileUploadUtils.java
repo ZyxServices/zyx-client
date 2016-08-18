@@ -7,13 +7,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by SubDong on 2016/3/16.
  */
 public class FileUploadUtils {
     //图片最大上传大小
-    public static int IMAGES_MAX_BYTE = 5 * 1024 * 1024;
+    public static int IMAGES_MAX_BYTE = 20 * 1024 * 1024;
 
 
     /**
@@ -34,14 +36,15 @@ public class FileUploadUtils {
         System.out.println("fileName : " + fileName);
         fileName = fileName.toLowerCase();
         //"gif", "jpeg", "jpg", "bmp", "png"
-        String[] strings = new String[]{"png", "gif", "jpeg", "jpg", "bmp"};
+        String[] strings = new String[]{"png", "gif", "jpeg", "jpg", "bmp"};//所有文件格式
+        List<String> list = Arrays.asList(strings);
         try {
-            if (Arrays.binarySearch(strings, fileName) != -1) {
-
-
+            if (list.contains(fileName)) {
                 byte[] tempFile = file.getBytes();
-                String[] images = new String[]{"png", "gif", "jpeg", "jpeg", "jpg", "bmp"};
-                if (Arrays.binarySearch(images, fileName) != -1 && tempFile.length > IMAGES_MAX_BYTE) {
+                String[] images = new String[]{"png", "gif", "jpeg", "jpg", "bmp"};//可上传图片格式
+                List<String> imagesList = Arrays.asList(images);
+                Arrays.binarySearch(images,fileName);
+                if (imagesList.contains(fileName) && tempFile.length > IMAGES_MAX_BYTE) {
                     return Constants.AUTH_ERROR_901 + "";
                 }
 
