@@ -1,16 +1,15 @@
 package com.zyx.controller.activity;
 
 
+import com.zyx.constants.Constants;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.utils.ActivityUtils;
-import com.zyx.utils.FileUploadUtils;
-import com.zyx.utils.ImagesVerifyUtils;
 import com.zyx.entity.activity.parm.QueryActivityParm;
 import com.zyx.entity.activity.parm.QueryHistoryParm;
 import com.zyx.rpc.activity.ActivityFacade;
+import com.zyx.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
@@ -42,7 +41,7 @@ public class ActivityController {
                                 @RequestParam(name = "title", required = true) String title,
                                 @RequestParam(name = "desc", required = true) String desc,
                                 @RequestParam(name = "descimage", required = false) String[] descimage,
-                                @RequestPart(name = "image", required = true) MultipartFile image,
+                                @RequestParam(name = "image", required = true) String image,
                                 @RequestParam(name = "startTime", required = true) Long startTime,
                                 @RequestParam(name = "endTime", required = true) Long endTime,
                                 @RequestParam(name = "lastTime", required = true) Long lastTime,
@@ -61,9 +60,9 @@ public class ActivityController {
         if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
 
-        String uploadFile = FileUploadUtils.uploadFile(image);
+        //String uploadFile = FileUploadUtils.uploadFile(image);
 
-        Map<String, Object> verify = ImagesVerifyUtils.verify(uploadFile);
+        //Map<String, Object> verify = ImagesVerifyUtils.verify(uploadFile);
         if (descimage != null && descimage.length >= 0) {
             String htmlImage = "";
             for (String s : descimage) {
@@ -72,11 +71,11 @@ public class ActivityController {
             }
             desc = desc + "<br/>" + htmlImage;
         }
-        if (verify != null) {
-            jsonView.setAttributesMap(verify);
+        if (image == null || image.equals("")) {
+            jsonView.setAttributesMap(MapUtils.buildErrorMap(Constants.PARAM_MISS, "参数缺失"));
             return new ModelAndView(jsonView);
         } else {
-            Map<String, Object> map = activityFacade.insertActivity(createId, title, desc, uploadFile, startTime, endTime, lastTime, maxPeople, visible, phone, price, type, address, examine, memberTemplate);
+            Map<String, Object> map = activityFacade.insertActivity(createId, title, desc, image, startTime, endTime, lastTime, maxPeople, visible, phone, price, type, address, examine, memberTemplate);
             jsonView.setAttributesMap(map);
             return new ModelAndView(jsonView);
         }
