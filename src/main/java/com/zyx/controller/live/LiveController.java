@@ -100,7 +100,8 @@ public class LiveController {
                     liveInfo.setLab(lab);
                     // 不必须字段
                     liveInfo.setBgmUrl(bgmUrl);
-                    liveInfoFacade.add(liveInfo);
+                    Integer id = liveInfoFacade.add(liveInfo);
+                    attrMap.put("id",id);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                 }
             } else {
