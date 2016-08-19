@@ -70,16 +70,15 @@ public class UploadCommonController {
 
     @RequestMapping(value = "/uploads", method = RequestMethod.POST)
     @ApiOperation(value = "上传多张图片，图片大的时候慎用", notes = "上传图片到服务器返回图片地址")
-    public ModelAndView uploads(@RequestPart(name = "avatars1") MultipartFile avatars1, @RequestPart(name = "avatars2") MultipartFile avatars2, @RequestPart(name = "avatars3") MultipartFile avatars3, @RequestPart(name = "avatars4") MultipartFile avatars4) throws ExecutionException, InterruptedException {
+    public ModelAndView uploads(@RequestPart(name = "avatars") MultipartFile[] avatars) throws ExecutionException, InterruptedException {
 
         AbstractView jsonView = new MappingJackson2JsonView();
-        MultipartFile[] avatars = new MultipartFile[]{avatars1, avatars2, avatars3, avatars4};
 
         if (avatars == null || avatars.length == 0) {
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             // 创建一个线程池
-            ExecutorService pool = Executors.newFixedThreadPool(2);
+            ExecutorService pool = Executors.newFixedThreadPool(9);
             // 创建多个有返回值的任务
             List<Future> list = new ArrayList<>();
             for (int i = 0; i < avatars.length; i++) {
