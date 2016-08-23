@@ -44,20 +44,20 @@ public class ActivityController {
                                 @RequestParam(name = "image", required = true) String image,
                                 @RequestParam(name = "startTime", required = true) Long startTime,
                                 @RequestParam(name = "endTime", required = true) Long endTime,
-                                @RequestParam(name = "lastTime", required = true) Long lastTime,
+                                @RequestParam(name = "lastTime", required = false) Long lastTime,
                                 @RequestParam(name = "maxPeople", required = false) Integer maxPeople,
-                                @RequestParam(name = "visible", required = true) Integer visible,
+                                @RequestParam(name = "visible", required = false) Integer visible,
                                 @RequestParam(name = "phone", required = false) String phone,
-                                @RequestParam(name = "price", required = false) Double price,
+                                @RequestParam(name = "price", required = true) Double price,
                                 @RequestParam(name = "type", required = true) Integer type,
-                                @RequestParam(name = "address", required = false) String address,
+                                @RequestParam(name = "address", required = true) String address,
                                 @RequestParam(name = "examine", required = false) Integer examine,
                                 @RequestParam(name = "memberTemplate", required = false) String memberTemplate) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
-        boolean token1 = accountCommonFacade.validateToken(token);
-        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
+        /*boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());*/
 
 
         //String uploadFile = FileUploadUtils.uploadFile(image);
