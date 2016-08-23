@@ -64,8 +64,8 @@ public class PgController {
                                 @RequestParam(name = "type") Integer type,
                                 @RequestParam(name = "cernTitle") String cernTitle,
                                 @RequestParam(name = "content") String content,
-                                @RequestParam(name = "imgUrl",required = false) String imgUrl,
-                                @RequestParam(name = "videoUrl",required = false) String videoUrl,
+                                @RequestParam(name = "imgUrl", required = false) String imgUrl,
+                                @RequestParam(name = "videoUrl", required = false) String videoUrl,
                                 @RequestParam(name = "visible") Integer visible) {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = pgFacade.addCern(userId, type, cernTitle, content, imgUrl, videoUrl, visible);
@@ -130,8 +130,9 @@ public class PgController {
                                       @RequestParam(name = "circle_id") Integer circle_id,
                                       @RequestParam(name = "create_id") Integer create_id,
                                       @RequestParam(name = "title") String title,
-                                      @RequestParam(name = "content") String content) {
-        Map<String, Object> map = pgFacade.addCircleItem(circle_id, create_id, title, content);
+                                      @RequestParam(name = "content") String content,
+                                      @RequestParam(name = "img_url", required = false) String img_url) {
+        Map<String, Object> map = pgFacade.addCircleItem(circle_id, create_id, title, content,img_url);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -334,6 +335,28 @@ public class PgController {
     public ModelAndView starConcern(
             @PathVariable(value = "max") Integer max) {
         Map<String, Object> returnMap = pgFacade.starConcern(max);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/concern/getOne/{token}/{concernId}", method = RequestMethod.GET)
+    @ApiOperation(value = "动态详情", notes = "concernId：动态id")
+    public ModelAndView getOneConcern(
+            @PathVariable(value = "token") String token,
+            @PathVariable(value = "concernId") Integer concernId) {
+        Map<String, Object> returnMap = pgFacade.getOneConcern(concernId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circleItem/getOne/{token}/{circleItemId}", method = RequestMethod.GET)
+    @ApiOperation(value = "帖子详情", notes = "circleItem：帖子id")
+    public ModelAndView getOneCircleItem(
+            @PathVariable(value = "token") String token,
+            @PathVariable(value = "circleItemId") Integer circleItemId) {
+        Map<String, Object> returnMap = pgFacade.getOneCircleItem(circleItemId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);

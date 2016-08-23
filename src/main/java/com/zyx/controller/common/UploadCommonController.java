@@ -3,6 +3,7 @@ package com.zyx.controller.common;
 import com.zyx.constants.Constants;
 import com.zyx.utils.FileUploadUtils;
 import com.zyx.utils.ImagesVerifyUtils;
+import com.zyx.utils.MapUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -32,36 +30,47 @@ import java.util.concurrent.*;
 @RequestMapping("/v1")
 @Api(description = "公共接口API。1、上传一张图片。2、上传多张图片")
 public class UploadCommonController {
+    // 创建一个线程池
+    ExecutorService pool = Executors.newFixedThreadPool(100);
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ApiOperation(value = "上传一张图片", notes = "上传图片到服务器返回图片地址")
-    public ModelAndView upload(@RequestPart(name = "avatar") MultipartFile avatar) {
-
+    public ModelAndView upload(@RequestPart(name = "avatar") MultipartFile avatar) throws ExecutionException, InterruptedException {
         AbstractView jsonView = new MappingJackson2JsonView();
-        if (avatar == null) {
-            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
-        } else {
-            System.out.println("avatar  :  " + avatar);
-            System.out.println("avatar.getName()  :  " + avatar.getName());
-            String avatarId = FileUploadUtils.uploadFile(avatar);
-            Map<String, Object> map = ImagesVerifyUtils.verify(avatarId);
-            if (map != null) {
-                jsonView.setAttributesMap(map);
+        try {
+            if (avatar == null) {
+                jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
             } else {
-                map = new HashMap<>();
-                map.put(Constants.STATE, Constants.SUCCESS);
-                map.put(Constants.SUCCESS_MSG, "图片上传成功");
-                Map<String, Object> map2 = new HashMap<>();
-                map2.put("url", avatarId);
-                map.put(Constants.DATA, map2);
-                jsonView.setAttributesMap(map);
+                System.out.println("avatar  :  " + avatar);
+                System.out.println("avatar.getName()  :  " + avatar.getName());
+
+                Callable c = new MyCallable(avatar);
+                // 执行任务并获取Future对象
+                Future f = pool.submit(c);
+
+                String avatarId = f.get().toString();
+                Map<String, Object> map = ImagesVerifyUtils.verify(avatarId);
+                if (map != null) {
+                    jsonView.setAttributesMap(map);
+                } else {
+                    map = new HashMap<>();
+                    map.put(Constants.STATE, Constants.SUCCESS);
+                    map.put(Constants.SUCCESS_MSG, "图片上传成功");
+                    Map<String, Object> map2 = new HashMap<>();
+                    map2.put("url", avatarId);
+                    map.put(Constants.DATA, map2);
+                    jsonView.setAttributesMap(map);
+                }
             }
+        } catch (Exception e) {
+            jsonView.setAttributesMap(Constants.MAP_500);
         }
         return new ModelAndView(jsonView);
     }
 
     @RequestMapping(value = "/uploads", method = RequestMethod.POST)
     @ApiOperation(value = "上传多张图片，图片大的时候慎用", notes = "上传图片到服务器返回图片地址")
-    public ModelAndView uploads(@RequestPart(name = "avatar") MultipartFile[] avatars) throws ExecutionException, InterruptedException {
+    public ModelAndView uploads(@RequestPart(name = "avatars") MultipartFile[] avatars) throws ExecutionException, InterruptedException {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -69,7 +78,7 @@ public class UploadCommonController {
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
             // 创建一个线程池
-            ExecutorService pool = Executors.newSingleThreadExecutor();
+            ExecutorService pool = Executors.newFixedThreadPool(9);
             // 创建多个有返回值的任务
             List<Future> list = new ArrayList<>();
             for (int i = 0; i < avatars.length; i++) {
@@ -90,15 +99,24 @@ public class UploadCommonController {
             }
 
             Map<String, Object> map = new HashMap<>();
-            map.put(Constants.STATE, Constants.SUCCESS);
-            map.put(Constants.SUCCESS_MSG, "图片上传成功");
-            map.put(Constants.DATA, _temp);
+            if (_temp.contains("901")) {
+                map = MapUtils.buildErrorMap(Constants.AUTH_ERROR_901, "图片大小不能超过5MB");
+            } else if (_temp.contains("902")) {
+                map = MapUtils.buildErrorMap(Constants.AUTH_ERROR_902, "图片上传失败,请重试");
+            } else if (_temp.contains("903")) {
+                map = MapUtils.buildErrorMap(Constants.AUTH_ERROR_903, "文件格式错误");
+            } else {
+                map.put(Constants.STATE, Constants.SUCCESS);
+                map.put(Constants.SUCCESS_MSG, "图片上传成功");
+                map.put(Constants.DATA, _temp);
+            }
             jsonView.setAttributesMap(map);
         }
         return new ModelAndView(jsonView);
     }
 
 }
+
 
 class MyCallable implements Callable<Object> {
     private MultipartFile file;

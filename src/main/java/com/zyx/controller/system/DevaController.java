@@ -1,4 +1,4 @@
-package com.zyx.controller.admin;
+package com.zyx.controller.system;
 
 import com.zyx.config.BaseResponse;
 import com.zyx.constants.Constants;
@@ -23,20 +23,21 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/deva")
 @Api(description = "首推相关接口")
-public class DevaluationController {
+public class DevaController {
     @Autowired
     private DevaFacade devaFacade;
 //    /*@ApiParam(required = true,name = "model",value ="所在模块")*/
     @RequestMapping(value = "/get", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "首推-按照模块获取所有首推", notes = "首推-按照模块获取所有首推",response = BaseResponse.class)
-    public ModelAndView getDeva(@ApiParam(required = true,name = "model",value ="首推所在模块")@RequestParam(name = "model",required = true) Integer model) {
+    public ModelAndView getDeva(@ApiParam(required = true,name = "area",value ="首推展示区域")@RequestParam(name = "area",required = true) Integer area,
+                                @ApiParam(required = true,name = "model",value ="首推所在模块")@RequestParam(name = "model",required = true) Integer model) {
         Map<String, Object> attrMap = new HashMap<>();
         if (model == null || Constants.devaNames.get(model)==null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
         } else {
             Map<String, Object> devasMap = new HashMap<>();
-            attrMap.put(Constants.devaNames.get(model),devaFacade.getDevaByModel(model));
+            attrMap.put(Constants.devaNames.get(model),devaFacade.getDevaByModel(area,model));
             attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             attrMap.put(LiveConstants.SUCCESS_MSG, LiveConstants.MSG_SUCCESS);
             attrMap.putAll(devasMap);
@@ -51,12 +52,12 @@ public class DevaluationController {
         Map<String, Object> attrMap;
         try {
             Map<String, Object> devasMap = new HashMap<>();
-            devasMap.put("activtyDevas", devaFacade.getDevaByModel(Constants.MODEL_ACTIVITY));
-            devasMap.put("liveDevas", devaFacade.getDevaByModel(Constants.MODEL_LIVE));
+            devasMap.put("activtyDevas", devaFacade.getDevaByModel(1,Constants.MODEL_ACTIVITY));
+            devasMap.put("liveDevas", devaFacade.getDevaByModel(1,Constants.MODEL_LIVE));
 //            devasMap.put("liveWatchNums", getLiveDevaWatchNum());
-            devasMap.put("userDevas", devaFacade.getDevaByModel(Constants.MODEL_USER));
-            devasMap.put("cirleDevas", devaFacade.getDevaByModel(Constants.MODEL_CIRCLE));
-            devasMap.put("concerDevas", devaFacade.getDevaByModel(Constants.MODEL_CONCERN));
+            devasMap.put("userDevas", devaFacade.getDevaByModel(1,Constants.MODEL_USER));
+            devasMap.put("cirleDevas", devaFacade.getDevaByModel(1,Constants.MODEL_CIRCLE));
+            devasMap.put("concerDevas", devaFacade.getDevaByModel(1,Constants.MODEL_CONCERN));
             attrMap = MapUtils.buildSuccessMap(LiveConstants.SUCCESS, LiveConstants.MSG_SUCCESS, devasMap);
         } catch (Exception e) {
             attrMap = Constants.MAP_500;
