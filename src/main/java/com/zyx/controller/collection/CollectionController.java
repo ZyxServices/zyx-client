@@ -1,12 +1,16 @@
 package com.zyx.controller.collection;
 
+import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.constants.live.LiveConstants;
 import com.zyx.entity.collection.Collection;
 import com.zyx.entity.live.LiveInfo;
+import com.zyx.param.Pager;
+import com.zyx.param.collection.CollectionParam;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.rpc.collection.CollectionFacade;
 import com.zyx.vo.account.AccountInfoVo;
+import com.zyx.vo.collection.CollectionVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,6 +67,75 @@ public class CollectionController {
                 collection.setModel(model);
                 collection.setModelId(modelId);
                 collectionFacade.addCollection(collection);
+                attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            }
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ApiOperation(value = "获取收藏列表", notes = "收藏-获取收藏列表")
+    public ModelAndView getCollections(@RequestParam(name = "token", required = true) String token,
+                                       @RequestParam(name = "model", required = false) Integer model,
+                                       @RequestParam(name = "pageNo", required = false) Integer pageNo,
+                                       @RequestParam(name = "pageSize", required = false) Integer pageSize
+    ) {
+        Map<String, Object> attrMap = new HashMap<>();
+        if (token == null || "".equals(token)) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_REQUEST_UNAUTHORIZED);
+        } else if (model == null) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
+        } else if (!(model == 1 || model == 2 || model == 3 || model == 4 || model == 6 || model == 7)) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+        } else {
+            AccountInfoVo account = accountCommonFacade.getAccountVoByToken(token);
+            if (account == null || account.getId() == null) {
+                attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
+                attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
+            } else {
+                CollectionParam param = new CollectionParam();
+                param.setUserId(account.getId());
+                param.setModel(model);
+                if (pageNo != null && pageSize != null) {
+                    Pager pager = new Pager();
+                    pager.setPageNum(pageNo);
+                    pager.setPageSize(pageSize);
+                    param.setPager(pager);
+                }
+                List<CollectionVo> cs = collectionFacade.selectCollections(param);
+                attrMap.put(Constants.DATA, cs);
+                attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            }
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/concel", method = RequestMethod.POST)
+    @ApiOperation(value = "取消收藏", notes = "收藏-取消收藏")
+    public ModelAndView concelCollection(@RequestParam(name = "token", required = true) String token,
+                                         @RequestParam(name = "id", required = true) Integer id) {
+        // Token 验证
+        Map<String, Object> attrMap = new HashMap<>();
+        if (token == null || "".equals(token)) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_REQUEST_UNAUTHORIZED);
+        } else {
+            AccountInfoVo account = accountCommonFacade.getAccountVoByToken(token);
+            if (account == null || account.getId() == null) {
+                attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
+                attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
+            } else {
+                CollectionParam param = new CollectionParam();
+                param.setUserId(account.getId());
+                param.setId(id);
+                collectionFacade.cancelCollect(param);
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             }
         }
