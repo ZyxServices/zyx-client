@@ -132,7 +132,7 @@ public class PgController {
                                       @RequestParam(name = "title") String title,
                                       @RequestParam(name = "content") String content,
                                       @RequestParam(name = "img_url", required = false) String img_url) {
-        Map<String, Object> map = pgFacade.addCircleItem(circle_id, create_id, title, content,img_url);
+        Map<String, Object> map = pgFacade.addCircleItem(circle_id, create_id, title, content, img_url);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -357,6 +357,18 @@ public class PgController {
             @PathVariable(value = "token") String token,
             @PathVariable(value = "circleItemId") Integer circleItemId) {
         Map<String, Object> returnMap = pgFacade.getOneCircleItem(circleItemId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circleItem/getTjCircleItem/{token}/{start}/{pageSize}", method = RequestMethod.GET)
+    @ApiOperation(value = "帖子推荐列表", notes = "max：最大条数")
+    public ModelAndView getTjCircleItem(
+            @PathVariable(value = "token") String token,
+            @PathVariable(value = "start") Integer start,
+            @PathVariable(value = "pageSize") Integer pageSize) {
+        Map<String, Object> returnMap = pgFacade.getTjCircleItem(start, pageSize);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
