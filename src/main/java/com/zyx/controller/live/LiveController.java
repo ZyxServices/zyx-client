@@ -230,12 +230,6 @@ public class LiveController {
             try {
                 LiveInfoParam liveInfoParam = new LiveInfoParam();
                 boolean flag = accountCommonFacade.validateToken(token);
-//				if (!flag) {
-//					liveInfoVo.setAuth(1);
-//				} else {
-//					List<Integer> userIds = new ArrayList<Integer>();
-//					LiveInfoParam.setUserIds(userIds.isEmpty() ? null : userIds);
-//				}
                 liveInfoParam.setLab(lab);
                 if (pageNo != null && pageSize != null) {
                     Pager pager = new Pager();

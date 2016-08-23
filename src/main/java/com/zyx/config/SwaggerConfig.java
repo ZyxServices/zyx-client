@@ -115,6 +115,18 @@ public class SwaggerConfig {
     }
 
     @Bean
+    public Docket collectionApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("collection")
+                .select()  // 选择那些路径和api会生成document
+                .apis(RequestHandlerSelectors.basePackage("com.zyx.controller.collection"))
+                .paths(PathSelectors.any()) // 对所有路径进行监控
+                .build()
+                .apiInfo(collectionApiInfo());
+    }
+
+
+    @Bean
     public Docket systemApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("system")
@@ -181,6 +193,19 @@ public class SwaggerConfig {
     private ApiInfo liveApiInfo() {
         ApiInfo apiInfo = new ApiInfo("直播接口API",//大标题
                 "图文直播，视频直播",//小标题
+                "0.1",//版本
+                "成都term",
+                new Contact("邓清海", "http://112.74.112.143:8081/ui/Delta/index.html", ""),// 作者
+                "智悠行",//链接显示文字
+                "http://112.74.112.143:8081/ui/Delta/index.html "//网站链接
+        );
+
+        return apiInfo;
+    }
+
+    private ApiInfo collectionApiInfo() {
+        ApiInfo apiInfo = new ApiInfo("收藏接口API",//大标题
+                "收藏",//小标题
                 "0.1",//版本
                 "成都term",
                 new Contact("邓清海", "http://112.74.112.143:8081/ui/Delta/index.html", ""),// 作者
