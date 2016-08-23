@@ -98,6 +98,7 @@ public class LiveController {
                     liveInfo.setEnd(end);
                     liveInfo.setTitle(title);
                     liveInfo.setLab(lab);
+                    liveInfo.setUserId(account.getId());
                     // 不必须字段
                     liveInfo.setBgmUrl(bgmUrl);
                     Integer id = liveInfoFacade.add(liveInfo);
