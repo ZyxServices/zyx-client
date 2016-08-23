@@ -363,7 +363,7 @@ public class PgController {
     }
 
     @RequestMapping(value = "/v1/circleItem/getTjCircleItem/{token}/{start}/{pageSize}", method = RequestMethod.GET)
-    @ApiOperation(value = "帖子推荐列表", notes = "max：最大条数")
+    @ApiOperation(value = "帖子推荐列表", notes = "start：开始页数，pageSize：每页显示条数")
     public ModelAndView getTjCircleItem(
             @PathVariable(value = "token") String token,
             @PathVariable(value = "start") Integer start,
