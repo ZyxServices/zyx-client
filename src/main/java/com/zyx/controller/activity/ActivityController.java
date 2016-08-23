@@ -56,8 +56,8 @@ public class ActivityController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
-        /*boolean token1 = accountCommonFacade.validateToken(token);
-        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());*/
+        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
 
         //String uploadFile = FileUploadUtils.uploadFile(image);
