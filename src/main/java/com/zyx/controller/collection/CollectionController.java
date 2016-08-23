@@ -58,7 +58,7 @@ public class CollectionController {
                 attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
             } else {
                 Collection collection = new Collection();
-                collection.setUserId(account.getId());
+                collection.setUsrId(account.getId());
                 collection.setModel(model);
                 collection.setModelId(modelId);
                 collectionFacade.addCollection(collection);
