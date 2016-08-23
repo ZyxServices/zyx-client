@@ -51,4 +51,6 @@
 
     <!-- 关注、拉黑服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.attention.UserAttentionFacade" id="userAttentionFacade" check="false"/>
+    <!-- 收藏服务接口 -->
+    <dubbo:reference interface="com.zyx.rpc.collection.CollectionFacade" id="collectionFacade" check="false"/>
 </beans>

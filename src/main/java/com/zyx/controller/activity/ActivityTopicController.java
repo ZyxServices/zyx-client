@@ -8,6 +8,7 @@ import com.zyx.constants.activity.ActivityConstants;
 import com.zyx.entity.activity.parm.AddTopicParm;
 import com.zyx.entity.activity.parm.QueryTopicParm;
 import com.zyx.rpc.activity.ActivityTopicFacade;
+import com.zyx.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +47,7 @@ public class ActivityTopicController {
                                 @RequestParam(name = "userId", required = true) Integer userId,
                                 @RequestParam(name = "topicTitle", required = true) String topicTitle,
                                 @RequestParam(name = "topicContent", required = true) String topicContent,
-                                @RequestPart(name = "image", required = true) MultipartFile[] image) {
+                                @RequestPart(name = "image", required = true) String[] image) {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -55,22 +57,21 @@ public class ActivityTopicController {
 
         Map<String, Object> map = new HashMap<>();
 
-        if (image != null && image.length > 9) {
+        if (image == null) {
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+            return new ModelAndView(jsonView);
+        }
+
+        if (image.length > 9) {
             map.put(Constants.STATE,ActivityConstants.AUTH_ERROR_10007);
             map.put(Constants.ERROR_MSG,"图片上传超过9张图片");
         }
-        String images = "";
-        if (image != null) {
-            for (MultipartFile multipartFile : image) {
-                images = images + FileUploadUtils.uploadFile(multipartFile) + ",";
-            }
-        }
-        images = images.substring(0, images.length() - 1);
+
 
         AddTopicParm parm = new AddTopicParm();
         parm.setUserId(userId);
         parm.setActivityId(activitiId);
-        parm.setImages(images);
+        parm.setImages(Arrays.toString(image));
         parm.setTopicTitle(topicTitle);
         parm.setTopicContent(topicContent);
 

@@ -98,9 +98,11 @@ public class LiveController {
                     liveInfo.setEnd(end);
                     liveInfo.setTitle(title);
                     liveInfo.setLab(lab);
+                    liveInfo.setUserId(account.getId());
                     // 不必须字段
                     liveInfo.setBgmUrl(bgmUrl);
-                    liveInfoFacade.add(liveInfo);
+                    Integer id = liveInfoFacade.add(liveInfo);
+                    attrMap.put("id",id);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                 }
             } else {
@@ -228,12 +230,6 @@ public class LiveController {
             try {
                 LiveInfoParam liveInfoParam = new LiveInfoParam();
                 boolean flag = accountCommonFacade.validateToken(token);
-//				if (!flag) {
-//					liveInfoVo.setAuth(1);
-//				} else {
-//					List<Integer> userIds = new ArrayList<Integer>();
-//					LiveInfoParam.setUserIds(userIds.isEmpty() ? null : userIds);
-//				}
                 liveInfoParam.setLab(lab);
                 if (pageNo != null && pageSize != null) {
                     Pager pager = new Pager();
@@ -470,7 +466,6 @@ public class LiveController {
                                       @RequestParam(name = "content") String content) {
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//		attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
         if (token == null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
         } else if (liveId == null || liveId == null) {
@@ -480,33 +475,21 @@ public class LiveController {
             attrMap.put(LiveConstants.STATE, LiveConstants.LIVE_BARRAGE_NULL_CONTENT);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_LIVE_BARRAGE_NULL_CONTENT);
         } else {
-//			try {
-            Map<String, Object> rstMap = accountInfoFacade.queryAccountInfo(token, userId);
-//				AccountInfoVo account = (AccountInfoVo) rstMap.get("result");
-//				if (null == account) {
-//					attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50300);
-//					attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50300_MSG);
-//				} else {
-            // 传入参数构造
-            Barrage entity = new Barrage();
-            entity.setLiveId(liveId);
-            entity.setContent(content);
-            entity.setUserId(10);
-            entity.setNickName("mrdeng");
-            entity.setAvatar("tgest");
-            entity.setCreateTime(System.currentTimeMillis());
-            barrageFacade.add(entity);
-            attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-//				}
-//			} catch (NumberFormatException nfe) {
-//				// nfe.printStackTrace();
-//				attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-//				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
-//			} catch (Exception e) {
-//				// e.printStackTrace();
-//				attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
-//				attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//			}
+            AccountInfoVo account = accountCommonFacade.getAccountVoByToken(token);
+            if (account == null || account.getId() == null) {
+                attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
+                attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
+            } else {
+                Barrage entity = new Barrage();
+                entity.setLiveId(liveId);
+                entity.setContent(content);
+                entity.setUserId(account.getId());
+                entity.setNickName(account.getNickname());
+                entity.setAvatar(account.getAvatar());
+                entity.setCreateTime(System.currentTimeMillis());
+                barrageFacade.add(entity);
+                attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            }
         }
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(attrMap);
@@ -520,8 +503,6 @@ public class LiveController {
                                        @RequestParam(name = "createTimeUpper", required = false) Long createTimeUpper,
                                        @RequestParam(name = "topNum", required = false) Integer topNum) {
         Map<String, Object> attrMap = new HashMap<>();
-        attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-        attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
         if (liveId == null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
