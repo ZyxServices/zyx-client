@@ -32,7 +32,7 @@ public class UserAttentionController {
     private UserAttentionFacade userAttentionFacade;
 
     @RequestMapping(value = "/user", method = {RequestMethod.GET})
-    @ApiOperation(value = "通过用户ID查询用户信息", notes = "通过用户ID查询用户信息")
+    @ApiOperation(value = "用户A关注用户B", notes = "用户A关注用户B")
     public ModelAndView info(@RequestParam(name = "token") String token, @RequestParam(name = "fromId") Integer fromId, @RequestParam(name = "toId") Integer toId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 

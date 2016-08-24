@@ -5,7 +5,6 @@ import com.zyx.constants.account.AccountConstants;
 import com.zyx.constants.collection.CollConstants;
 import com.zyx.constants.live.LiveConstants;
 import com.zyx.entity.collection.Collection;
-import com.zyx.entity.live.LiveInfo;
 import com.zyx.param.Pager;
 import com.zyx.param.collection.CollectionParam;
 import com.zyx.rpc.account.AccountCommonFacade;
