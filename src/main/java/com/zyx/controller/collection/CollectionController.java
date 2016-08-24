@@ -2,6 +2,7 @@ package com.zyx.controller.collection;
 
 import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
+import com.zyx.constants.collection.CollConstants;
 import com.zyx.constants.live.LiveConstants;
 import com.zyx.entity.collection.Collection;
 import com.zyx.entity.live.LiveInfo;
@@ -66,8 +67,14 @@ public class CollectionController {
                 collection.setUserId(account.getId());
                 collection.setModel(model);
                 collection.setModelId(modelId);
-                collectionFacade.addCollection(collection);
-                attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+                int count = collectionFacade.count(collection);
+                if(count!=0){
+                    attrMap.put(LiveConstants.STATE, CollConstants.COLL_EXSIT_COLLECTION);
+                    attrMap.put(LiveConstants.ERROR_MSG, CollConstants.MSG_COLL_EXSIT_COLLECTION);
+                }else{
+                    collectionFacade.addCollection(collection);
+                    attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+                }
             }
         }
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -101,7 +108,7 @@ public class CollectionController {
                 CollectionParam param = new CollectionParam();
                 param.setUserId(account.getId());
                 param.setModel(model);
-                if (pageNo != null && pageSize != null) {
+                if (pageSize != null&&pageNo != null) {
                     Pager pager = new Pager();
                     pager.setPageNum(pageNo);
                     pager.setPageSize(pageSize);
@@ -132,10 +139,10 @@ public class CollectionController {
                 attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
                 attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
             } else {
-                CollectionParam param = new CollectionParam();
-                param.setUserId(account.getId());
-                param.setId(id);
-                collectionFacade.cancelCollect(param);
+                Collection record =  new Collection();
+                record.setId(id);
+                record.setUserId(account.getId());
+                collectionFacade.cancelCollect(record);
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             }
         }
