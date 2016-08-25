@@ -161,7 +161,7 @@ public class PgController {
 
     @RequestMapping(value = "/v1/circleItem/list", method = RequestMethod.POST)
     @ApiOperation(value = "帖子列表", notes = "帖子列表")
-    public ModelAndView circleItemList(@RequestParam(value = "token", required = false) String token,
+    public ModelAndView circleItemList(
                                        @RequestParam(value = "max") Integer max,
                                        @RequestParam(value = "circleId", required = false) Integer circleId) {
         Map<String, Object> map = pgFacade.circleItemList(max, circleId);
@@ -173,7 +173,7 @@ public class PgController {
 
     @RequestMapping(value = "/v1/circleItem/setTop", method = RequestMethod.POST)
     @ApiOperation(value = "设置置顶帖子", notes = "设置置顶帖子")
-    public ModelAndView setTop(@RequestParam("token") String token,
+    public ModelAndView setTop(
                                @RequestParam("circle_id") Integer circle_id,
                                @RequestParam("topSize") Integer topSize) {
         Map<String, Object> map = pgFacade.setTop(topSize, circle_id);
@@ -245,9 +245,10 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/delete/{createId}/{circleItemId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/v1/circleItem/delete/{token}/{createId}/{circleItemId}", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除帖子", notes = "createId 户名id,circleItemId 帖子id")
     public ModelAndView deleteCircleItemByThisUser(
+            @PathVariable(value = "token") String token,
             @PathVariable("createId") Integer createId,
             @PathVariable("circleItemId") Integer circleItemId) {
         Map<String, Object> returnMap = pgFacade.deleteCircleItem(createId, circleItemId);
@@ -259,6 +260,7 @@ public class PgController {
     @RequestMapping(value = "/v1/circle/closeMaster", method = RequestMethod.POST)
     @ApiOperation(value = "取消圈主", notes = "circleId 圈子id,accountId 用户id")
     public ModelAndView closeMaster(
+            @RequestParam(value = "token") String token,
             @RequestParam(value = "circleId") Integer circleId,
             @RequestParam(value = "accountId") Integer accountId) {
         Map<String, Object> returnMap = pgFacade.closeMaster(circleId, accountId);
@@ -291,6 +293,7 @@ public class PgController {
     @RequestMapping(value = "/v1/circle/setAdminIds", method = RequestMethod.POST)
     @ApiOperation(value = "设置管理员", notes = "circleId 圈子id,accountId 当前操作用户id,adminIds 管理员id字符串，设置管理员与取消管理员同样适用")
     public ModelAndView setAdminIds(
+            @RequestParam(value = "token") String token,
             @RequestParam(value = "accountId") Integer accountId,
             @RequestParam(value = "adminIds") String adminIds,
             @RequestParam(value = "circleId") Integer circleId) {
@@ -320,9 +323,10 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/concern/getFollow/{loginUserId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/concern/getFollow/{token}/{loginUserId}", method = RequestMethod.GET)
     @ApiOperation(value = "根据登录用户查询当前用户的关注的动态列表", notes = "loginUserId：登录用户id")
     public ModelAndView getFollow(
+            @PathVariable(value = "token") String token,
             @PathVariable(value = "loginUserId") Integer loginUserId) {
         Map<String, Object> returnMap = pgFacade.getMyFollowList(loginUserId);
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -351,10 +355,9 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/getOne/{token}/{circleItemId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/circleItem/getOne/{circleItemId}", method = RequestMethod.GET)
     @ApiOperation(value = "帖子详情", notes = "circleItem：帖子id")
     public ModelAndView getOneCircleItem(
-            @PathVariable(value = "token") String token,
             @PathVariable(value = "circleItemId") Integer circleItemId) {
         Map<String, Object> returnMap = pgFacade.getOneCircleItem(circleItemId);
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -362,10 +365,9 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/getTjCircleItem/{token}/{start}/{pageSize}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/circleItem/getTjCircleItem/{start}/{pageSize}", method = RequestMethod.GET)
     @ApiOperation(value = "帖子推荐列表", notes = "start：开始页数，pageSize：每页显示条数")
     public ModelAndView getTjCircleItem(
-            @PathVariable(value = "token") String token,
             @PathVariable(value = "start") Integer start,
             @PathVariable(value = "pageSize") Integer pageSize) {
         Map<String, Object> returnMap = pgFacade.getTjCircleItem(start, pageSize);
