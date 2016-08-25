@@ -30,7 +30,7 @@ public interface TextLiveItemFacade {
 	public TextLiveItem getById(Integer id);
 	/**
 	 * 获取直播内容列表
-	 * @param liveInfoVo
+	 * @param textLiveItemVo
 	 * @return
 	 */
 	public List<TextLiveItem> getList( TextLiveItemVo textLiveItemVo);
