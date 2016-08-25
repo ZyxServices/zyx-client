@@ -500,7 +500,6 @@ public class LiveController {
                 entity.setNickName(account.getNickname());
                 entity.setAvatar(account.getAvatar());
                 entity.setCreateTime(System.currentTimeMillis());
-                System.out.println("存储弹幕………………………………………………………………………………");
                 barrageFacade.add(entity);
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             }
