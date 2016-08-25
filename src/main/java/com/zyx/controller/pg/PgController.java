@@ -162,8 +162,8 @@ public class PgController {
     @RequestMapping(value = "/v1/circleItem/list", method = RequestMethod.POST)
     @ApiOperation(value = "帖子列表", notes = "帖子列表")
     public ModelAndView circleItemList(
-                                       @RequestParam(value = "max") Integer max,
-                                       @RequestParam(value = "circleId", required = false) Integer circleId) {
+            @RequestParam(value = "max") Integer max,
+            @RequestParam(value = "circleId", required = false) Integer circleId) {
         Map<String, Object> map = pgFacade.circleItemList(max, circleId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -174,8 +174,8 @@ public class PgController {
     @RequestMapping(value = "/v1/circleItem/setTop", method = RequestMethod.POST)
     @ApiOperation(value = "设置置顶帖子", notes = "设置置顶帖子")
     public ModelAndView setTop(
-                               @RequestParam("circle_id") Integer circle_id,
-                               @RequestParam("topSize") Integer topSize) {
+            @RequestParam("circle_id") Integer circle_id,
+            @RequestParam("topSize") Integer topSize) {
         Map<String, Object> map = pgFacade.setTop(topSize, circle_id);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -344,10 +344,9 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/concern/getOne/{token}/{concernId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/concern/getOne/{concernId}", method = RequestMethod.GET)
     @ApiOperation(value = "动态详情", notes = "concernId：动态id")
     public ModelAndView getOneConcern(
-            @PathVariable(value = "token") String token,
             @PathVariable(value = "concernId") Integer concernId) {
         Map<String, Object> returnMap = pgFacade.getOneConcern(concernId);
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -371,6 +370,15 @@ public class PgController {
             @PathVariable(value = "start") Integer start,
             @PathVariable(value = "pageSize") Integer pageSize) {
         Map<String, Object> returnMap = pgFacade.getTjCircleItem(start, pageSize);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/circleType/getCircleTypeList", method = RequestMethod.GET)
+    @ApiOperation(value = "圈子类别列表", notes = "圈子类别列表")
+    public ModelAndView getTjCircleList() {
+        Map<String, Object> returnMap = pgFacade.getCircleTypeList();
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
