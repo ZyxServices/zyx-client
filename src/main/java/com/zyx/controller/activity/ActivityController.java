@@ -47,7 +47,7 @@ public class ActivityController {
                                 @RequestParam(name = "lastTime", required = false) Long lastTime,
                                 @RequestParam(name = "maxPeople", required = false) Integer maxPeople,
                                 @RequestParam(name = "visible", required = false) Integer visible,
-                                @RequestParam(name = "phone", required = false) String phone,
+                                @RequestParam(name = "phone", required = true) String phone,
                                 @RequestParam(name = "price", required = true) Double price,
                                 @RequestParam(name = "type", required = true) Integer type,
                                 @RequestParam(name = "address", required = true) String address,
@@ -65,11 +65,11 @@ public class ActivityController {
         //Map<String, Object> verify = ImagesVerifyUtils.verify(uploadFile);
         if (descimage != null && descimage.length >= 0) {
             String htmlImage = "";
+            desc = desc + "<br/>" + htmlImage;
             for (String s : descimage) {
                 String html = "<img src=http://image.tiyujia.com/" + s + "/><br/>";
                 htmlImage += html;
             }
-            desc = desc + "<br/>" + htmlImage;
         }
         if (image == null || image.equals("")) {
             jsonView.setAttributesMap(MapUtils.buildErrorMap(Constants.PARAM_MISS, "参数缺失"));

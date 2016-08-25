@@ -11,8 +11,8 @@
 
     <!-- 使用zookeeper注册中心暴露服务地址 -->
     <!-- 注册中心地址 -->
-    <dubbo:registry protocol="zookeeper" address="211.157.152.200:2181"/>
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.1.200:2181"/>-->
+    <!--<dubbo:registry protocol="zookeeper" address="211.157.152.200:2181"/>-->
+    <dubbo:registry protocol="zookeeper" address="192.168.1.200:2181"/>
 
     <!-- 服务线程池大小 -->
     <dubbo:protocol threads="100"/>
@@ -48,6 +48,7 @@
 
     <!--系统服务接口-->
     <dubbo:reference interface="com.zyx.rpc.system.DevaFacade" id="devaFacade" check="false" timeout="10000"/>
+    <dubbo:reference interface="com.zyx.rpc.system.SearchFacade" id="searchFacade" check="false" timeout="10000"/>
 
     <!-- 关注、拉黑服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.attention.UserAttentionFacade" id="userAttentionFacade" check="false"/>

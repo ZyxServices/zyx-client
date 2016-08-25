@@ -42,7 +42,7 @@ public class ActivityMemberController {
                                @RequestParam(name = "userId", required = true) Integer userId,
                                @RequestParam(name = "userNick", required = true) String userNick,
                                @RequestParam(name = "phone", required = true) String phone,
-                               @RequestParam(name = "memberInfo", required = true) String memberInfo) {
+                               @RequestParam(name = "memberInfo", required = false) String memberInfo) {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
