@@ -47,7 +47,26 @@ public class MyAttentionController {
                 attentionParam.setToken(token);
                 attentionParam.setFromId(accountId);
                 jsonView.setAttributesMap(userAttentionFacade.myGZList(attentionParam));
-                return new ModelAndView(jsonView);
+            } catch (Exception e) {
+                jsonView.setAttributesMap(Constants.MAP_500);
+            }
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/dk/from", method = RequestMethod.GET)
+    @ApiOperation(value = "我的关注大咖列表", notes = "我的关注大咖列表")
+    public ModelAndView myDKGZList(@RequestParam String token, @RequestParam Integer accountId) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(accountId)) {// 缺少参数
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            try {
+                AttentionParam attentionParam = new AttentionParam();
+                attentionParam.setToken(token);
+                attentionParam.setFromId(accountId);
+                jsonView.setAttributesMap(userAttentionFacade.myDKGZList(attentionParam));
             } catch (Exception e) {
                 jsonView.setAttributesMap(Constants.MAP_500);
             }
@@ -68,7 +87,6 @@ public class MyAttentionController {
                 attentionParam.setToken(token);
                 attentionParam.setToId(accountId);
                 jsonView.setAttributesMap(userAttentionFacade.myFSList(attentionParam));
-                return new ModelAndView(jsonView);
             } catch (Exception e) {
                 jsonView.setAttributesMap(Constants.MAP_500);
             }
