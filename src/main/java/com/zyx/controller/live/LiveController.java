@@ -5,7 +5,6 @@ import com.zyx.constants.live.LiveConstants;
 import com.zyx.entity.live.Barrage;
 import com.zyx.entity.live.LiveInfo;
 import com.zyx.entity.live.TextLiveItem;
-import com.zyx.entity.live.dto.LiveInfoDto;
 import com.zyx.param.Pager;
 import com.zyx.param.live.BarrageParam;
 import com.zyx.param.live.LiveInfoParam;
@@ -16,7 +15,6 @@ import com.zyx.rpc.live.LiveInfoFacade;
 import com.zyx.rpc.live.LiveLabFacade;
 import com.zyx.rpc.live.TextLiveItemFacade;
 import com.zyx.vo.account.AccountInfoVo;
-import com.zyx.vo.live.BarrageVo;
 import com.zyx.vo.live.LiveInfoVo;
 import com.zyx.vo.live.TextLiveItemVo;
 import io.swagger.annotations.Api;
@@ -31,7 +29,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -529,7 +526,7 @@ public class LiveController {
                 param.setLiveId(liveId);
 //                vo.setCreateTimeLower(createTimeLower);
 //                vo.setCreateTimeUpper(createTimeUpper);
-                param.setIndex(index);
+//                param.setIndex(index);
                 attrMap.put("barrages", barrageFacade.getLast(param));
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             } catch (NumberFormatException nfe) {
