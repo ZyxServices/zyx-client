@@ -37,6 +37,10 @@ public interface BarrageFacade {
 	 * @update 2016年6月22日 上午10:30:21
 	 */
 	public List<Barrage> getLast(BarrageParam param);
+
+
+
+	public List<Barrage> getList(BarrageParam param);
 //	/**
 //	 * 
 //	 * @param token

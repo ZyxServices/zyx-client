@@ -1,5 +1,6 @@
 package com.zyx.controller.live;
 
+import com.alibaba.fastjson.JSON;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.constants.live.LiveConstants;
 import com.zyx.entity.live.Barrage;
@@ -245,9 +246,7 @@ public class LiveController {
                 boolean flag = accountCommonFacade.validateToken(token);
                 liveInfoParam.setLab(lab);
                 if (pageNo != null && pageSize != null) {
-                    Pager pager = new Pager();
-                    pager.setPageNum(pageNo);
-                    pager.setPageSize(pageSize);
+                    Pager pager = new Pager(pageNo,pageSize);
                     liveInfoParam.setPager(pager);
                 }
                 List<LiveInfoVo> list = liveInfoFacade.getList(liveInfoParam);
@@ -263,35 +262,6 @@ public class LiveController {
         jsonView.setAttributesMap(attrMap);
         return new ModelAndView(jsonView);
     }
-
-//    @RequestMapping(value = "/list/head", method = {RequestMethod.GET, RequestMethod.POST})
-//    @ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
-//    public ModelAndView getHeadLives(@RequestParam(name = "token", required = false) String token,
-//                                     @RequestParam(name = "pageNo", required = false) Integer pageNo,
-//                                     @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-//        Map<String, Object> attrMap = new HashMap<>();
-//        attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//        try {
-//            LiveInfoParam liveInfoParam = new LiveInfoParam();
-//            boolean flag = accountCommonFacade.validateToken(token);
-//            if (pageNo != null && pageSize != null) {
-//                Pager pager = new Pager();
-//                pager.setPageNum(pageNo);
-//                pager.setPageSize(pageSize);
-//                liveInfoParam.setPager(pager);
-//            }
-//            List<LiveInfoVo> list = liveInfoFacade.getList(liveInfoParam);
-//            attrMap.put(LiveConstants.DATA, list);
-//            attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-//            attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.MSG_ERROR);
-//        }
-//        AbstractView jsonView = new MappingJackson2JsonView();
-//        jsonView.setAttributesMap(attrMap);
-//        return new ModelAndView(jsonView);
-//    }
 
     @RequestMapping(value = "/get", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")
@@ -527,6 +497,45 @@ public class LiveController {
 //                vo.setCreateTimeUpper(createTimeUpper);
 //                param.setIndex(index);
                 attrMap.put("barrages", barrageFacade.getLast(param));
+                attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
+                attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
+                attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
+            } catch (Exception e) {
+                e.printStackTrace();
+                attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_ERROR);
+                attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+            }
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
+
+//    @ApiParam(required = true, name = "status", value = "直播状态 -1:结束 0:未开始 1:直播中 2:暂停")
+    @RequestMapping(value = "/barrage/history", method = {RequestMethod.POST, RequestMethod.GET})
+    @ApiOperation(value = "直播-获取直播弹幕历史消息", notes = "直播-获取直播弹幕历史消息 ")
+    public ModelAndView getBarrageHistory(@RequestParam(name = "liveId", required = true) Integer liveId,
+                                          @ApiParam(required = false, name = "pageNo", value = "页码 1开始 错误分页将不分页")@RequestParam(name = "pageNo", required = false) Integer pageNo,
+                                          @ApiParam(required = false, name = "pageSize", value = "页大小")@RequestParam(name = "pageSize", required = false) Integer pageSize
+                                      /* @RequestParam(name = "index", required = false) Long index*/) {
+        Map<String, Object> attrMap = new HashMap<>();
+        if (liveId == null) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
+        } else {
+            try {
+                BarrageParam param = new BarrageParam();
+                System.out.println(pageNo+ "   "+pageSize);
+                if(pageNo!=null&&pageSize!=null&&pageSize>0&&pageNo>0){
+                    System.out.println("wocao");
+                    Pager pager = new Pager(pageNo,pageSize);
+                    param.setPager(pager);
+                }
+                param.setLiveId(liveId);
+                System.out.println(JSON.toJSONString(param));
+                attrMap.put("barrages", barrageFacade.getList(param));
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             } catch (NumberFormatException nfe) {
                 nfe.printStackTrace();
