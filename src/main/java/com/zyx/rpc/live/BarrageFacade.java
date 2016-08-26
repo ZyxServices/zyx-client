@@ -1,8 +1,10 @@
 package com.zyx.rpc.live;
 
 import java.util.List;
+import java.util.Map;
 
 import com.zyx.entity.live.Barrage;
+import com.zyx.param.live.BarrageParam;
 import com.zyx.vo.live.BarrageVo;
 
 public interface BarrageFacade {
@@ -27,14 +29,14 @@ public interface BarrageFacade {
 //	public Barrage getById(Long id);
 	/**
 	 * 
-	 * @param barrage
+	 * @param param
 	 * @return
 	 * @description 获取直播列表
 	 * @version 1.0
 	 * @author MrDeng
 	 * @update 2016年6月22日 上午10:30:21
 	 */
-	public List<Barrage> getLast( BarrageVo barrageVo);
+	public List<Barrage> getLast(BarrageParam param);
 //	/**
 //	 * 
 //	 * @param token

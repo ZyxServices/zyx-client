@@ -37,4 +37,12 @@ public interface UserAttentionFacade {
      * @return
      */
     Map<String, Object> myGZList(AttentionParam attentionParam);
+
+    /**
+     * 我的关注大咖列表
+     *
+     * @param attentionParam
+     * @return
+     */
+    Map<String, Object> myDKGZList(AttentionParam attentionParam);
 }
