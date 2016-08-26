@@ -174,6 +174,7 @@ public class PgController {
     @RequestMapping(value = "/v1/circleItem/setTop", method = RequestMethod.POST)
     @ApiOperation(value = "设置置顶帖子", notes = "设置置顶帖子")
     public ModelAndView setTop(
+            @RequestParam String token,
             @RequestParam("circle_id") Integer circle_id,
             @RequestParam("topSize") Integer topSize) {
         Map<String, Object> map = pgFacade.setTop(topSize, circle_id);
@@ -182,9 +183,9 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/circleItem/top/{token}/{max}/{circleId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/circleItem/top/{max}/{circleId}", method = RequestMethod.GET)
     @ApiOperation(value = "获取置顶帖子列表", notes = "获取置顶帖子列表")
-    public ModelAndView top(@PathVariable String token, @PathVariable Integer max, @PathVariable Integer circleId) {
+    public ModelAndView top( @PathVariable Integer max, @PathVariable Integer circleId) {
         Map<String, Object> map = pgFacade.top(max, circleId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
