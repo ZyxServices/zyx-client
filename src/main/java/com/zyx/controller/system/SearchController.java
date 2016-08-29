@@ -30,7 +30,7 @@ public class SearchController {
 
     @RequestMapping(value = "/model", method = {RequestMethod.POST})
     @ApiOperation(value = "热门查询", notes = "热门查询")
-    public ModelAndView searchModel(@RequestParam(name = "userId") Integer userId,
+    public ModelAndView searchModel(@RequestParam(name = "userId", required = false) Integer userId,
                                     @RequestParam(name = "character", required = false) String character,
                                     @RequestParam(name = "model") int model,
                                     @RequestParam(name = "pageNumber") Integer pageNumber,
