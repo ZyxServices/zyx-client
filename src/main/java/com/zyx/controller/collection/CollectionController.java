@@ -108,9 +108,7 @@ public class CollectionController {
                 param.setUserId(account.getId());
                 param.setModel(model);
                 if (pageSize != null&&pageNo != null) {
-                    Pager pager = new Pager();
-                    pager.setPageNum(pageNo);
-                    pager.setPageSize(pageSize);
+                    Pager pager = new Pager(pageNo,pageSize);
                     param.setPager(pager);
                 }
                 List<CollectionVo> cs = collectionFacade.selectCollections(param);
