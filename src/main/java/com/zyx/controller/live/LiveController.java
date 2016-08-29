@@ -66,8 +66,8 @@ public class LiveController {
                                    @RequestParam(name = "auth") Integer auth, @RequestParam(name = "type") Integer type,
                                    @RequestParam(name = "start", required = false) Long start,
                                    @RequestParam(name = "end", required = false) Long end, @RequestParam(name = "title") String title,
-                                   @RequestParam(name = "lab") Integer lab, @RequestParam(name = "bgmUrl", required = false) String bgmUrl,
-                                   @ApiParam(required = true, name = "groupId", value = "环信组ID")@RequestParam(name = "groupId", required = false) Long groupId) {
+                                   @RequestParam(name = "lab") Integer lab, @RequestParam(name = "bgmUrl", required = false) String bgmUrl
+                                   ) {
         // Token 验证
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
@@ -102,7 +102,7 @@ public class LiveController {
                     liveInfo.setUserId(account.getId());
                     // 不必须字段
                     liveInfo.setBgmUrl(bgmUrl);
-                    liveInfo.setGroupId(groupId);
+//                    liveInfo.setGroupId(groupId);
                     Integer id = liveInfoFacade.add(liveInfo);
                     attrMap.put("id", id);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
@@ -141,7 +141,7 @@ public class LiveController {
                                    @RequestParam(name = "lab", required = false) Integer lab,
                                    @RequestParam(name = "bgmUrl", required = false) String bgmUrl,
                                    @RequestParam(name = "vedioUrl", required = false) String vedioUrl,
-                                   @ApiParam(required = true, name = "groupId", value = "环信组ID")@RequestParam(name = "groupId", required = false) Long groupId) {
+                                   @ApiParam(required = false, name = "groupId", value = "环信组ID")@RequestParam(name = "groupId", required = false) Long groupId) {
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token) || null == id) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
