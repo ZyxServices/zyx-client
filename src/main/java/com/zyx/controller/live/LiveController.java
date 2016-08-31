@@ -95,8 +95,8 @@ public class LiveController {
                     liveInfo.setAuth(auth);
                     // 传入参数构造
                     liveInfo.setType(type);
-                    liveInfo.setStart(start);
-                    liveInfo.setEnd(end);
+                    liveInfo.setStartTime(start);
+                    liveInfo.setEndTime(end);
                     liveInfo.setTitle(title);
                     liveInfo.setLab(lab);
                     liveInfo.setUserId(account.getId());
@@ -160,8 +160,8 @@ public class LiveController {
                     liveInfo.setTitle(title);
                     liveInfo.setLab(lab);
                     // 不必须字段
-                    liveInfo.setStart(start == null ? System.currentTimeMillis() : start);
-                    liveInfo.setEnd(end == null ? System.currentTimeMillis() : end);
+                    liveInfo.setStartTime(start == null ? System.currentTimeMillis() : start);
+                    liveInfo.setEndTime(end == null ? System.currentTimeMillis() : end);
                     liveInfo.setBgmUrl(bgmUrl);
                     liveInfo.setVedioUrl(vedioUrl);
                     liveInfo.setGroupId(groupId);
