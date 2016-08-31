@@ -56,11 +56,11 @@ public class DevaController {
         Map<String, Object> attrMap;
         try {
             Map<String, Object> devasMap = new HashMap<>();
-            devasMap.put("activtyDevas", devaFacade.getDevaByModel(1,Constants.MODEL_ACTIVITY));
-            devasMap.put("liveDevas", devaFacade.getDevaByModel(1,Constants.MODEL_LIVE));
-            devasMap.put("userDevas", devaFacade.getDevaByModel(1,Constants.MODEL_USER));
-            devasMap.put("cirleDevas", devaFacade.getDevaByModel(1,Constants.MODEL_CIRCLE));
-            devasMap.put("concerDevas", devaFacade.getDevaByModel(1,Constants.MODEL_CONCERN));
+            devasMap.put(Constants.devaNames.get(Constants.MODEL_ACTIVITY), devaFacade.getDevaByModel(1,Constants.MODEL_ACTIVITY));
+            devasMap.put(Constants.devaNames.get(Constants.MODEL_LIVE), devaFacade.getDevaByModel(1,Constants.MODEL_LIVE));
+            devasMap.put(Constants.devaNames.get(Constants.MODEL_USER), devaFacade.getDevaByModel(1,Constants.MODEL_USER));
+            devasMap.put(Constants.devaNames.get(Constants.MODEL_CIRCLE_ITEM), devaFacade.getDevaByModel(1,Constants.MODEL_CIRCLE_ITEM));
+            devasMap.put(Constants.devaNames.get(Constants.MODEL_CONCERN), devaFacade.getDevaByModel(1,Constants.MODEL_CONCERN));
             attrMap = MapUtils.buildSuccessMap(LiveConstants.SUCCESS, LiveConstants.MSG_SUCCESS, devasMap);
         } catch (Exception e) {
             attrMap = Constants.MAP_500;
