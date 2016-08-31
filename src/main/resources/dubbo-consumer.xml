@@ -57,5 +57,7 @@
     <dubbo:reference interface="com.zyx.rpc.collection.CollectionFacade" id="collectionFacade" check="false"/>
     <!--评论接口-->
     <dubbo:reference interface="com.zyx.rpc.system.CommentFacade" id="commentFacade" check="false"/>
+    <!--回复接口-->
+    <dubbo:reference interface="com.zyx.rpc.system.ReplyFacade" id="replytFacade" check="false"/>
 
 </beans>
