@@ -95,8 +95,8 @@ public class LiveController {
                     liveInfo.setAuth(auth);
                     // 传入参数构造
                     liveInfo.setType(type);
-                    liveInfo.setStart(start);
-                    liveInfo.setEnd(end);
+                    liveInfo.setStartTime(start);
+                    liveInfo.setEndTime(end);
                     liveInfo.setTitle(title);
                     liveInfo.setLab(lab);
                     liveInfo.setUserId(account.getId());
@@ -159,8 +159,8 @@ public class LiveController {
                     liveInfo.setTitle(title);
                     liveInfo.setLab(lab);
                     // 不必须字段
-                    liveInfo.setStart(start == null ? System.currentTimeMillis() : start);
-                    liveInfo.setEnd(end == null ? System.currentTimeMillis() : end);
+                    liveInfo.setStartTime(start);
+                    liveInfo.setEndTime(end);
                     liveInfo.setBgmUrl(bgmUrl);
                     liveInfo.setVedioUrl(vedioUrl);
                     liveInfo.setGroupId(groupId);
@@ -207,18 +207,18 @@ public class LiveController {
                         attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
                     } else {
                         LiveInfo dlive = liveInfoFacade.getById(id);
-                        if (dlive == null || dlive.getUserId() != account.getId()) {
+                        if (dlive == null || !dlive.getUserId().equals(account.getId())) {
                             attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50301);
                             attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50301_MSG);
                         } else {
                             LiveInfo liveInfo = new LiveInfo();
                             liveInfo.setId(id);
                             liveInfo.setState(status);
+                            System.out.println(JSON.toJSONString(liveInfo));
                             liveInfoFacade.updateNotNull(liveInfo);
                             attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                         }
                     }
-
                 } else {
                     attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
                     attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
@@ -237,11 +237,14 @@ public class LiveController {
     @RequestMapping(value = "/list/lab", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
     public ModelAndView getLiveList(@RequestParam(name = "token", required = false) String token,
-                                    @RequestParam(name = "lab") Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
+                                    @RequestParam(name = "lab" ,required=true) Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
                                     @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-        if (!(lab == 1 || lab == 2 || lab == 3 || lab == 4)) {// 判断参数合法性
+        if ( null == lab  ) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
+        } else if (!(lab == 1 || lab == 2 || lab == 3 || lab == 4)) {// 判断参数合法性
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
         } else {

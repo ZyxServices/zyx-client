@@ -46,7 +46,7 @@ public class ShopController {
 	    	info.setId(id);
 	    	info.setBgmUrl("www.baidu.com");
 	    	info.setCreateTime(12344l);
-	    	info.setEnd(22222l);
+	    	info.setEndTime(22222l);
 	    	info.setTitle("test");
 	    	return ResponseEntity.ok(info);
 	    }
