@@ -103,7 +103,6 @@ public class LiveController {
                     // 不必须字段
                     liveInfo.setBgmUrl(bgmUrl);
 //                    liveInfo.setGroupId(groupId);
-                    System.out.println(JSON.toJSONString(liveInfo));
                     Integer id = liveInfoFacade.add(liveInfo);
                     attrMap.put("id", id);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
@@ -160,12 +159,13 @@ public class LiveController {
                     liveInfo.setTitle(title);
                     liveInfo.setLab(lab);
                     // 不必须字段
-                    liveInfo.setStartTime(start == null ? System.currentTimeMillis() : start);
-                    liveInfo.setEndTime(end == null ? System.currentTimeMillis() : end);
+                    liveInfo.setStartTime(start);
+                    liveInfo.setEndTime(end);
                     liveInfo.setBgmUrl(bgmUrl);
                     liveInfo.setVedioUrl(vedioUrl);
                     liveInfo.setGroupId(groupId);
                     // 系统补全参数
+                    System.out.println(JSON.toJSONString(liveInfo));
                     liveInfoFacade.updateNotNull(liveInfo);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                 } else {
@@ -215,6 +215,7 @@ public class LiveController {
                             LiveInfo liveInfo = new LiveInfo();
                             liveInfo.setId(id);
                             liveInfo.setState(status);
+                            System.out.println(JSON.toJSONString(liveInfo));
                             liveInfoFacade.updateNotNull(liveInfo);
                             attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                         }
