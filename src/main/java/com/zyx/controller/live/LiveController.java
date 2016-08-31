@@ -103,6 +103,7 @@ public class LiveController {
                     // 不必须字段
                     liveInfo.setBgmUrl(bgmUrl);
 //                    liveInfo.setGroupId(groupId);
+                    System.out.println(JSON.toJSONString(liveInfo));
                     Integer id = liveInfoFacade.add(liveInfo);
                     attrMap.put("id", id);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
@@ -207,7 +208,7 @@ public class LiveController {
                         attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
                     } else {
                         LiveInfo dlive = liveInfoFacade.getById(id);
-                        if (dlive == null || dlive.getUserId() != account.getId()) {
+                        if (dlive == null || !dlive.getUserId().equals(account.getId())) {
                             attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50301);
                             attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50301_MSG);
                         } else {
@@ -218,7 +219,6 @@ public class LiveController {
                             attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                         }
                     }
-
                 } else {
                     attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
                     attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
