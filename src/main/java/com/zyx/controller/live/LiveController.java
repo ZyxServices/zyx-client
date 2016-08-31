@@ -165,7 +165,6 @@ public class LiveController {
                     liveInfo.setVedioUrl(vedioUrl);
                     liveInfo.setGroupId(groupId);
                     // 系统补全参数
-                    System.out.println(JSON.toJSONString(liveInfo));
                     liveInfoFacade.updateNotNull(liveInfo);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                 } else {
