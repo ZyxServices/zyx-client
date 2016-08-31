@@ -238,11 +238,14 @@ public class LiveController {
     @RequestMapping(value = "/list/lab", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
     public ModelAndView getLiveList(@RequestParam(name = "token", required = false) String token,
-                                    @RequestParam(name = "lab") Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
+                                    @RequestParam(name = "lab" ,required=true) Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
                                     @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-        if (!(lab == 1 || lab == 2 || lab == 3 || lab == 4)) {// 判断参数合法性
+        if ( null == lab  ) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
+        } else if (!(lab == 1 || lab == 2 || lab == 3 || lab == 4)) {// 判断参数合法性
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
         } else {
