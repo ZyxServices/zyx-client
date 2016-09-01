@@ -23,6 +23,14 @@ public interface UserAttentionFacade {
     Map<String, Object> attentionFromAToB(AttentionParam attentionParam);
 
     /**
+     * 取消关注，取消拉黑
+     *
+     * @param attentionParam
+     * @return
+     */
+    Map<String, Object> unAttentionFromAToB(AttentionParam attentionParam);
+
+    /**
      * 我的粉丝列表
      *
      * @param attentionParam
@@ -45,4 +53,6 @@ public interface UserAttentionFacade {
      * @return
      */
     Map<String, Object> myDKGZList(AttentionParam attentionParam);
+
+
 }
