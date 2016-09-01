@@ -33,7 +33,7 @@ public class UserAttentionController {
 
     @RequestMapping(value = "/user", method = {RequestMethod.GET})
     @ApiOperation(value = "用户A关注用户B", notes = "用户A关注用户B")
-    public ModelAndView info(@RequestParam(name = "token") String token, @RequestParam(name = "fromId") Integer fromId, @RequestParam(name = "toId") Integer toId) {
+    public ModelAndView attention_get(@RequestParam(name = "token") String token, @RequestParam(name = "fromId") Integer fromId, @RequestParam(name = "toId") Integer toId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromId) || StringUtils.isEmpty(toId)) {// 缺少参数
@@ -41,6 +41,20 @@ public class UserAttentionController {
         } else {
             AttentionParam param = buildParam(token, fromId, toId);
             jsonView.setAttributesMap(userAttentionFacade.attentionFromAToB(param));
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/user", method = {RequestMethod.DELETE})
+    @ApiOperation(value = "用户A取消关注用户B", notes = "用户A取消关注用户B")
+    public ModelAndView attention_delete(@RequestParam(name = "token") String token, @RequestParam(name = "fromId") Integer fromId, @RequestParam(name = "toId") Integer toId) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromId) || StringUtils.isEmpty(toId)) {// 缺少参数
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            AttentionParam param = buildParam(token, fromId, toId);
+            jsonView.setAttributesMap(userAttentionFacade.unAttentionFromAToB(param));
         }
         return new ModelAndView(jsonView);
     }
