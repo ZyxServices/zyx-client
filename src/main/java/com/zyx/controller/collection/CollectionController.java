@@ -10,9 +10,11 @@ import com.zyx.param.collection.CollectionParam;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.rpc.collection.CollectionFacade;
 import com.zyx.vo.account.AccountInfoVo;
+import com.zyx.vo.account.UserIconVo;
 import com.zyx.vo.collection.CollectionVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -143,6 +145,21 @@ public class CollectionController {
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             }
         }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @ApiOperation(value = "获取收藏列表", notes = "收藏-获取收藏列表")
+    public ModelAndView getCollUserBaseInfo(
+            @ApiParam(required = true, name = "model", value = "模块类型（1活动，2直播，3圈子，4帖子，5动态，6用户，7系统）") @RequestParam(name = "model", required = true) Integer model,
+            @ApiParam(required = true, name = "modelId", value = "模块ID") @RequestParam(name = "modelId", required = true) Integer modelId
+    ){
+        Map<String, Object> attrMap = new HashMap<>();
+        List<UserIconVo> list = collectionFacade.getCollUserIcons(model, modelId);
+        attrMap.put(LiveConstants.DATA, list);
+        attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(attrMap);
         return new ModelAndView(jsonView);

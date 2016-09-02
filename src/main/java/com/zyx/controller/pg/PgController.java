@@ -8,6 +8,7 @@ import com.zyx.rpc.pg.PgFacade;
 import com.zyx.utils.FileUploadUtils;
 import com.zyx.utils.ImagesVerifyUtils;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,11 +36,11 @@ public class PgController {
     @ApiOperation(value = "添加圈子", notes = "添加圈子")
     public ModelAndView addCircle(@RequestParam("token") String token,
                                   @RequestParam("title") String title,
-                                  @RequestParam("createId") Integer createId,
-                                  @RequestParam("circleType") Integer circleType,
-                                  @RequestParam("details") String details,
+                                  @ApiParam(required = true,name = "createId",value ="创建圈子用户id")@RequestParam("createId") Integer createId,
+                                  @ApiParam(required = true,name = "circleType",value ="圈子类别，需要动态去圈子类别表数据")@RequestParam("circleType") Integer circleType,
+                                  @ApiParam(required = true,name = "details",value ="圈子详情")@RequestParam("details") String details,
 //                                  @RequestParam("tag") Integer tag,
-                                  @RequestParam(value = "headImgUrl", required = false) String headImgUrl) {
+                                  @ApiParam(required = true,name = "headImgUrl",value ="图片url地址，可以传多个，以逗号（英文）隔开")@RequestParam(value = "headImgUrl", required = false) String headImgUrl) {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, headImgUrl, 0);
         jsonView.setAttributesMap(map);
@@ -49,8 +50,8 @@ public class PgController {
     @RequestMapping(value = "/v1/circle/meetting", method = RequestMethod.POST)
     @ApiOperation(value = "圈子签到", notes = "圈子签到")
     public ModelAndView addMeet(@RequestParam("token") String token,
-                                @RequestParam("circleId") Integer circleId,
-                                @RequestParam("accountId") Integer accountId) {
+                                @ApiParam(required = true,name = "circleId",value ="圈子id")@RequestParam("circleId") Integer circleId,
+                                @ApiParam(required = true,name = "accountId",value ="签到用户id")@RequestParam("accountId") Integer accountId) {
         Map<String, Object> map = pgFacade.addMeet(circleId, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -60,13 +61,13 @@ public class PgController {
     @RequestMapping(value = "/v1/cern/insert", method = RequestMethod.POST)
     @ApiOperation(value = "发布动态", notes = "发布动态")
     public ModelAndView addCern(@RequestParam(name = "token", value = "", required = false) String token,
-                                @RequestParam(name = "userId") Integer userId,
-                                @RequestParam(name = "type") Integer type,
+                                @ApiParam(required = true,name = "userId",value ="发布动态id")@RequestParam(name = "userId") Integer userId,
+                                @ApiParam(required = true,name = "type",value ="动态类型1为个人动态，2为活动动态，3为明星动态，4为圈子动态")@RequestParam(name = "type") Integer type,
                                 @RequestParam(name = "cernTitle") String cernTitle,
                                 @RequestParam(name = "content") String content,
                                 @RequestParam(name = "imgUrl", required = false) String imgUrl,
-                                @RequestParam(name = "videoUrl", required = false) String videoUrl,
-                                @RequestParam(name = "visible") Integer visible) {
+                                @ApiParam(required = true,name = "videoUrl",value ="视频url，一期暂无")@RequestParam(name = "videoUrl", required = false) String videoUrl,
+                                @ApiParam(required = true,name = "visible",value ="可见范围，可见范围0所有可见，1好友可见")@RequestParam(name = "visible") Integer visible) {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = pgFacade.addCern(userId, type, cernTitle, content, imgUrl, videoUrl, visible);
         jsonView.setAttributesMap(map);
@@ -76,9 +77,9 @@ public class PgController {
     @RequestMapping(value = "/v1/zan/add", method = RequestMethod.POST)
     @ApiOperation(value = "点赞", notes = "点赞")
     public ModelAndView zan(@RequestParam(name = "token") String token,
-                            @RequestParam(name = "bodyId") Integer bodyId,
-                            @RequestParam(name = "bodyType") Integer bodyType,
-                            @RequestParam(name = "accountId") Integer accountId) {
+                            @ApiParam(required = true,name = "bodyId",value ="模块id")@RequestParam(name = "bodyId") Integer bodyId,
+                            @ApiParam(required = true,name = "bodyType",value ="点赞模块类型1：圈子，2：动态，3：活动，4直播，5帖子")@RequestParam(name = "bodyType") Integer bodyType,
+                            @ApiParam(required = true,name = "accountId",value ="点赞人id")@RequestParam(name = "accountId") Integer accountId) {
         Map<String, Object> map = pgFacade.addZan(bodyId, bodyType, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -88,9 +89,9 @@ public class PgController {
     @RequestMapping(value = "/v1/cern/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加关注", notes = "添加关注")
     public ModelAndView addMyConcern(@RequestParam(name = "token") String token,
-                                     @RequestParam(name = "concernId") Integer concernId,
-                                     @RequestParam(name = "concernType") Integer concernType,
-                                     @RequestParam(name = "accountId") Integer accountId) {
+                                     @ApiParam(required = true,name = "concernId",value ="关注模块id") @RequestParam(name = "concernId") Integer concernId,
+                                     @ApiParam(required = true,name = "concernType",value ="关注模块类型，0为动态，1为明星，2为个人，3为球队,4为圈子，5为活动，6为直播") @RequestParam(name = "concernType") Integer concernType,
+                                     @ApiParam(required = true,name = "accountId",value ="添加关注用户id")@RequestParam(name = "accountId") Integer accountId) {
         Map<String, Object> map = pgFacade.addMyConcern(concernId, concernType, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -127,11 +128,11 @@ public class PgController {
     @RequestMapping(value = "/v1/circleItem/add", method = RequestMethod.POST)
     @ApiOperation(value = "发布帖子", notes = "发布帖子")
     public ModelAndView addCircleItem(@RequestParam(name = "token") String token,
-                                      @RequestParam(name = "circle_id") Integer circle_id,
-                                      @RequestParam(name = "create_id") Integer create_id,
+                                      @ApiParam(required = true,name = "circle_id",value ="所属圈子id")@RequestParam(name = "circle_id") Integer circle_id,
+                                      @ApiParam(required = true,name = "create_id",value ="发布帖子用户id")@RequestParam(name = "create_id") Integer create_id,
                                       @RequestParam(name = "title") String title,
                                       @RequestParam(name = "content") String content,
-                                      @RequestParam(name = "img_url", required = false) String img_url) {
+                                      @ApiParam(required = true,name = "img_url",value ="图片url地址，可以传多个，以逗号（英文）隔开")@RequestParam(name = "img_url", required = false) String img_url) {
         Map<String, Object> map = pgFacade.addCircleItem(circle_id, create_id, title, content, img_url);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -141,9 +142,9 @@ public class PgController {
     @RequestMapping(value = "/v1/circle/setMaster", method = RequestMethod.POST)
     @ApiOperation(value = "设置圈主", notes = "设置圈主")
     public ModelAndView setMaster(@RequestParam(name = "token") String token,
-                                  @RequestParam(name = "circle_id") Integer circle_id,
-                                  @RequestParam(name = "master_id") Integer master_id,
-                                  @RequestParam(name = "account_id") Integer account_id) {
+                                  @ApiParam(required = true,name = "circle_id",value ="所属圈子id")@RequestParam(name = "circle_id") Integer circle_id,
+                                  @ApiParam(required = true,name = "master_id",value ="设置该圈子圈主id")@RequestParam(name = "master_id") Integer master_id,
+                                  @ApiParam(required = true,name = "account_id",value ="设置圈主的设置人id")@RequestParam(name = "account_id") Integer account_id) {
         Map<String, Object> map = pgFacade.setMaster(circle_id, master_id, account_id);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -175,8 +176,8 @@ public class PgController {
     @ApiOperation(value = "设置置顶帖子", notes = "设置置顶帖子")
     public ModelAndView setTop(
             @RequestParam String token,
-            @RequestParam("circle_id") Integer circle_id,
-            @RequestParam("topSize") Integer topSize) {
+            @ApiParam(required = true,name = "circle_id",value ="所属圈子id")@RequestParam("circle_id") Integer circle_id,
+            @ApiParam(required = true,name = "topSize",value ="设置置顶排序数值，以最高排前")@RequestParam("topSize") Integer topSize) {
         Map<String, Object> map = pgFacade.setTop(topSize, circle_id);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
@@ -192,18 +193,17 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/reply/addReply", method = RequestMethod.POST)
-    @ApiOperation(value = "发表回复", notes = "发表回复")
-    public ModelAndView addReply(@RequestParam("token") String token,
-                                 @RequestParam("reply_type") Integer reply_type,
-                                 @RequestParam("reply_id") Integer reply_id,
-                                 @RequestParam("account_id") Integer account_id,
-                                 @RequestParam("content") String content) {
-        Map<String, Object> map = pgFacade.addReply(reply_type, reply_id, account_id, content);
+    @RequestMapping(value = "/v1/cern/del/{token}/{concernId}/{loginUserId}", method = RequestMethod.DELETE)
+    @ApiOperation(value = "删除动态", notes = "删除动态")
+    public ModelAndView delCern(@PathVariable Integer token,
+                                @PathVariable Integer concernId,
+                                @PathVariable Integer loginUserId) {
+        Map<String, Object> map = pgFacade.delCern(concernId, loginUserId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
+
 
 //    @RequestMapping(value = "/v1/circle/queryCircleDeva/{token}", method = RequestMethod.GET)
 //    @ApiOperation(value = "圈子首推数据", notes = "圈子首推数据")
@@ -230,7 +230,8 @@ public class PgController {
 //    }
     @RequestMapping(value = "/v1/circle/getOne/{circleId}/{accountId}", method = RequestMethod.GET)
     @ApiOperation(value = "获取圈子数据", notes = "根据圈子id，用户id查询，范围帖子数，关注数，是否关注等信息")
-    public ModelAndView getOne(@PathVariable Integer circleId, @PathVariable Integer accountId) {
+    public ModelAndView getOne(@PathVariable Integer circleId,
+                               @PathVariable Integer accountId) {
         Map<String, Object> returnMap = pgFacade.findCircle(circleId, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
@@ -239,7 +240,9 @@ public class PgController {
 
     @RequestMapping(value = "/v1/cern/findParams/{token}/{concernId}/{concernType}", method = RequestMethod.GET)
     @ApiOperation(value = "关注列表条件查询", notes = "concernId，与concernType，自行去github查看")
-    public ModelAndView findMyconcernParams(@PathVariable String token, @PathVariable Integer concernId, @PathVariable Integer concernType) {
+    public ModelAndView findMyconcernParams(@PathVariable String token,
+                                            @ApiParam(required = true,name = "concernId",value ="关注模块id")@PathVariable Integer concernId,
+                                            @ApiParam(required = true,name = "concernType",value ="关注模块类型，0为动态，1为明星，2为个人，3为球队,4为圈子，5为活动，6为直播")@PathVariable Integer concernType) {
         Map<String, Object> returnMap = pgFacade.findMyConcernParams(concernId, concernType);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
@@ -250,8 +253,8 @@ public class PgController {
     @ApiOperation(value = "删除帖子", notes = "createId 户名id,circleItemId 帖子id")
     public ModelAndView deleteCircleItemByThisUser(
             @PathVariable(value = "token") String token,
-            @PathVariable("createId") Integer createId,
-            @PathVariable("circleItemId") Integer circleItemId) {
+            @ApiParam(required = true,name = "createId",value ="登录用户id")@PathVariable("createId") Integer createId,
+            @ApiParam(required = true,name = "circleItemId",value ="帖子id")@PathVariable("circleItemId") Integer circleItemId) {
         Map<String, Object> returnMap = pgFacade.deleteCircleItem(createId, circleItemId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
@@ -262,8 +265,8 @@ public class PgController {
     @ApiOperation(value = "取消圈主", notes = "circleId 圈子id,accountId 用户id")
     public ModelAndView closeMaster(
             @RequestParam(value = "token") String token,
-            @RequestParam(value = "circleId") Integer circleId,
-            @RequestParam(value = "accountId") Integer accountId) {
+            @ApiParam(required = true,name = "circleId",value ="圈子id")@RequestParam(value = "circleId") Integer circleId,
+            @ApiParam(required = true,name = "accountId",value ="取消圈主的取消人id")@RequestParam(value = "accountId") Integer accountId) {
         Map<String, Object> returnMap = pgFacade.closeMaster(circleId, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
@@ -380,6 +383,17 @@ public class PgController {
     @ApiOperation(value = "圈子类别列表", notes = "圈子类别列表")
     public ModelAndView getTjCircleList() {
         Map<String, Object> returnMap = pgFacade.getCircleTypeList();
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(returnMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/v1/cern/{token}/{circleId}/{accountId}", method = RequestMethod.DELETE)
+    @ApiOperation(value = "圈子取消关注", notes = "circleId:圈子id，accountId：用户id")
+    public ModelAndView delMyConcern(@PathVariable("token") String token,
+                                     @PathVariable("circleId") Integer circleId,
+                                     @PathVariable("accountId") Integer accountId) {
+        Map<String, Object> returnMap = pgFacade.delMyConcern(circleId, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
