@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

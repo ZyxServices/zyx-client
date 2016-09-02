@@ -2,10 +2,10 @@ package com.zyx.controller.activity;
 
 
 import com.zyx.constants.Constants;
+import com.zyx.param.activity.QueryActivityParm;
+import com.zyx.param.activity.QueryHistoryParm;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.utils.ActivityUtils;
-import com.zyx.entity.activity.parm.QueryActivityParm;
-import com.zyx.entity.activity.parm.QueryHistoryParm;
 import com.zyx.rpc.activity.ActivityFacade;
 import com.zyx.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,6 @@ import java.util.Map;
  * @author SubDong
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title com.activity.controller
  */
 @RestController
 @RequestMapping("/v1/activity")

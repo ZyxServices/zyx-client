@@ -1,17 +1,14 @@
 package com.zyx.controller.activity;
 
+import com.zyx.param.activity.AddTopicParm;
+import com.zyx.param.activity.QueryTopicParm;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.utils.ActivityUtils;
-import com.zyx.utils.FileUploadUtils;
 import com.zyx.constants.Constants;
 import com.zyx.constants.activity.ActivityConstants;
-import com.zyx.entity.activity.parm.AddTopicParm;
-import com.zyx.entity.activity.parm.QueryTopicParm;
 import com.zyx.rpc.activity.ActivityTopicFacade;
-import com.zyx.utils.MapUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;

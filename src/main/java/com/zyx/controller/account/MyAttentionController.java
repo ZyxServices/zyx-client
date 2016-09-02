@@ -1,7 +1,6 @@
 package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
-import com.zyx.entity.account.param.UserMarkParam;
 import com.zyx.param.attention.AttentionParam;
 import com.zyx.rpc.attention.UserAttentionFacade;
 import io.swagger.annotations.Api;
@@ -24,7 +23,6 @@ import java.util.Map;
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title MyAttentionController.java
  */
 @RestController
 @RequestMapping("/v1/my/attention")
@@ -42,14 +40,7 @@ public class MyAttentionController {
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(accountId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            try {
-                AttentionParam attentionParam = new AttentionParam();
-                attentionParam.setToken(token);
-                attentionParam.setFromId(accountId);
-                jsonView.setAttributesMap(userAttentionFacade.myGZList(attentionParam));
-            } catch (Exception e) {
-                jsonView.setAttributesMap(Constants.MAP_500);
-            }
+            jsonView.setAttributesMap(doMyGZList(token, accountId));
         }
         return new ModelAndView(jsonView);
     }
@@ -62,14 +53,7 @@ public class MyAttentionController {
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(accountId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            try {
-                AttentionParam attentionParam = new AttentionParam();
-                attentionParam.setToken(token);
-                attentionParam.setFromId(accountId);
-                jsonView.setAttributesMap(userAttentionFacade.myDKGZList(attentionParam));
-            } catch (Exception e) {
-                jsonView.setAttributesMap(Constants.MAP_500);
-            }
+            jsonView.setAttributesMap(doMyDKGZList(token, accountId));
         }
         return new ModelAndView(jsonView);
     }
@@ -82,16 +66,43 @@ public class MyAttentionController {
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(accountId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            try {
-                AttentionParam attentionParam = new AttentionParam();
-                attentionParam.setToken(token);
-                attentionParam.setToId(accountId);
-                jsonView.setAttributesMap(userAttentionFacade.myFSList(attentionParam));
-            } catch (Exception e) {
-                jsonView.setAttributesMap(Constants.MAP_500);
-            }
+            jsonView.setAttributesMap(doMyFSList(token, accountId));
         }
+
         return new ModelAndView(jsonView);
     }
+
+    private Map<String, Object> doMyGZList(String token, Integer accountId) {
+        try {
+            return userAttentionFacade.myGZList(getAttentionParam(token, accountId, null));
+        } catch (Exception e) {
+            return Constants.MAP_500;
+        }
+    }
+
+    private Map<String, Object> doMyDKGZList(String token, Integer accountId) {
+        try {
+            return userAttentionFacade.myDKGZList(getAttentionParam(token, accountId, null));
+        } catch (Exception e) {
+            return Constants.MAP_500;
+        }
+    }
+
+    private Map<String, Object> doMyFSList(String token, Integer accountId) {
+        try {
+            return userAttentionFacade.myFSList(getAttentionParam(token, null, accountId));
+        } catch (Exception e) {
+            return Constants.MAP_500;
+        }
+    }
+
+    private AttentionParam getAttentionParam(String token, Integer fromId, Integer toId) {
+        AttentionParam attentionParam = new AttentionParam();
+        attentionParam.setToken(token);
+        attentionParam.setFromId(fromId);
+        attentionParam.setToId(toId);
+        return attentionParam;
+    }
+
 
 }

@@ -15,12 +15,12 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
- * Created by WeiMinSheng on 2016/6/12.
+ * Created by wms on 2016/6/12.
  *
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title LoginController.java
+ *          LoginController.java
  */
 @RestController
 @RequestMapping("/v1/account")

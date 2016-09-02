@@ -1,12 +1,10 @@
 package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
-import com.zyx.entity.account.param.AccountInfoParam;
+import com.zyx.param.account.AccountInfoParam;
 import com.zyx.rpc.account.AccountInfoFacade;
-import com.zyx.vo.account.AccountInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +16,11 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
- * Created by WeiMinSheng on 2016/6/17.
+ * Created by wms on 2016/6/17.
  *
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title AccountController.java
  */
 @RestController
 @RequestMapping("/v1/account")
