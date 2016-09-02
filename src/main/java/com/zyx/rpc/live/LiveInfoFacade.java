@@ -19,6 +19,16 @@ import com.zyx.vo.live.LiveSearchVo;
  * @version V1.0  
  * Copyright (c)2012 chantsoft-版权所有
  */
+/**
+ *
+ * @title LiveInfoFacade.java
+ * @package com.zyx.rpc.live
+ * @description TODO
+ * @author DengQingHai
+ * @update 2016年6月14日 下午3:17:07
+ * @version V1.0
+ * Copyright (c)2012 chantsoft-版权所有
+ */
 public interface LiveInfoFacade {
 	/**
 	 *
@@ -58,17 +68,6 @@ public interface LiveInfoFacade {
 	 * @update 2016年6月22日 上午10:30:21
 	 */
 	public List<LiveInfoVo> getList(LiveInfoParam liveInfoParam);
-
-	/**
-	 *
-	 * @param liveSearchVo
-	 * @return
-	 * @description 搜索直播列表
-	 * @version 1.0
-	 * @author MrDeng
-	 * @update 2016年6月22日 上午11:12:10
-	 */
-	public List<LiveInfo> searchList( LiveSearchVo liveSearchVo);
 	/**
 	 *
 	 * @param id
@@ -90,15 +89,22 @@ public interface LiveInfoFacade {
 	 */
 	public String getLiveUrl(Integer liveId);
 
-	/**
-	 * 获取直播的观看人数
-	 * @param liveIds
-	 * @return
-	 * @description TODO
-	 * @version 1.0
-	 * @author MrDeng
-	 * @update 2016年7月4日 下午2:21:39
-	 */
-	public Map<Integer,Integer> getLiveWatchNum(List<Integer> liveIds);
+//	/**
+//	 * 获取直播的观看人数
+//	 * @param liveIds
+//	 * @return
+//	 * @description TODO
+//	 * @version 1.0
+//	 * @author MrDeng
+//	 * @update 2016年7月4日 下午2:21:39
+//	 */
+//	public Map<Integer,Integer> getLiveWatchNum(List<Integer> liveIds);
 
+
+	/**
+	 * 进入或者推出直播间
+	 * @param liveId
+	 * @param inOrOut
+	 */
+	public void  inOrOutLive(Integer liveId,Integer inOrOut);
 }
