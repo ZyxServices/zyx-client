@@ -40,7 +40,7 @@ public interface BarrageFacade {
 
 
 
-	public List<Barrage> getList(BarrageParam param);
+	public List<BarrageVo> getList(BarrageParam param);
 //	/**
 //	 * 
 //	 * @param token
