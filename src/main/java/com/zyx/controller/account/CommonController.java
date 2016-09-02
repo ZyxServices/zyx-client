@@ -23,12 +23,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by WeiMinSheng on 2016/6/14.
+ * Created by wms on 2016/6/14.
  *
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title CommonController.java
  */
 @RestController
 @RequestMapping("/v1")

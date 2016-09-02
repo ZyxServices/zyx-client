@@ -39,8 +39,11 @@ public class UserAttentionController {
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromId) || StringUtils.isEmpty(toId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            AttentionParam param = buildParam(token, fromId, toId);
-            jsonView.setAttributesMap(userAttentionFacade.attentionFromAToB(param));
+            try {
+                jsonView.setAttributesMap(userAttentionFacade.attentionFromAToB(buildParam(token, fromId, toId)));
+            } catch (Exception e) {
+                jsonView.setAttributesMap(Constants.MAP_500);
+            }
         }
         return new ModelAndView(jsonView);
     }
@@ -53,9 +56,13 @@ public class UserAttentionController {
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromId) || StringUtils.isEmpty(toId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            AttentionParam param = buildParam(token, fromId, toId);
-            jsonView.setAttributesMap(userAttentionFacade.unAttentionFromAToB(param));
+            try {
+                jsonView.setAttributesMap(userAttentionFacade.unAttentionFromAToB(buildParam(token, fromId, toId)));
+            } catch (Exception e) {
+                jsonView.setAttributesMap(Constants.MAP_500);
+            }
         }
+
         return new ModelAndView(jsonView);
     }
 

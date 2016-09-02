@@ -1,7 +1,5 @@
 package com.zyx.rpc.activity;
 
-import com.zyx.entity.activity.parm.AddTopicParm;
-
 import java.util.Map;
 
 /**
@@ -22,7 +20,7 @@ public interface PageViwesFacade {
      * @param typeId
      * @return
      */
-    void pageViwes(Integer types,Integer typeId);
+    void pageViwes(Integer types, Integer typeId);
 
     /**
      * 获取浏览量
@@ -31,6 +29,6 @@ public interface PageViwesFacade {
      * @param typeId
      * @return
      */
-    Map<String,Object> getPageViwes(Integer types, Integer typeId);
+    Map<String, Object> getPageViwes(Integer types, Integer typeId);
 
 }

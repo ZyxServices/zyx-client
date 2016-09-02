@@ -1,9 +1,9 @@
 package com.zyx.controller.activity;
 
-import com.zyx.entity.activity.parm.MemberInfoParm;
+import com.zyx.param.activity.MemberInfoParm;
+import com.zyx.param.activity.QueryMemberParm;
 import com.zyx.rpc.account.AccountCommonFacade;
 import com.zyx.rpc.activity.ActivityMemberFacade;
-import com.zyx.entity.activity.parm.QueryMemberParm;
 import com.zyx.utils.ActivityUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;

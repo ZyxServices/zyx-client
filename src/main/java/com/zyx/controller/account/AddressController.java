@@ -1,7 +1,7 @@
 package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
-import com.zyx.entity.account.param.UserAddressParam;
+import com.zyx.param.account.UserAddressParam;
 import com.zyx.rpc.account.AccountAddressFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,12 +18,11 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import java.util.UUID;
 
 /**
- * Created by WeiMinSheng on 2016/6/20.
+ * Created by wms on 2016/6/20.
  *
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title AddressController.java
  */
 @RestController
 @RequestMapping("/v1/account/receiptAddress")

@@ -1,10 +1,12 @@
 package com.zyx.controller.account;
 
 import com.zyx.rpc.account.MyCircleFacade;
-import com.zyx.rpc.pg.PgFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
@@ -18,7 +20,6 @@ import java.util.Map;
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title MyCircleController.java
  */
 @RestController
 @RequestMapping("/v1/my/circle")

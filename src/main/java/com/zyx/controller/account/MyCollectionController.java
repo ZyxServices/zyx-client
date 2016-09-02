@@ -20,7 +20,6 @@ import java.util.Map;
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title MyCollectionController.java
  */
 @RestController
 @RequestMapping("/v1/my/collection")

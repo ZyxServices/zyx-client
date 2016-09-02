@@ -1,8 +1,8 @@
 package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
-import com.zyx.entity.account.param.UserMarkParam;
 import com.zyx.interceptor.Authorization;
+import com.zyx.param.account.UserMarkParam;
 import com.zyx.rpc.account.MarkFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,13 +16,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import java.util.Map;
+
 /**
  * Created by WeiMinSheng on 2016/6/16.
  *
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title MarkController.java
+ *          MarkController.java
  */
 @RestController
 @RequestMapping("/v1/account")
@@ -41,14 +43,7 @@ public class MarkController {
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            try {
-                UserMarkParam userMarkParam = new UserMarkParam();
-                userMarkParam.setToken(token);
-                userMarkParam.setUserId(userId);
-                jsonView.setAttributesMap(markFacade.sign(userMarkParam));
-            } catch (Exception e) {
-                jsonView.setAttributesMap(Constants.MAP_500);
-            }
+            jsonView.setAttributesMap(doSign(token, userId));
         }
 
         return new ModelAndView(jsonView);
@@ -63,17 +58,33 @@ public class MarkController {
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            try {
-                UserMarkParam userMarkParam = new UserMarkParam();
-                userMarkParam.setToken(token);
-                userMarkParam.setUserId(userId);
-                jsonView.setAttributesMap(markFacade.querySign(userMarkParam));
-            } catch (Exception e) {
-                jsonView.setAttributesMap(Constants.MAP_500);
-            }
+            jsonView.setAttributesMap(doQuerySign(token, userId));
         }
 
         return new ModelAndView(jsonView);
+    }
+
+    private Map<String, Object> doSign(String token, int userId) {
+        try {
+            return markFacade.sign(buildUserMarkParam(token, userId));
+        } catch (Exception e) {
+            return Constants.MAP_500;
+        }
+    }
+
+    private Map<String, Object> doQuerySign(String token, int userId) {
+        try {
+            return markFacade.querySign(buildUserMarkParam(token, userId));
+        } catch (Exception e) {
+            return Constants.MAP_500;
+        }
+    }
+
+    private UserMarkParam buildUserMarkParam(String token, int userId) {
+        UserMarkParam userMarkParam = new UserMarkParam();
+        userMarkParam.setToken(token);
+        userMarkParam.setUserId(userId);
+        return userMarkParam;
     }
 
 }

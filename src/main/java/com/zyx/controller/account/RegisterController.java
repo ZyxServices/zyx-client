@@ -1,10 +1,10 @@
 package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
+import com.zyx.param.account.UserLoginParam;
+import com.zyx.rpc.account.RegisterFacade;
 import com.zyx.utils.FileUploadUtils;
 import com.zyx.utils.ImagesVerifyUtils;
-import com.zyx.entity.account.UserLoginParam;
-import com.zyx.rpc.account.RegisterFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,11 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import java.util.Map;
 
 /**
- * Created by WeiMinSheng on 2016/6/6.
+ * Created by wms on 2016/6/6.
  *
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title RegisterController.java
  */
 @RestController
 @RequestMapping("/v1/account")
@@ -36,15 +35,19 @@ public class RegisterController {
     @RequestMapping(value = "/validate/code", method = RequestMethod.POST)
     @ApiOperation(value = "验证手机验证码", notes = "验证手机号和验证码是否匹配")
     public ModelAndView validatePhoneCode(@RequestParam(name = "phone") String phone, @RequestParam(name = "code") String code) {
-
         AbstractView jsonView = new MappingJackson2JsonView();
+
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)) {
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            UserLoginParam userLoginParam = new UserLoginParam();
-            userLoginParam.setPhone(phone);
-            userLoginParam.setCode(code);
-            jsonView.setAttributesMap(registerFacade.validatePhoneCode(userLoginParam));
+            try {
+                UserLoginParam userLoginParam = new UserLoginParam();
+                userLoginParam.setPhone(phone);
+                userLoginParam.setCode(code);
+                jsonView.setAttributesMap(registerFacade.validatePhoneCode(userLoginParam));
+            } catch (Exception e) {
+                jsonView.setAttributesMap(Constants.MAP_500);
+            }
         }
 
         return new ModelAndView(jsonView);
@@ -57,36 +60,39 @@ public class RegisterController {
 //                                 @RequestParam(name = "code") String code,
                                  @RequestParam(name = "nickname") String nickname,
                                  @RequestPart(name = "avatar", required = false) MultipartFile avatar) {
-
         AbstractView jsonView = new MappingJackson2JsonView();
+
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(nickname)) {
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            if (avatar != null) {// 用户上传头像
-                System.out.println("avatar  :  " + avatar);
-                System.out.println("avatar.getName()  :  " + avatar.getName());
-                String avatarId = FileUploadUtils.uploadFile(avatar);
-                Map<String, Object> map = ImagesVerifyUtils.verify(avatarId);
-                if (map != null) {
-                    jsonView.setAttributesMap(map);
+            try {
+                if (avatar != null) {// 用户上传头像
+                    String avatarId = FileUploadUtils.uploadFile(avatar);
+                    Map<String, Object> map = ImagesVerifyUtils.verify(avatarId);
+                    if (map != null) {
+                        jsonView.setAttributesMap(map);
+                    } else {
+                        UserLoginParam userLoginParam = new UserLoginParam();
+                        userLoginParam.setPhone(phone);
+                        userLoginParam.setPassword(password);
+//                    userLoginParam.setCode(code);
+                        userLoginParam.setAvatar(avatarId);
+                        userLoginParam.setNickname(nickname);
+                        jsonView.setAttributesMap(registerFacade.registerAccount(userLoginParam));
+                    }
                 } else {
                     UserLoginParam userLoginParam = new UserLoginParam();
                     userLoginParam.setPhone(phone);
                     userLoginParam.setPassword(password);
-//                    userLoginParam.setCode(code);
-                    userLoginParam.setAvatar(avatarId);
+//                userLoginParam.setCode(code);
                     userLoginParam.setNickname(nickname);
                     jsonView.setAttributesMap(registerFacade.registerAccount(userLoginParam));
                 }
-            } else {
-                UserLoginParam userLoginParam = new UserLoginParam();
-                userLoginParam.setPhone(phone);
-                userLoginParam.setPassword(password);
-//                userLoginParam.setCode(code);
-                userLoginParam.setNickname(nickname);
-                jsonView.setAttributesMap(registerFacade.registerAccount(userLoginParam));
+            } catch (Exception e) {
+                jsonView.setAttributesMap(Constants.MAP_500);
             }
         }
+
         return new ModelAndView(jsonView);
     }
 
@@ -96,18 +102,23 @@ public class RegisterController {
                                   @RequestParam(name = "pwd") String password,
                                   @RequestParam(name = "nickname") String nickname,
                                   @RequestParam(name = "avatar", required = false) String avatar) {
-
         AbstractView jsonView = new MappingJackson2JsonView();
+
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(password) || StringUtils.isEmpty(nickname)) {
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            UserLoginParam userLoginParam = new UserLoginParam();
-            userLoginParam.setPhone(phone);
-            userLoginParam.setPassword(password);
-            userLoginParam.setNickname(nickname);
-            userLoginParam.setAvatar(avatar);
-            jsonView.setAttributesMap(registerFacade.registerAccount(userLoginParam));
+            try {
+                UserLoginParam userLoginParam = new UserLoginParam();
+                userLoginParam.setPhone(phone);
+                userLoginParam.setPassword(password);
+                userLoginParam.setNickname(nickname);
+                userLoginParam.setAvatar(avatar);
+                jsonView.setAttributesMap(registerFacade.registerAccount(userLoginParam));
+            } catch (Exception e) {
+                jsonView.setAttributesMap(Constants.MAP_500);
+            }
         }
+
         return new ModelAndView(jsonView);
     }
 
