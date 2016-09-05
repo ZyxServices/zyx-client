@@ -5,6 +5,7 @@ import com.zyx.param.account.AccountInfoParam;
 import com.zyx.rpc.account.AccountInfoFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,11 +60,17 @@ public class AccountController {
     @ApiOperation(value = "通过用户ID编辑用户信息", notes = "通过用户ID编辑用户信息")
     public ModelAndView edit(@RequestParam(name = "token") String token,
                              @RequestParam(name = "account_id") Integer userId,
+                             @ApiParam(name = "avatar", value = "头像地址，需要先使用文件上传接口上传获取地址")
                              @RequestParam(required = false) String avatar,
+                             @ApiParam(name = "nickname", value = "昵称")
                              @RequestParam(required = false) String nickname,
+                             @ApiParam(name = "sex", value = "性别:1男 0女")
                              @RequestParam(required = false) Integer sex,
+                             @ApiParam(name = "birthday", value = "生日。日期时间戳")
                              @RequestParam(required = false) Long birthday,
+                             @ApiParam(name = "address", value = "地址")
                              @RequestParam(required = false) String address,
+                             @ApiParam(name = "signature", value = "签名")
                              @RequestParam(required = false) String signature) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
