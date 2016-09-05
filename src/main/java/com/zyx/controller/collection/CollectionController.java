@@ -44,9 +44,10 @@ public class CollectionController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiOperation(value = "添加收藏", notes = "收藏-添加收藏记录")
-    public ModelAndView createCollection(@RequestParam(name = "token", required = true) String token,
-                                         @RequestParam(name = "model", required = true) Integer model,
-                                         @RequestParam(name = "modelId", required = true) Integer modelId) {
+    public ModelAndView createCollection(
+            @RequestParam(name = "token", required = true) String token,
+            @ApiParam(required = false, name = "model", value = "模块类型（1活动，2直播，3圈子，4帖子，5动态，6用户，7系统）") @RequestParam(name = "model", required = false) Integer model,
+            @ApiParam(required = false, name = "modelId", value = "模块ID") @RequestParam(name = "modelId", required = false) Integer modelId) {
         // Token 验证
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token)) {
@@ -69,10 +70,10 @@ public class CollectionController {
                 collection.setModel(model);
                 collection.setModelId(modelId);
                 int count = collectionFacade.count(collection);
-                if(count!=0){
+                if (count != 0) {
                     attrMap.put(LiveConstants.STATE, CollConstants.COLL_EXSIT_COLLECTION);
                     attrMap.put(LiveConstants.ERROR_MSG, CollConstants.MSG_COLL_EXSIT_COLLECTION);
-                }else{
+                } else {
                     collectionFacade.addCollection(collection);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                 }
@@ -86,7 +87,7 @@ public class CollectionController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ApiOperation(value = "获取收藏列表", notes = "收藏-获取收藏列表")
     public ModelAndView getCollections(@RequestParam(name = "token", required = true) String token,
-                                       @RequestParam(name = "model", required = false) Integer model,
+                                       @ApiParam(required = false, name = "model", value = "模块类型（1活动，2直播，3圈子，4帖子，5动态，6用户，7系统）") @RequestParam(name = "model", required = false) Integer model,
                                        @RequestParam(name = "pageNo", required = false) Integer pageNo,
                                        @RequestParam(name = "pageSize", required = false) Integer pageSize
     ) {
@@ -109,8 +110,8 @@ public class CollectionController {
                 CollectionParam param = new CollectionParam();
                 param.setUserId(account.getId());
                 param.setModel(model);
-                if (pageSize != null&&pageNo != null) {
-                    Pager pager = new Pager(pageNo,pageSize);
+                if (pageSize != null && pageNo != null) {
+                    Pager pager = new Pager(pageNo, pageSize);
                     param.setPager(pager);
                 }
                 List<CollectionVo> cs = collectionFacade.selectCollections(param);
@@ -124,23 +125,32 @@ public class CollectionController {
     }
 
     @RequestMapping(value = "/concel", method = RequestMethod.POST)
-    @ApiOperation(value = "取消收藏", notes = "收藏-取消收藏")
-    public ModelAndView concelCollection(@RequestParam(name = "token", required = true) String token,
-                                         @RequestParam(name = "id", required = true) Integer id) {
+    @ApiOperation(value = "取消收藏", notes = "收藏-取消收藏 id不为空 或者（model 与 modelID不为空）")
+    public ModelAndView concelCollection(
+            @RequestParam(name = "token", required = true) String token,
+            @ApiParam(required = false, name = "id", value = "收藏ID") @RequestParam(name = "id", required = false) Integer id,
+            @ApiParam(required = false, name = "model", value = "模块类型（1活动，2直播，3圈子，4帖子，5动态，6用户，7系统）") @RequestParam(name = "model", required = false) Integer model,
+            @ApiParam(required = false, name = "modelId", value = "模块ID") @RequestParam(name = "modelId", required = false) Integer modelId
+    ) {
         // Token 验证
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token)) {
             attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_REQUEST_UNAUTHORIZED);
+        } else if (id == null && (model == null || modelId == null)) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
         } else {
             AccountInfoVo account = accountCommonFacade.getAccountVoByToken(token);
             if (account == null || account.getId() == null) {
                 attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
                 attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
             } else {
-                Collection record =  new Collection();
+                Collection record = new Collection();
                 record.setId(id);
                 record.setUserId(account.getId());
+                record.setModelId(modelId);
+                record.setModelId(model);
                 collectionFacade.cancelCollect(record);
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             }
@@ -155,7 +165,7 @@ public class CollectionController {
     public ModelAndView getCollUserBaseInfo(
             @ApiParam(required = true, name = "model", value = "模块类型（1活动，2直播，3圈子，4帖子，5动态，6用户，7系统）") @RequestParam(name = "model", required = true) Integer model,
             @ApiParam(required = true, name = "modelId", value = "模块ID") @RequestParam(name = "modelId", required = true) Integer modelId
-    ){
+    ) {
         Map<String, Object> attrMap = new HashMap<>();
         List<UserIconVo> list = collectionFacade.getCollUserIcons(model, modelId);
         attrMap.put(LiveConstants.DATA, list);

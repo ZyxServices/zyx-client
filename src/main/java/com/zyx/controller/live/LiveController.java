@@ -63,7 +63,8 @@ public class LiveController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiOperation(value = "直播发布", notes = "直播-直播发布")
     public ModelAndView createLive(@RequestParam(name = "token") String token,
-                                   @RequestParam(name = "auth") Integer auth, @RequestParam(name = "type") Integer type,
+                                   @ApiParam(required = true, name = "modelId", value = "模块ID")@RequestParam(name = "auth") Integer auth,
+                                   @RequestParam(name = "type") Integer type,
                                    @RequestParam(name = "start", required = false) Long start,
                                    @RequestParam(name = "end", required = false) Long end, @RequestParam(name = "title") String title,
                                    @RequestParam(name = "lab") Integer lab, @RequestParam(name = "bgmUrl", required = false) String bgmUrl
