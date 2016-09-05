@@ -46,8 +46,8 @@ public class CollectionController {
     @ApiOperation(value = "添加收藏", notes = "收藏-添加收藏记录")
     public ModelAndView createCollection(
             @RequestParam(name = "token", required = true) String token,
-            @ApiParam(required = false, name = "model", value = "模块类型（1活动，2直播，3圈子，4帖子，5动态，6用户，7系统）") @RequestParam(name = "model", required = false) Integer model,
-            @ApiParam(required = false, name = "modelId", value = "模块ID") @RequestParam(name = "modelId", required = false) Integer modelId) {
+            @ApiParam(required = true, name = "model", value = "模块类型（1活动，2直播，3圈子，4帖子，5动态，6用户，7系统）") @RequestParam(name = "model", required = true) Integer model,
+            @ApiParam(required = true, name = "modelId", value = "模块ID") @RequestParam(name = "modelId", required = true) Integer modelId) {
         // Token 验证
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token)) {
@@ -56,7 +56,7 @@ public class CollectionController {
         } else if (model == null || modelId == null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
-        } else if (!(model == 1 || model == 2 || model == 3 || model == 4 || model == 6 || model == 7)) {
+        } else if (!(model == 1 || model == 2 || model == 3 || model == 4 || model == 6 || model == 5)) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
         } else {
@@ -98,7 +98,7 @@ public class CollectionController {
         } else if (model == null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
-        } else if (!(model == 1 || model == 2 || model == 3 || model == 4 || model == 6 || model == 7)) {
+        } else if (!(model == 1 || model == 2 || model == 3 || model == 4 || model == 6 || model == 5)) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
         } else {
@@ -149,8 +149,8 @@ public class CollectionController {
                 Collection record = new Collection();
                 record.setId(id);
                 record.setUserId(account.getId());
+                record.setModel(model);
                 record.setModelId(modelId);
-                record.setModelId(model);
                 collectionFacade.cancelCollect(record);
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             }
