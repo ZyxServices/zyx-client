@@ -1,5 +1,7 @@
 package com.zyx.controller.activity;
 
+import com.fasterxml.jackson.dataformat.yaml.snakeyaml.scanner.Constant;
+import com.zyx.constants.Constants;
 import com.zyx.rpc.activity.PageViwesFacade;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,9 +35,14 @@ public class PageViwesController {
 
     @RequestMapping(value = "/pageViwes", method = RequestMethod.POST)
     @ApiOperation(value = "浏览量（0 直播  1 动态  2 活动  3 帖子  4 个人主页）", notes = "浏览量（0 直播  1 动态  2 活动  3 帖子  4 个人主页）")
-    public void pageViwes(@RequestParam(name = "types", required = true) Integer types,
-                          @RequestParam(name = "typeId", required = true) Integer typeId) {
+    public ModelAndView pageViwes(@RequestParam(name = "types", required = true) Integer types,
+                                  @RequestParam(name = "typeId", required = true) Integer typeId) {
         pageViwesFacade.pageViwes(types, typeId);
+        AbstractView jsonView = new MappingJackson2JsonView();
+        Map<String, Object> map = new HashMap<>();
+        map.put(Constants.STATE, Constants.SUCCESS);
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
     }
 
     @RequestMapping(value = "/getPageViwes", method = RequestMethod.POST)
