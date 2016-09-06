@@ -20,4 +20,11 @@ public interface CommentFacade  {
      */
     Map<String, Object> addComment(Integer commentType, Integer commentId, String commentContent, Integer commentAccount, Integer commentState);
 
+    /**
+     *  获取评论列表
+     * @param commentType 评论类型
+     * @param commentId 评论modelId
+     * @return
+     */
+    Map<String,Object> queryComment(Integer commentType,Integer commentId);
 }
