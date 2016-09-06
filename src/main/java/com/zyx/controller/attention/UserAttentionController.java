@@ -5,6 +5,7 @@ import com.zyx.param.attention.AttentionParam;
 import com.zyx.rpc.attention.UserAttentionFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,11 @@ public class UserAttentionController {
 
     @RequestMapping(value = "/user", method = {RequestMethod.GET})
     @ApiOperation(value = "用户A关注用户B", notes = "用户A关注用户B")
-    public ModelAndView attention_get(@RequestParam(name = "token") String token, @RequestParam(name = "fromId") Integer fromId, @RequestParam(name = "toId") Integer toId) {
+    public ModelAndView attention_get(@RequestParam(name = "token") String token,
+                                      @ApiParam(required = true, name = "fromId", value = "关注操作发起者ID")
+                                      @RequestParam(name = "fromId") Integer fromId,
+                                      @ApiParam(required = true, name = "toId", value = "被关注者ID")
+                                      @RequestParam(name = "toId") Integer toId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromId) || StringUtils.isEmpty(toId)) {// 缺少参数
@@ -50,7 +55,11 @@ public class UserAttentionController {
 
     @RequestMapping(value = "/user", method = {RequestMethod.DELETE})
     @ApiOperation(value = "用户A取消关注用户B", notes = "用户A取消关注用户B")
-    public ModelAndView attention_delete(@RequestParam(name = "token") String token, @RequestParam(name = "fromId") Integer fromId, @RequestParam(name = "toId") Integer toId) {
+    public ModelAndView attention_delete(@RequestParam(name = "token") String token,
+                                         @ApiParam(required = true, name = "fromId", value = "取消操作发起者ID")
+                                         @RequestParam(name = "fromId") Integer fromId,
+                                         @ApiParam(required = true, name = "toId", value = "被取消者ID")
+                                         @RequestParam(name = "toId") Integer toId) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromId) || StringUtils.isEmpty(toId)) {// 缺少参数

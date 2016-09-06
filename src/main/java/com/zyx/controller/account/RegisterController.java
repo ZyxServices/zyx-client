@@ -7,6 +7,7 @@ import com.zyx.utils.FileUploadUtils;
 import com.zyx.utils.ImagesVerifyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,9 @@ public class RegisterController {
 
     @RequestMapping(value = "/validate/code", method = RequestMethod.POST)
     @ApiOperation(value = "验证手机验证码", notes = "验证手机号和验证码是否匹配")
-    public ModelAndView validatePhoneCode(@RequestParam(name = "phone") String phone, @RequestParam(name = "code") String code) {
+    public ModelAndView validatePhoneCode(@RequestParam(name = "phone") String phone,
+                                          @ApiParam(required = true, name = "code", value = "验证码")
+                                          @RequestParam(name = "code") String code) {
         AbstractView jsonView = new MappingJackson2JsonView();
 
         if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)) {
@@ -100,7 +103,9 @@ public class RegisterController {
     @ApiOperation(value = "用户注册", notes = "用户注册，头像可不设置")
     public ModelAndView register2(@RequestParam(name = "phone") String phone,
                                   @RequestParam(name = "pwd") String password,
+                                  @ApiParam(name = "nickname", value = "昵称")
                                   @RequestParam(name = "nickname") String nickname,
+                                  @ApiParam(name = "avatar", value = "头像地址，需要先使用文件上传接口上传获取地址")
                                   @RequestParam(name = "avatar", required = false) String avatar) {
         AbstractView jsonView = new MappingJackson2JsonView();
 

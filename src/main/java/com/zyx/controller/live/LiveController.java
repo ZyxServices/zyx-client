@@ -63,10 +63,13 @@ public class LiveController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiOperation(value = "直播发布", notes = "直播-直播发布")
     public ModelAndView createLive(@RequestParam(name = "token") String token,
-                                   @RequestParam(name = "auth") Integer auth, @RequestParam(name = "type") Integer type,
-                                   @RequestParam(name = "start", required = false) Long start,
-                                   @RequestParam(name = "end", required = false) Long end, @RequestParam(name = "title") String title,
-                                   @RequestParam(name = "lab") Integer lab, @RequestParam(name = "bgmUrl", required = false) String bgmUrl
+                                   @ApiParam(required = true, name = "auth", value = "权限：1-公开，默认 2-我的粉丝可见 3-我关注人可见 4-包括2、3情况")@RequestParam(name = "auth",required = true) Integer auth,
+                                   @ApiParam(required = true, name = "type", value = "直播类型 1-图文直播 2-视频直播")@RequestParam(name = "type") Integer type,
+                                   @ApiParam(required = false, name = "start", value = "直播开始时间，默认为当前立即开始")@RequestParam(name = "start", required = false) Long start,
+                                   @ApiParam(required = true, name = "end", value = "直播结束时间")@RequestParam(name = "end", required = false) Long end,
+                                   @ApiParam(required = true, name = "title", value = "直播标题")@RequestParam(name = "title") String title,
+                                   @ApiParam(required = true, name = "lab", value = "直播所属标签")@RequestParam(name = "lab") Integer lab,
+                                   @ApiParam(required = false, name = "bgmUrl", value = "直播背景图片")@RequestParam(name = "bgmUrl", required = false) String bgmUrl
                                    ) {
         // Token 验证
         Map<String, Object> attrMap = new HashMap<>();
@@ -77,7 +80,7 @@ public class LiveController {
         } else if (type == null || title == null || "".equals(title) || lab == null) {// 判断参数必要性
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
-        } else if (!(type == 1 || type == 2) || !(lab == 1 || lab == 2 || lab == 3 || lab == 4)
+        } else if (!(type == 1 || type == 2) || !(lab == 1 || lab == 2 || lab == 3 || lab == 4|| lab == 5|| lab == 6)
                 || !(auth == 1 || auth == 2 || auth == 3 || auth == 4)) {// 判断参数合法性
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);

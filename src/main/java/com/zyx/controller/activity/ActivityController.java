@@ -51,7 +51,8 @@ public class ActivityController {
                                 @RequestParam(name = "type", required = true) Integer type,
                                 @RequestParam(name = "address", required = true) String address,
                                 @RequestParam(name = "examine", required = false) Integer examine,
-                                @RequestParam(name = "memberTemplate", required = false) String memberTemplate) {
+                                @RequestParam(name = "memberTemplate", required = false) String memberTemplate,
+                                @RequestParam(name = "groupId", required = false) Long groupId) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
@@ -74,7 +75,7 @@ public class ActivityController {
             jsonView.setAttributesMap(MapUtils.buildErrorMap(Constants.PARAM_MISS, "参数缺失"));
             return new ModelAndView(jsonView);
         } else {
-            Map<String, Object> map = activityFacade.insertActivity(createId, title, desc, image, startTime, endTime, lastTime, maxPeople, visible, phone, price, type, address, examine, memberTemplate);
+            Map<String, Object> map = activityFacade.insertActivity(createId, title, desc, image, startTime, endTime, lastTime, maxPeople, visible, phone, price, type, address, examine, memberTemplate, groupId);
             jsonView.setAttributesMap(map);
             return new ModelAndView(jsonView);
         }
@@ -82,7 +83,7 @@ public class ActivityController {
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ApiOperation(value = "活动查询", notes = "活动查询")
-    public ModelAndView query(@RequestParam(name = "token", required = true) String token,
+    public ModelAndView query(@RequestParam(name = "token", required = false) String token,
                               @RequestParam(name = "createId", required = false) Integer createId,
                               @RequestParam(name = "id", required = false) Integer id,
                               @RequestParam(name = "startTime", required = false) Long startTime,
@@ -94,8 +95,8 @@ public class ActivityController {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
-        boolean token1 = accountCommonFacade.validateToken(token);
-        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
+/*        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());*/
 
         QueryActivityParm parm = new QueryActivityParm();
         parm.setCreateId(createId);
@@ -145,15 +146,15 @@ public class ActivityController {
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     @ApiOperation(value = "查询历史活动", notes = "查询历史活动")
-    public ModelAndView history(@RequestParam(name = "token", required = true) String token,
+    public ModelAndView history(@RequestParam(name = "token", required = false) String token,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
                                 @RequestParam(name = "page", required = true) Integer page) {
 
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
-        boolean token1 = accountCommonFacade.validateToken(token);
-        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
+/*        boolean token1 = accountCommonFacade.validateToken(token);
+        if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());*/
 
         QueryHistoryParm parm = new QueryHistoryParm();
         parm.setPageNumber(pageNumber);
