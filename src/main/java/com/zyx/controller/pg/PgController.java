@@ -107,23 +107,23 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/cern/random/{token}/{n}", method = RequestMethod.GET)
-    @ApiOperation(value = "个人圈子列表", notes = "个人圈子列表")
-    public ModelAndView random(@PathVariable String token, @PathVariable Integer n) {
-        Map<String, Object> map = pgFacade.starRandom(1, n);
-        AbstractView jsonView = new MappingJackson2JsonView();
-        jsonView.setAttributesMap(map);
-        return new ModelAndView(jsonView);
-    }
-
-    @RequestMapping(value = "/v1/cern/starRandom/{token}/{n}", method = RequestMethod.GET)
-    @ApiOperation(value = "明星圈子列表", notes = "明星圈子列表")
-    public ModelAndView starRandom(@PathVariable String token, @PathVariable Integer n) {
-        Map<String, Object> map = pgFacade.starRandom(3, n);
-        AbstractView jsonView = new MappingJackson2JsonView();
-        jsonView.setAttributesMap(map);
-        return new ModelAndView(jsonView);
-    }
+//    @RequestMapping(value = "/v1/cern/random/{token}/{n}", method = RequestMethod.GET)
+//    @ApiOperation(value = "个人圈子列表", notes = "个人圈子列表")
+//    public ModelAndView random(@PathVariable String token, @PathVariable Integer n) {
+//        Map<String, Object> map = pgFacade.starRandom(1, n);
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        jsonView.setAttributesMap(map);
+//        return new ModelAndView(jsonView);
+//    }
+//
+//    @RequestMapping(value = "/v1/cern/starRandom/{token}/{n}", method = RequestMethod.GET)
+//    @ApiOperation(value = "明星圈子列表", notes = "明星圈子列表")
+//    public ModelAndView starRandom(@PathVariable String token, @PathVariable Integer n) {
+//        Map<String, Object> map = pgFacade.starRandom(3, n);
+//        AbstractView jsonView = new MappingJackson2JsonView();
+//        jsonView.setAttributesMap(map);
+//        return new ModelAndView(jsonView);
+//    }
 
     @RequestMapping(value = "/v1/circleItem/add", method = RequestMethod.POST)
     @ApiOperation(value = "发布帖子", notes = "发布帖子")
@@ -163,9 +163,10 @@ public class PgController {
     @RequestMapping(value = "/v1/circleItem/list", method = RequestMethod.POST)
     @ApiOperation(value = "帖子列表", notes = "帖子列表")
     public ModelAndView circleItemList(
-            @RequestParam(value = "max") Integer max,
-            @RequestParam(value = "circleId", required = false) Integer circleId) {
-        Map<String, Object> map = pgFacade.circleItemList(max, circleId);
+            @RequestParam(value = "circleId", required = false) Integer circleId,
+            @RequestParam(value = "start") Integer start,
+            @RequestParam(value = "pageSize") Integer pageSize) {
+        Map<String, Object> map = pgFacade.circleItemList(circleId, start, pageSize);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -327,22 +328,25 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/concern/getFollow/{token}/{loginUserId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/concern/getFollow/{token}/{loginUserId}/{start}/{pageSize}", method = RequestMethod.GET)
     @ApiOperation(value = "根据登录用户查询当前用户的关注的动态列表", notes = "loginUserId：登录用户id")
     public ModelAndView getFollow(
             @PathVariable(value = "token") String token,
-            @PathVariable(value = "loginUserId") Integer loginUserId) {
-        Map<String, Object> returnMap = pgFacade.getMyFollowList(loginUserId);
+            @PathVariable(value = "loginUserId") Integer loginUserId,
+            @PathVariable(value = "start") Integer start,
+            @PathVariable(value = "pageSize") Integer pageSize) {
+        Map<String, Object> returnMap = pgFacade.getMyFollowList(loginUserId, start, pageSize);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/concern/starConcern/{max}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/concern/starConcern/{start}/{pageSize}", method = RequestMethod.GET)
     @ApiOperation(value = "大咖动态", notes = "max：最大条数")
     public ModelAndView starConcern(
-            @PathVariable(value = "max") Integer max) {
-        Map<String, Object> returnMap = pgFacade.starConcern(max);
+            @PathVariable(value = "start") Integer start,
+            @PathVariable(value = "pageSize") Integer pageSize) {
+        Map<String, Object> returnMap = pgFacade.starConcern(start,pageSize);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
@@ -353,7 +357,7 @@ public class PgController {
     public ModelAndView getOneConcern(
             @RequestParam(value = "concernId") Integer concernId,
             @RequestParam(value = "accountId", required = false) Integer accountId) {
-        Map<String, Object> returnMap = pgFacade.getOneConcern(concernId,accountId);
+        Map<String, Object> returnMap = pgFacade.getOneConcern(concernId, accountId);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
