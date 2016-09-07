@@ -9,5 +9,5 @@ import java.util.Map;
  * Create by XiaoWei on 2016/8/31
  */
 public interface ReplyFacade {
-    Map<String, Object> addReply(Integer replyType, Integer replyParentId, Integer replyFromUser, Integer replyToUser, String replyContent, Integer replyState);
+    Map<String, Object> addReply(Integer replyParentId, Integer replyFromUser, Integer replyToUser, String replyContent);
 }
