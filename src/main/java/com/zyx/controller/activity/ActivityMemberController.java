@@ -111,9 +111,9 @@ public class ActivityMemberController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ApiOperation(value = "发起者审核报名用户", notes = "发起者审核报名用户")
+    @ApiOperation(value = "发起者批量审核报名用户", notes = "发起者批量审核报名用户")
     public ModelAndView update(@RequestParam(name = "token", required = false) String token,
-                                     @RequestParam(name = "id", required = true) Integer id) {
+                               @RequestParam(name = "id", required = true) Integer[] id) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
