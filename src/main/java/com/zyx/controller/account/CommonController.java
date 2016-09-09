@@ -3,6 +3,7 @@ package com.zyx.controller.account;
 import com.zyx.constants.Constants;
 import com.zyx.constants.account.AccountConstants;
 import com.zyx.rpc.account.AccountCommonFacade;
+import com.zyx.utils.MapUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,35 +43,52 @@ public class CommonController {
     public ModelAndView timestamp() {
         AbstractView jsonView = new MappingJackson2JsonView();
         Map<String, Object> map = new HashMap<>();
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String str = sdf.format(date);
-        map.put(AccountConstants.TIMESTAMP_LONG, System.currentTimeMillis());
-        map.put(AccountConstants.TIMESTAMP_STRING, str);
-        jsonView.setAttributesMap(map);
+        try {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            String str = sdf.format(date);
+            map.put(AccountConstants.TIMESTAMP_LONG, System.currentTimeMillis());
+            map.put(AccountConstants.TIMESTAMP_STRING, str);
+            jsonView.setAttributesMap(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonView.setAttributesMap(Constants.MAP_500);
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/sendRegisterCode", method = RequestMethod.POST)
+    @ApiOperation(value = "发送验证码", notes = "发送验证码")
+    public ModelAndView sendRegisterCode(@RequestParam(name = "phone") String phone) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+        if (StringUtils.isEmpty(phone)) {
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            jsonView.setAttributesMap(doSendPhone(phone, AccountConstants.SEND_REGISTER, null));
+        }
         return new ModelAndView(jsonView);
     }
 
     @RequestMapping(value = "/sendCode", method = RequestMethod.POST)
     @ApiOperation(value = "发送验证码", notes = "发送验证码")
     public ModelAndView sendCode(@RequestParam(name = "phone") String phone) {
-
         AbstractView jsonView = new MappingJackson2JsonView();
-        Map<String, Object> map = new HashMap<>();
         if (StringUtils.isEmpty(phone)) {
             jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
         } else {
-            // 判断手机号码
-            if (isMobileNum(phone)) {
-                jsonView.setAttributesMap(accountCommonFacade.sendPhoneCode(phone, null));
-            } else {
-                map.put(Constants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50100);
-                map.put(Constants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50100_MSG);
-                jsonView.setAttributesMap(map);
-            }
+            jsonView.setAttributesMap(doSendPhone(phone, AccountConstants.SEND_PUBLIC, null));
         }
-
         return new ModelAndView(jsonView);
+    }
+
+    private Map<String, Object> doSendPhone(String phone, String type, String msg) {
+        try {
+            // 判断手机号码
+            return isMobileNum(phone) ? accountCommonFacade.sendPhoneCode(phone, type, msg) : MapUtils.buildErrorMap(AccountConstants.ACCOUNT_ERROR_CODE_50100, AccountConstants.ACCOUNT_ERROR_CODE_50100_MSG);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Constants.MAP_500;
+        }
     }
 
     private boolean isMobileNum(String mobiles) {
