@@ -1,5 +1,7 @@
 package com.zyx.rpc.account;
 
+import com.zyx.param.account.UserCollectionParam;
+
 import java.util.Map;
 
 /**
@@ -8,10 +10,8 @@ import java.util.Map;
  * @author WeiMinSheng
  * @version V1.0
  *          Copyright (c)2016 tyj-版权所有
- * @title MyCollectionFacade.java
  */
 public interface MyCollectionFacade {
 
-    Map<String, Object> myList(String token, Integer accountId);
-
+    Map<String, Object> myList(UserCollectionParam userCollectionParam);
 }

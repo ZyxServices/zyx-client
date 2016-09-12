@@ -36,13 +36,15 @@
     <dubbo:reference interface="com.zyx.rpc.account.AccountCommonFacade" id="accountCommonFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.account.AccountInfoFacade" id="accountInfoFacade" check="false"/>
     <dubbo:reference interface="com.zyx.rpc.account.RegisterFacade" id="registerFacade" check="false"/>
-    <dubbo:reference interface="com.zyx.rpc.account.UserLoginFacade" id="userLoginFacade" check="false" timeout="10000"/>
-    <dubbo:reference interface="com.zyx.rpc.account.MarkFacade" id="markFacade" check="false"/>
+    <dubbo:reference interface="com.zyx.rpc.account.UserLoginFacade" id="userLoginFacade" check="false"
+                     timeout="10000"/>
+    <dubbo:reference interface="com.zyx.rpc.account.MarkFacade" id="markFacade" check="false" timeout="10000"/>
 
     <dubbo:reference interface="com.zyx.rpc.account.AccountAddressFacade" id="accountAddressFacade" check="false"/>
 
     <dubbo:reference interface="com.zyx.rpc.account.MyCircleFacade" id="myCircleFacade" check="false"/>
-    <dubbo:reference interface="com.zyx.rpc.account.MyConcernFacade" id="myConcernFacade" check="false"/>
+    <dubbo:reference interface="com.zyx.rpc.account.MyConcernFacade" id="myConcernFacade" check="false"
+                     timeout="10000"/>
     <dubbo:reference interface="com.zyx.rpc.account.MyCollectionFacade" id="myCollectionFacade" check="false"
                      timeout="10000"/>
     <!-- 用户首推 -->

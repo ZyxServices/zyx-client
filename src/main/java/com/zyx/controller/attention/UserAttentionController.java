@@ -75,6 +75,29 @@ public class UserAttentionController {
         return new ModelAndView(jsonView);
     }
 
+    @RequestMapping(value = "/user_check", method = {RequestMethod.GET})
+    @ApiOperation(value = "检查用户A是否关注用户B", notes = "检查用户A是否关注用户B")
+    public ModelAndView attention_user_check(@RequestParam(name = "token") String token,
+                                         @ApiParam(required = true, name = "fromId", value = "检查操作发起者ID")
+                                         @RequestParam(name = "fromId") Integer fromId,
+                                         @ApiParam(required = true, name = "toId", value = "被检查者ID")
+                                         @RequestParam(name = "toId") Integer toId) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromId) || StringUtils.isEmpty(toId)) {// 缺少参数
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            try {
+                jsonView.setAttributesMap(userAttentionFacade.checkAttentionFromAToB(buildParam(token, fromId, toId)));
+            } catch (Exception e) {
+                jsonView.setAttributesMap(Constants.MAP_500);
+            }
+        }
+
+        return new ModelAndView(jsonView);
+    }
+
+
     private AttentionParam buildParam(String token, Integer fromId, Integer toId) {
         AttentionParam param = new AttentionParam(fromId, toId);
         param.setToken(token);
