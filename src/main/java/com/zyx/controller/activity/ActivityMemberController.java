@@ -88,7 +88,7 @@ public class ActivityMemberController {
 
     @RequestMapping(value = "/memberPeople", method = RequestMethod.POST)
     @ApiOperation(value = "查询参与活动人列表（详细信息）/可查寻当前用户参加过到活动", notes = "查询参与活动人列表（详细信息）/可查寻当前用户参加过到活动")
-    public ModelAndView memberPeople(@RequestParam(name = "token", required = false) String token,
+    public ModelAndView memberPeople(@RequestParam(name = "token", required = true) String token,
                                      @RequestParam(name = "activityId", required = false) Integer activitiId,
                                      @RequestParam(name = "userId", required = false) Integer userId) {
 
@@ -112,15 +112,17 @@ public class ActivityMemberController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "发起者批量审核报名用户", notes = "发起者批量审核报名用户")
-    public ModelAndView update(@RequestParam(name = "token", required = false) String token,
-                               @RequestParam(name = "id", required = true) Integer[] id) {
+    public ModelAndView update(@RequestParam(name = "token", required = true) String token,
+                               @RequestParam(name = "type", required = true) Integer type,
+                               @RequestParam(name = "id", required = true) String id) {
 
         AbstractView jsonView = new MappingJackson2JsonView();
 
         boolean token1 = accountCommonFacade.validateToken(token);
         if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());
 
-        Map<String, Object> map = activityMemberFacade.updateMemberByExamine(id);
+
+        Map<String, Object> map = activityMemberFacade.updateMemberByExamine(type, id);
 
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);

@@ -46,5 +46,5 @@ public interface ActivityMemberFacade {
      * @param id
      * @return
      */
-    Map<String, Object> updateMemberByExamine(Integer[] id);
+    Map<String, Object> updateMemberByExamine(Integer type, String id);
 }
