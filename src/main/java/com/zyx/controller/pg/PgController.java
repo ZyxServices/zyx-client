@@ -40,9 +40,10 @@ public class PgController {
                                   @ApiParam(required = true, name = "circleType", value = "圈子类别，需要动态去圈子类别表数据") @RequestParam("circleType") Integer circleType,
                                   @ApiParam(required = true, name = "details", value = "圈子详情") @RequestParam("details") String details,
 //                                  @RequestParam("tag") Integer tag,
-                                  @ApiParam(required = true, name = "headImgUrl", value = "图片url地址，可以传多个，以逗号（英文）隔开") @RequestParam(value = "headImgUrl", required = false) String headImgUrl) {
+                                  @ApiParam(required = true, name = "headImgUrl", value = "图片url地址，可以传多个，以逗号（英文）隔开") @RequestParam(value = "headImgUrl", required = false) String headImgUrl,
+                                  @ApiParam(required = true, name = "group_id", value = "groupId") @RequestParam("group_id") Integer groupId) {
         AbstractView jsonView = new MappingJackson2JsonView();
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, headImgUrl, 0);
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, headImgUrl, 0,groupId);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
