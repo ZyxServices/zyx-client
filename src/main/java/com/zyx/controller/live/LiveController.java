@@ -273,7 +273,7 @@ public class LiveController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/get", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/get", method = {RequestMethod.POST})
     @ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")
     public ModelAndView getLiveByKey(@RequestParam(name = "id") Integer id) {
         Map<String, Object> attrMap = new HashMap<>();
@@ -284,6 +284,29 @@ public class LiveController {
             try {
                 LiveInfo liveInfo = liveInfoFacade.getById(id);
                 attrMap.put(LiveConstants.DATA, liveInfo);
+                attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            } catch (NumberFormatException nfe) {
+                attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
+            } catch (Exception e) {
+                attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+            }
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/end", method = {RequestMethod.POST})
+    @ApiOperation(value = "直播-结束直播", notes = "直播-结束直播")
+    public ModelAndView getEndLive(@RequestParam(name = "id") Integer id) {
+        Map<String, Object> attrMap = new HashMap<>();
+        if (id == null) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+        } else {
+            try {
+                LiveInfoVo liveInfoVo = liveInfoFacade.endLive(id);
+                attrMap.put(LiveConstants.DATA, liveInfoVo);
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             } catch (NumberFormatException nfe) {
                 attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
