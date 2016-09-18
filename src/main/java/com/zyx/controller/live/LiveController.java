@@ -63,14 +63,14 @@ public class LiveController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ApiOperation(value = "直播发布", notes = "直播-直播发布")
     public ModelAndView createLive(@RequestParam(name = "token") String token,
-                                   @ApiParam(required = true, name = "auth", value = "权限：1-公开，默认 2-我的粉丝可见 3-我关注人可见 4-包括2、3情况")@RequestParam(name = "auth",required = true) Integer auth,
-                                   @ApiParam(required = true, name = "type", value = "直播类型 1-图文直播 2-视频直播")@RequestParam(name = "type") Integer type,
-                                   @ApiParam(required = false, name = "start", value = "直播开始时间，默认为当前立即开始")@RequestParam(name = "start", required = false) Long start,
-                                   @ApiParam(required = true, name = "end", value = "直播结束时间")@RequestParam(name = "end", required = false) Long end,
-                                   @ApiParam(required = true, name = "title", value = "直播标题")@RequestParam(name = "title") String title,
-                                   @ApiParam(required = true, name = "lab", value = "直播所属标签")@RequestParam(name = "lab") Integer lab,
-                                   @ApiParam(required = false, name = "bgmUrl", value = "直播背景图片")@RequestParam(name = "bgmUrl", required = false) String bgmUrl
-                                   ) {
+                                   @ApiParam(required = true, name = "auth", value = "权限：1-公开，默认 2-我的粉丝可见 3-我关注人可见 4-包括2、3情况") @RequestParam(name = "auth", required = true) Integer auth,
+                                   @ApiParam(required = true, name = "type", value = "直播类型 1-图文直播 2-视频直播") @RequestParam(name = "type") Integer type,
+                                   @ApiParam(required = false, name = "start", value = "直播开始时间，默认为当前立即开始") @RequestParam(name = "start", required = false) Long start,
+                                   @ApiParam(required = true, name = "end", value = "直播结束时间") @RequestParam(name = "end", required = false) Long end,
+                                   @ApiParam(required = true, name = "title", value = "直播标题") @RequestParam(name = "title") String title,
+                                   @ApiParam(required = true, name = "lab", value = "直播所属标签") @RequestParam(name = "lab") Integer lab,
+                                   @ApiParam(required = false, name = "bgmUrl", value = "直播背景图片") @RequestParam(name = "bgmUrl", required = false) String bgmUrl
+    ) {
         // Token 验证
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
@@ -80,7 +80,7 @@ public class LiveController {
         } else if (type == null || title == null || "".equals(title) || lab == null) {// 判断参数必要性
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
-        } else if (!(type == 1 || type == 2) || !(lab == 1 || lab == 2 || lab == 3 || lab == 4|| lab == 5|| lab == 6)
+        } else if (!(type == 1 || type == 2) || !(lab == 1 || lab == 2 || lab == 3 || lab == 4 || lab == 5 || lab == 6)
                 || !(auth == 1 || auth == 2 || auth == 3 || auth == 4)) {// 判断参数合法性
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
@@ -144,7 +144,7 @@ public class LiveController {
                                    @RequestParam(name = "lab", required = false) Integer lab,
                                    @RequestParam(name = "bgmUrl", required = false) String bgmUrl,
                                    @RequestParam(name = "vedioUrl", required = false) String vedioUrl,
-                                   @ApiParam(required = false, name = "groupId", value = "环信组ID")@RequestParam(name = "groupId", required = false) Long groupId) {
+                                   @ApiParam(required = false, name = "groupId", value = "环信组ID") @RequestParam(name = "groupId", required = false) Long groupId) {
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token) || null == id) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
@@ -197,7 +197,7 @@ public class LiveController {
         if (token == null || "".equals(token) || null == status || null == id) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
-        } else if (!(status == 1||status == 2||status == 0||status == -1)) {
+        } else if (!(status == 1 || status == 2 || status == 0 || status == -1)) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_ILIGAL);
         } else {
@@ -240,11 +240,11 @@ public class LiveController {
     @RequestMapping(value = "/list/lab", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
     public ModelAndView getLiveList(@RequestParam(name = "token", required = false) String token,
-                                    @RequestParam(name = "lab" ,required=true) Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
+                                    @RequestParam(name = "lab", required = true) Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
                                     @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-        if ( null == lab  ) {
+        if (null == lab) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
         } else if (!(lab == 1 || lab == 2 || lab == 3 || lab == 4)) {// 判断参数合法性
@@ -256,7 +256,7 @@ public class LiveController {
                 boolean flag = accountCommonFacade.validateToken(token);
                 liveInfoParam.setLab(lab);
                 if (pageNo != null && pageSize != null) {
-                    Pager pager = new Pager(pageNo,pageSize);
+                    Pager pager = new Pager(pageNo, pageSize);
                     liveInfoParam.setPager(pager);
                 }
                 List<LiveInfoVo> list = liveInfoFacade.getList(liveInfoParam);
@@ -298,7 +298,7 @@ public class LiveController {
 
     @RequestMapping(value = "/end", method = {RequestMethod.POST})
     @ApiOperation(value = "直播-结束直播", notes = "直播-结束直播")
-    public ModelAndView getEndLive(@RequestParam(name = "token") String token,@RequestParam(name = "id") Integer id) {
+    public ModelAndView getEndLive(@RequestParam(name = "token") String token, @RequestParam(name = "id") Integer id) {
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token) || null == id) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
@@ -307,15 +307,27 @@ public class LiveController {
             attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
         } else {
-                boolean flag = accountCommonFacade.validateToken(token);
-                if (flag) {
-                    LiveInfoVo liveInfoVo = liveInfoFacade.endLive(id);
-                    attrMap.put(LiveConstants.DATA, liveInfoVo);
-                    attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+            boolean flag = accountCommonFacade.validateToken(token);
+            if (flag) {
+                AccountInfoVo account = accountCommonFacade.getAccountVoByToken(token);
+                if (account == null || account.getId() == null) {
+                    attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
+                    attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
                 } else {
-                    attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
-                    attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+                    LiveInfo liveInfo = liveInfoFacade.getById(id);
+                    if (liveInfo == null || !liveInfo.getUserId().equals(account.getId())) {
+                        attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50301);
+                        attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50301_MSG);
+                    } else {
+                        LiveInfoVo liveInfoVo = liveInfoFacade.endLive(id);
+                        attrMap.put(LiveConstants.DATA, liveInfoVo);
+                        attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+                    }
                 }
+            } else {
+                attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
+                attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+            }
         }
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(attrMap);
@@ -356,7 +368,7 @@ public class LiveController {
     @RequestMapping(value = "/in", method = RequestMethod.POST)
     @ApiOperation(value = "直播-进入直播", notes = "直播-进入直播")
     public ModelAndView inLiveByKey(@RequestParam(name = "token") String token,
-                                        @RequestParam(name = "id") Integer id) {
+                                    @RequestParam(name = "id") Integer id) {
         Map<String, Object> attrMap = new HashMap<>();
 
         if (token == null || "".equals(token)) {
@@ -369,7 +381,7 @@ public class LiveController {
             try {
                 boolean flag = accountCommonFacade.validateToken(token);
                 if (flag) {
-                    liveInfoFacade.inOrOutLive(id,1);
+                    liveInfoFacade.inOrOutLive(id, 1);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                 } else {
                     attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
@@ -389,7 +401,7 @@ public class LiveController {
     @RequestMapping(value = "/out", method = RequestMethod.POST)
     @ApiOperation(value = "直播-退出直播", notes = "直播-退出直播")
     public ModelAndView outLiveByKey(@RequestParam(name = "token") String token,
-                                    @RequestParam(name = "id") Integer id) {
+                                     @RequestParam(name = "id") Integer id) {
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token)) {
             attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
@@ -401,7 +413,7 @@ public class LiveController {
             try {
                 boolean flag = accountCommonFacade.validateToken(token);
                 if (flag) {
-                    liveInfoFacade.inOrOutLive(id,0);
+                    liveInfoFacade.inOrOutLive(id, 0);
                     attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                 } else {
                     attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
@@ -417,6 +429,7 @@ public class LiveController {
         jsonView.setAttributesMap(attrMap);
         return new ModelAndView(jsonView);
     }
+
     ///////////
     ////
     ///////////
@@ -544,9 +557,9 @@ public class LiveController {
 
     @RequestMapping(value = "/barrage/create", method = RequestMethod.POST)
     @ApiOperation(value = "直播-发送直播弹", notes = "直播-发送直播弹幕")
-    public ModelAndView createBarrage(@RequestParam(name = "token",required = true) String token,
-                                      @RequestParam(name = "liveId",required = true) Integer liveId,
-                                      @RequestParam(name = "content",required = true) String content) {
+    public ModelAndView createBarrage(@RequestParam(name = "token", required = true) String token,
+                                      @RequestParam(name = "liveId", required = true) Integer liveId,
+                                      @RequestParam(name = "content", required = true) String content) {
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
         if (token == null) {
@@ -613,12 +626,12 @@ public class LiveController {
         return new ModelAndView(jsonView);
     }
 
-//    @ApiParam(required = true, name = "status", value = "直播状态 -1:结束 0:未开始 1:直播中 2:暂停")
+    //    @ApiParam(required = true, name = "status", value = "直播状态 -1:结束 0:未开始 1:直播中 2:暂停")
     @RequestMapping(value = "/barrage/history", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "直播-获取直播弹幕历史消息", notes = "直播-获取直播弹幕历史消息 ")
     public ModelAndView getBarrageHistory(@RequestParam(name = "liveId", required = true) Integer liveId,
-                                          @ApiParam(required = false, name = "pageNo", value = "页码 1开始 错误分页将不分页")@RequestParam(name = "pageNo", required = false) Integer pageNo,
-                                          @ApiParam(required = false, name = "pageSize", value = "页大小")@RequestParam(name = "pageSize", required = false) Integer pageSize
+                                          @ApiParam(required = false, name = "pageNo", value = "页码 1开始 错误分页将不分页") @RequestParam(name = "pageNo", required = false) Integer pageNo,
+                                          @ApiParam(required = false, name = "pageSize", value = "页大小") @RequestParam(name = "pageSize", required = false) Integer pageSize
                                       /* @RequestParam(name = "index", required = false) Long index*/) {
         Map<String, Object> attrMap = new HashMap<>();
         if (liveId == null) {
@@ -627,10 +640,10 @@ public class LiveController {
         } else {
             try {
                 BarrageParam param = new BarrageParam();
-                System.out.println(pageNo+ "   "+pageSize);
-                if(pageNo!=null&&pageSize!=null&&pageSize>0&&pageNo>0){
+                System.out.println(pageNo + "   " + pageSize);
+                if (pageNo != null && pageSize != null && pageSize > 0 && pageNo > 0) {
                     System.out.println("wocao");
-                    Pager pager = new Pager(pageNo,pageSize);
+                    Pager pager = new Pager(pageNo, pageSize);
                     param.setPager(pager);
                 }
                 param.setLiveId(liveId);
