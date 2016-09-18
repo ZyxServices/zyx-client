@@ -298,21 +298,24 @@ public class LiveController {
 
     @RequestMapping(value = "/end", method = {RequestMethod.POST})
     @ApiOperation(value = "直播-结束直播", notes = "直播-结束直播")
-    public ModelAndView getEndLive(@RequestParam(name = "id") Integer id) {
+    public ModelAndView getEndLive(@RequestParam(name = "token") String token,@RequestParam(name = "id") Integer id) {
         Map<String, Object> attrMap = new HashMap<>();
-        if (id == null) {
+        if (token == null || "".equals(token) || null == id) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+            attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
+        } else if (id == null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
         } else {
-            try {
-                LiveInfoVo liveInfoVo = liveInfoFacade.endLive(id);
-                attrMap.put(LiveConstants.DATA, liveInfoVo);
-                attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
-            } catch (NumberFormatException nfe) {
-                attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_ILIGAL);
-            } catch (Exception e) {
-                attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
-            }
+                boolean flag = accountCommonFacade.validateToken(token);
+                if (flag) {
+                    LiveInfoVo liveInfoVo = liveInfoFacade.endLive(id);
+                    attrMap.put(LiveConstants.DATA, liveInfoVo);
+                    attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+                } else {
+                    attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
+                    attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+                }
         }
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(attrMap);
