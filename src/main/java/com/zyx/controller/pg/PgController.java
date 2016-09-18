@@ -133,7 +133,7 @@ public class PgController {
                                       @ApiParam(required = true, name = "create_id", value = "发布帖子用户id") @RequestParam(name = "create_id") Integer create_id,
                                       @RequestParam(name = "title") String title,
                                       @RequestParam(name = "content") String content,
-                                      @ApiParam(required = true, name = "img_url", value = "图片url地址，可以传多个，以逗号（英文）隔开") @RequestParam(name = "img_url", required = false) String img_url) {
+                                      @ApiParam(name = "img_url", value = "图片url地址，可以传多个，以逗号（英文）隔开") @RequestParam(name = "img_url", required = false) String img_url) {
         Map<String, Object> map = pgFacade.addCircleItem(circle_id, create_id, title, content, img_url);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(map);
