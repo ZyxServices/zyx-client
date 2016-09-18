@@ -66,7 +66,7 @@ public class LiveController {
                                    @ApiParam(required = true, name = "auth", value = "权限：1-公开，默认 2-我的粉丝可见 3-我关注人可见 4-包括2、3情况") @RequestParam(name = "auth", required = true) Integer auth,
                                    @ApiParam(required = true, name = "type", value = "直播类型 1-图文直播 2-视频直播") @RequestParam(name = "type") Integer type,
                                    @ApiParam(required = false, name = "start", value = "直播开始时间，默认为当前立即开始") @RequestParam(name = "start", required = false) Long start,
-                                   @ApiParam(required = true, name = "end", value = "直播结束时间") @RequestParam(name = "end", required = false) Long end,
+                                   @ApiParam(required = false, name = "end", value = "直播结束时间") @RequestParam(name = "end", required = false) Long end,
                                    @ApiParam(required = true, name = "title", value = "直播标题") @RequestParam(name = "title") String title,
                                    @ApiParam(required = true, name = "lab", value = "直播所属标签") @RequestParam(name = "lab") Integer lab,
                                    @ApiParam(required = false, name = "bgmUrl", value = "直播背景图片") @RequestParam(name = "bgmUrl", required = false) String bgmUrl
@@ -240,8 +240,9 @@ public class LiveController {
     @RequestMapping(value = "/list/lab", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "直播-获取 标签页面 多条直播", notes = "直播-取 标签页面 多条直播")
     public ModelAndView getLiveList(@RequestParam(name = "token", required = false) String token,
-                                    @RequestParam(name = "lab", required = true) Integer lab, @RequestParam(name = "pageNo", required = false) Integer pageNo,
-                                    @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+                                    @RequestParam(name = "lab", required = true) Integer lab,
+                                    @RequestParam(name = "pageNo", required = true) Integer pageNo,
+                                    @RequestParam(name = "pageSize", required = true) Integer pageSize) {
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
         if (null == lab) {
@@ -257,6 +258,9 @@ public class LiveController {
                 liveInfoParam.setLab(lab);
                 if (pageNo != null && pageSize != null) {
                     Pager pager = new Pager(pageNo, pageSize);
+                    liveInfoParam.setPager(pager);
+                }else{
+                    Pager pager = new Pager(1, 10);
                     liveInfoParam.setPager(pager);
                 }
                 List<LiveInfoVo> list = liveInfoFacade.getList(liveInfoParam);
@@ -298,12 +302,14 @@ public class LiveController {
 
     @RequestMapping(value = "/end", method = {RequestMethod.POST})
     @ApiOperation(value = "直播-结束直播", notes = "直播-结束直播")
-    public ModelAndView getEndLive(@RequestParam(name = "token") String token, @RequestParam(name = "id") Integer id) {
+    public ModelAndView getEndLive(
+            @RequestParam(name = "token") String token,
+            @ApiParam(required = true, name = "liveId", value = "直播ID")@RequestParam(name = "liveId") Integer liveId) {
         Map<String, Object> attrMap = new HashMap<>();
-        if (token == null || "".equals(token) || null == id) {
+        if (token == null || "".equals(token) || null == liveId) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
             attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.MSG_PARAM_MISS);
-        } else if (id == null) {
+        } else if (liveId == null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
         } else {
@@ -314,12 +320,12 @@ public class LiveController {
                     attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50000);
                     attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50000_MSG);
                 } else {
-                    LiveInfo liveInfo = liveInfoFacade.getById(id);
+                    LiveInfo liveInfo = liveInfoFacade.getById(liveId);
                     if (liveInfo == null || !liveInfo.getUserId().equals(account.getId())) {
                         attrMap.put(LiveConstants.STATE, AccountConstants.ACCOUNT_ERROR_CODE_50301);
                         attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.ACCOUNT_ERROR_CODE_50301_MSG);
                     } else {
-                        LiveInfoVo liveInfoVo = liveInfoFacade.endLive(id);
+                        LiveInfoVo liveInfoVo = liveInfoFacade.endLive(liveId);
                         attrMap.put(LiveConstants.DATA, liveInfoVo);
                         attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
                     }
