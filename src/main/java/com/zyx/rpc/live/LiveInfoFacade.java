@@ -10,16 +10,6 @@ import com.zyx.vo.live.LiveInfoVo;
 import com.zyx.vo.live.LiveSearchVo;
 
 /**
- * 
- * @title LiveInfoFacade.java
- * @package com.zyx.rpc.live
- * @description TODO
- * @author DengQingHai   
- * @update 2016年6月14日 下午3:17:07
- * @version V1.0  
- * Copyright (c)2012 chantsoft-版权所有
- */
-/**
  *
  * @title LiveInfoFacade.java
  * @package com.zyx.rpc.live
@@ -58,6 +48,13 @@ public interface LiveInfoFacade {
 	 * @update 2016年6月22日 上午10:30:44
 	 */
 	public LiveInfo getById(Integer id);
+
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	public LiveInfoVo endLive(Integer id);
 	/**
 	 *
 	 * @param liveInfoParam
