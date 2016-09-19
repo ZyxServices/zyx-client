@@ -43,7 +43,7 @@ public class PgController {
                                   @ApiParam(required = false, name = "headImgUrl", value = "图片url地址，可以传多个，以逗号（英文）隔开") @RequestParam(value = "headImgUrl", required = false) String headImgUrl,
                                   @ApiParam(required = true, name = "group_id", value = "groupId") @RequestParam("group_id") Long groupId) {
         AbstractView jsonView = new MappingJackson2JsonView();
-        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, headImgUrl, 0,groupId);
+        Map<String, Object> map = pgFacade.insertCircle(title, createId, circleType, details, headImgUrl, 0, groupId);
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
@@ -240,12 +240,13 @@ public class PgController {
         return new ModelAndView(jsonView);
     }
 
-    @RequestMapping(value = "/v1/cern/findParams/{token}/{concernId}/{concernType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/cern/findParams", method = RequestMethod.POST)
     @ApiOperation(value = "关注列表条件查询", notes = "concernId，与concernType，自行去github查看")
-    public ModelAndView findMyconcernParams(@PathVariable String token,
-                                            @ApiParam(required = true, name = "concernId", value = "关注模块id") @PathVariable Integer concernId,
-                                            @ApiParam(required = true, name = "concernType", value = "关注模块类型，0为动态，1为明星，2为个人，3为球队,4为圈子，5为活动，6为直播") @PathVariable Integer concernType) {
-        Map<String, Object> returnMap = pgFacade.findMyConcernParams(concernId, concernType);
+    public ModelAndView findMyconcernParams(@RequestParam(value = "token") String token,
+                                            @ApiParam(required = true, name = "concernId", value = "关注模块id") @RequestParam(value = "concernId") Integer concernId,
+                                            @ApiParam(required = true, name = "concernType", value = "关注模块类型，0为动态，1为明星，2为个人，3为球队,4为圈子，5为活动，6为直播") @RequestParam(value = "concernType") Integer concernType,
+                                            @ApiParam(name = "keyword", defaultValue = "") @RequestParam(value = "keyword", required = false) String keyword) {
+        Map<String, Object> returnMap = pgFacade.findMyConcernParams(concernId, concernType, keyword);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
@@ -347,7 +348,7 @@ public class PgController {
     public ModelAndView starConcern(
             @PathVariable(value = "start") Integer start,
             @PathVariable(value = "pageSize") Integer pageSize) {
-        Map<String, Object> returnMap = pgFacade.starConcern(start,pageSize);
+        Map<String, Object> returnMap = pgFacade.starConcern(start, pageSize);
         AbstractView jsonView = new MappingJackson2JsonView();
         jsonView.setAttributesMap(returnMap);
         return new ModelAndView(jsonView);
