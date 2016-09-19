@@ -2,6 +2,7 @@ package com.zyx.controller.account;
 
 import com.zyx.constants.Constants;
 import com.zyx.param.account.AccountInfoParam;
+import com.zyx.param.account.UserAuthParam;
 import com.zyx.rpc.account.AccountInfoFacade;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -93,6 +94,36 @@ public class AccountController {
                 param.setAddress(address);
                 param.setSignature(signature);
                 jsonView.setAttributesMap(accountInfoFacade.editAccountInfo(token, userId, param));
+            }
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/auth_info/edit", method = {RequestMethod.POST})
+    @ApiOperation(value = "通过用户ID提交认证信息", notes = "通过用户ID提交认证信息")
+    public ModelAndView editAuthInfo(@RequestParam(name = "token") String token,
+                                     @RequestParam(name = "account_id") Integer userId,
+                                     @ApiParam(required = true, name = "authInfo", value = "认证信息")
+                                     @RequestParam() String authInfo,
+                                     @ApiParam(required = true, name = "authFile", value = "图片地址，需要先使用文件上传接口上传获取地址，多个用逗号隔开")
+                                     @RequestParam() String authFile) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
+            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+        } else {
+            // 判断属性是否存在
+            if (StringUtils.isEmpty(authInfo) && StringUtils.isEmpty(authFile)) {
+                // 必须包含一个参数值
+                jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+            } else {
+                UserAuthParam param = new UserAuthParam();
+                param.setUserId(userId);
+                param.setToken(token);
+                param.setAuthInfo(authInfo);
+                param.setAuthFile(authFile);
+                param.setModifyTime(System.currentTimeMillis());
+                jsonView.setAttributesMap(accountInfoFacade.editAccountAuth(token, userId, param));
             }
         }
         return new ModelAndView(jsonView);
