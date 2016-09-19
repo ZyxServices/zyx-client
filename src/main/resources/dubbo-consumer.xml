@@ -42,7 +42,7 @@
 
     <dubbo:reference interface="com.zyx.rpc.account.AccountAddressFacade" id="accountAddressFacade" check="false"/>
 
-    <dubbo:reference interface="com.zyx.rpc.account.MyCircleFacade" id="myCircleFacade" check="false"/>
+    <dubbo:reference interface="com.zyx.rpc.account.MyCircleFacade" id="myCircleFacade" check="false" timeout="10000"/>
     <dubbo:reference interface="com.zyx.rpc.account.MyConcernFacade" id="myConcernFacade" check="false"
                      timeout="10000"/>
     <dubbo:reference interface="com.zyx.rpc.account.MyCollectionFacade" id="myCollectionFacade" check="false"
