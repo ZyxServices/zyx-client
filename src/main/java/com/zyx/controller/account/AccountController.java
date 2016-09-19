@@ -35,11 +35,14 @@ public class AccountController {
     @ApiOperation(value = "通过用户ID查询用户信息", notes = "通过用户ID查询用户信息")
     public ModelAndView info(@RequestParam(name = "token") String token, @RequestParam(name = "account_id") Integer userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
-
-        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
-        } else {
-            jsonView.setAttributesMap(accountInfoFacade.queryAccountInfo(token, userId));
+        try {
+            if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
+                jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+            } else {
+                jsonView.setAttributesMap(accountInfoFacade.queryAccountInfo(token, userId));
+            }
+        } catch (Exception e) {
+            jsonView.setAttributesMap(Constants.MAP_500);
         }
         return new ModelAndView(jsonView);
     }
@@ -51,11 +54,14 @@ public class AccountController {
             @RequestParam(name = "token") String token,
             @RequestParam(name = "account_id") Integer userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
-
-        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
-        } else {
-            jsonView.setAttributesMap(accountInfoFacade.queryMyCenterInfo(token, userId));
+        try {
+            if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
+                jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+            } else {
+                jsonView.setAttributesMap(accountInfoFacade.queryMyCenterInfo(token, userId));
+            }
+        } catch (Exception e) {
+            jsonView.setAttributesMap(Constants.MAP_500);
         }
         return new ModelAndView(jsonView);
     }
@@ -103,28 +109,37 @@ public class AccountController {
     @ApiOperation(value = "通过用户ID提交认证信息", notes = "通过用户ID提交认证信息")
     public ModelAndView editAuthInfo(@RequestParam(name = "token") String token,
                                      @RequestParam(name = "account_id") Integer userId,
-                                     @ApiParam(required = true, name = "authInfo", value = "认证信息")
+                                     @ApiParam(required = true, name = "authName", value = "真实姓名")
+                                     @RequestParam() String authName,
+                                     @ApiParam(required = true, name = "authIDCard", value = "身份证号码")
+                                     @RequestParam() String authIDCard,
+                                     @ApiParam(required = true, name = "authMob", value = "手机号码")
+                                     @RequestParam() String authMob,
+                                     @ApiParam(required = true, name = "authFile", value = "手持身份证照片，图片地址，需要先使用文件上传接口上传获取地址")
+                                     @RequestParam() String authFile,
+                                     @ApiParam(required = true, name = "authInfo", value = "认证标签")
                                      @RequestParam() String authInfo,
-                                     @ApiParam(required = true, name = "authFile", value = "图片地址，需要先使用文件上传接口上传获取地址，多个用逗号隔开")
-                                     @RequestParam() String authFile) {
+                                     @ApiParam(required = true, name = "authFileWork", value = "工作证明照片，图片地址，需要先使用文件上传接口上传获取地址")
+                                     @RequestParam() String authFileWork) {
         AbstractView jsonView = new MappingJackson2JsonView();
-
-        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
-            jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
-        } else {
-            // 判断属性是否存在
-            if (StringUtils.isEmpty(authInfo) && StringUtils.isEmpty(authFile)) {
-                // 必须包含一个参数值
+        try {
+            if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
                 jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
             } else {
                 UserAuthParam param = new UserAuthParam();
                 param.setUserId(userId);
                 param.setToken(token);
-                param.setAuthInfo(authInfo);
+                param.setAuthName(authName);
+                param.setAuthIDCard(authIDCard);
+                param.setAuthMob(authMob);
                 param.setAuthFile(authFile);
+                param.setAuthInfo(authInfo);
+                param.setAuthFileWork(authFileWork);
                 param.setModifyTime(System.currentTimeMillis());
                 jsonView.setAttributesMap(accountInfoFacade.editAccountAuth(token, userId, param));
             }
+        } catch (Exception e) {
+            jsonView.setAttributesMap(Constants.MAP_500);
         }
         return new ModelAndView(jsonView);
     }
