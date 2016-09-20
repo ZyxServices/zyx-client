@@ -50,7 +50,7 @@ public class AccountController {
     @RequestMapping(value = "/center_info", method = {RequestMethod.GET})
     @ApiOperation(value = "通过用户ID查询个人中心用户信息", notes = "通过用户ID查询个人中心用户信息")
     public ModelAndView centerInfo(
-            @ApiParam(name = "token", value = "使用通用token:tiyujia2016可以查询别人的个人中心信息")
+            @ApiParam(required = true, name = "token", value = "使用通用token:tiyujia2016可以查询别人的个人中心信息")
             @RequestParam(name = "token") String token,
             @RequestParam(name = "account_id") Integer userId) {
         AbstractView jsonView = new MappingJackson2JsonView();
@@ -59,6 +59,24 @@ public class AccountController {
                 jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
             } else {
                 jsonView.setAttributesMap(accountInfoFacade.queryMyCenterInfo(token, userId));
+            }
+        } catch (Exception e) {
+            jsonView.setAttributesMap(Constants.MAP_500);
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/auth_info", method = {RequestMethod.GET})
+    @ApiOperation(value = "通过用户ID查询用户审核信息", notes = "通过用户ID查询用户审核信息")
+    public ModelAndView authInfo(
+            @RequestParam(name = "token") String token,
+            @RequestParam(name = "account_id") Integer userId) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+        try {
+            if (StringUtils.isEmpty(token) || StringUtils.isEmpty(userId)) {// 缺少参数
+                jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+            } else {
+                jsonView.setAttributesMap(accountInfoFacade.queryMyAuthInfo(token, userId));
             }
         } catch (Exception e) {
             jsonView.setAttributesMap(Constants.MAP_500);
