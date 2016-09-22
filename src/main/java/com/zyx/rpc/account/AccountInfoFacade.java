@@ -21,10 +21,12 @@ public interface AccountInfoFacade {
 
     /**
      * 个人中心用户信息接口
-     *
-     * @param token
-     * @param userId
-     * @return
      */
     Map<String, Object> queryMyCenterInfo(String token, int userId);
+
+    /**
+     * 个人中心审核资料接口
+     */
+    Map<String, Object> queryMyAuthInfo(String token, int userId);
+
 }
