@@ -168,6 +168,7 @@ public class ActivityController {
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     @ApiOperation(value = "查询历史活动", notes = "查询历史活动")
     public ModelAndView history(@RequestParam(name = "token", required = false) String token,
+                                @RequestParam(name = "userId", required = false) Integer userId,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
                                 @RequestParam(name = "page", required = true) Integer page) {
 
@@ -178,6 +179,7 @@ public class ActivityController {
         if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());*/
 
         QueryHistoryParm parm = new QueryHistoryParm();
+        parm.setUserId(userId);
         parm.setPageNumber(pageNumber);
         parm.setPageHis(page);
 
