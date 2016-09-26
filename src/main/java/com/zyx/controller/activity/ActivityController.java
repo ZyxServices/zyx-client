@@ -107,7 +107,28 @@ public class ActivityController {
         parm.setPage(page);
         parm.setEditState(editState != null ? editState : 0);
 
-        Map<String, Object> map = activityFacade.queryActivity(parm);
+        Map<String, Object> map = activityFacade.queryActivity(parm, 0);
+
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/queryMyActivityList", method = RequestMethod.POST)
+    @ApiOperation(value = "查询当前用户创建的所有活动", notes = "查询当前用户创建的所有活动")
+    public ModelAndView queryMyActivityList(
+                              @RequestParam(name = "createId", required = true) Integer createId,
+                              @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
+                              @RequestParam(name = "page", required = true) Integer page) {
+
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+
+        QueryActivityParm parm = new QueryActivityParm();
+        parm.setCreateId(createId);
+        parm.setPageNumber(pageNumber);
+        parm.setPage(page);
+
+        Map<String, Object> map = activityFacade.queryActivity(parm, 1);
 
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
@@ -147,6 +168,7 @@ public class ActivityController {
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     @ApiOperation(value = "查询历史活动", notes = "查询历史活动")
     public ModelAndView history(@RequestParam(name = "token", required = false) String token,
+                                @RequestParam(name = "userId", required = false) Integer userId,
                                 @RequestParam(name = "pageNumber", required = true) Integer pageNumber,
                                 @RequestParam(name = "page", required = true) Integer page) {
 
@@ -157,6 +179,7 @@ public class ActivityController {
         if (!token1) return new ModelAndView(ActivityUtils.tokenFailure());*/
 
         QueryHistoryParm parm = new QueryHistoryParm();
+        parm.setUserId(userId);
         parm.setPageNumber(pageNumber);
         parm.setPageHis(page);
 
