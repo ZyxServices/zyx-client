@@ -31,15 +31,15 @@ public class MsgController {
     private MsgFacade msgFacade;
 
     @RequestMapping(value = "/info", method = {RequestMethod.POST})
-    @ApiOperation(value = "消息数量", notes = "消息数量", response = BaseResponse.class)
+    @ApiOperation(value = "插入消息", notes = "插入消息", response = BaseResponse.class)
     public ModelAndView insertMsg(
             @ApiParam(required = true, name = "token", value = "token") @RequestParam(value = "token") String token,
-            @ApiParam(required = true, name = "fromUserId", value = "当前用户ID") @RequestParam(value = "from_user_id") Integer fromUserId,
-            @ApiParam(required = true, name = "toUserId", value = "主体对象拥有者ID") @RequestParam(value = "to_user_id") Integer toUserId,
+            @ApiParam(required = true, name = "from_user_id", value = "当前用户ID") @RequestParam(value = "from_user_id") Integer fromUserId,
+            @ApiParam(required = true, name = "to_user_id", value = "主体对象拥有者ID") @RequestParam(value = "to_user_id") Integer toUserId,
             @ApiParam(required = true, name = "bodyId", value = "主体对象ID") @RequestParam(value = "bodyId") Integer bodyId,
             @ApiParam(required = true, name = "bodyType", value = "主体对象类型") @RequestParam(value = "bodyType") Integer bodyType,
             @ApiParam(required = true, name = "fromContent", value = "当前用户内容") @RequestParam(value = "fromContent") String fromContent,
-            @ApiParam(name = "toContent", value = "") @RequestParam(required = false, value = "toContent") String toContent) {
+            @ApiParam(name = "toContent") @RequestParam(required = false, value = "toContent") String toContent) {
         AbstractView jsonView = new MappingJackson2JsonView();
         try {
             if (StringUtils.isEmpty(token) || StringUtils.isEmpty(toUserId)) {// 缺少参数
@@ -53,7 +53,31 @@ public class MsgController {
                 userMsgParam.setBodyType(bodyType);
                 userMsgParam.setFromContent(fromContent);
                 userMsgParam.setToContent(toContent);
-                jsonView.setAttributesMap(msgFacade.queryMsgCount(userMsgParam));
+                jsonView.setAttributesMap(msgFacade.insertMsg(userMsgParam));
+                return new ModelAndView(jsonView);
+            }
+        } catch (Exception e) {
+            jsonView.setAttributesMap(Constants.MAP_500);
+        }
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/info", method = {RequestMethod.DELETE})
+    @ApiOperation(value = "删除消息", notes = "删除消息", response = BaseResponse.class)
+    public ModelAndView deleteMsg(
+            @ApiParam(required = true, name = "token", value = "token") @RequestParam(value = "token") String token,
+            @ApiParam(required = true, name = "from_user_id", value = "当前用户ID") @RequestParam(value = "from_user_id") Integer fromUserId,
+            @ApiParam(required = true, name = "msg_id", value = "消息ID") @RequestParam(value = "msg_id") Integer msgId) {
+        AbstractView jsonView = new MappingJackson2JsonView();
+        try {
+            if (StringUtils.isEmpty(token) || StringUtils.isEmpty(fromUserId)) {// 缺少参数
+                jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
+            } else {
+                UserMsgParam userMsgParam = new UserMsgParam();
+                userMsgParam.setToken(token);
+                userMsgParam.setFromUserId(fromUserId);
+                userMsgParam.setId(msgId);
+                jsonView.setAttributesMap(msgFacade.deleteMsg(userMsgParam));
                 return new ModelAndView(jsonView);
             }
         } catch (Exception e) {
