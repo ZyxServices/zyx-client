@@ -53,6 +53,7 @@
     <!--系统服务接口-->
     <dubbo:reference interface="com.zyx.rpc.system.DevaFacade" id="devaFacade" check="false" timeout="10000"/>
     <dubbo:reference interface="com.zyx.rpc.system.SearchFacade" id="searchFacade" check="false" timeout="10000"/>
+    <dubbo:reference interface="com.zyx.rpc.system.MsgFacade" id="msgFacade" check="false" timeout="10000"/>
 
     <!-- 关注、拉黑服务接口 -->
     <dubbo:reference interface="com.zyx.rpc.attention.UserAttentionFacade" id="userAttentionFacade" check="false"/>

@@ -197,7 +197,7 @@ public class PgController {
 
     @RequestMapping(value = "/v1/cern/del/{token}/{concernId}/{loginUserId}", method = RequestMethod.DELETE)
     @ApiOperation(value = "删除动态", notes = "删除动态")
-    public ModelAndView delCern(@PathVariable Integer token,
+    public ModelAndView delCern(@PathVariable String token,
                                 @PathVariable Integer concernId,
                                 @PathVariable Integer loginUserId) {
         Map<String, Object> map = pgFacade.delCern(concernId, loginUserId);

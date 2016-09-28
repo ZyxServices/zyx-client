@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by SubDong on 2016/3/16.
@@ -36,7 +35,7 @@ public class FileUploadUtils {
                 byte[] tempFile = file.getBytes();
                 String[] images = new String[]{"png", "gif", "jpeg", "jpg", "bmp"};//可上传图片格式
                 List<String> imagesList = Arrays.asList(images);
-                Arrays.binarySearch(images,fileName);
+                Arrays.binarySearch(images, fileName);
                 if (imagesList.contains(fileName) && tempFile.length > IMAGES_MAX_BYTE) {
                     return Constants.AUTH_ERROR_901 + "";
                 }
@@ -53,6 +52,14 @@ public class FileUploadUtils {
         } catch (IOException e) {
             e.printStackTrace();
             return Constants.ERROR + "";
+        }
+    }
+
+    public static String deleteFile(String fileUri) {
+        try {
+            return FastDFSClient.deleteFile(fileUri) + "";
+        } catch (Exception e) {
+            return Constants.ERROR_MSG;
         }
     }
 
