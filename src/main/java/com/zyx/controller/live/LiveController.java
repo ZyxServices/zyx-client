@@ -259,7 +259,7 @@ public class LiveController {
                 if (pageNo != null && pageSize != null) {
                     Pager pager = new Pager(pageNo, pageSize);
                     liveInfoParam.setPager(pager);
-                }else{
+                } else {
                     Pager pager = new Pager(1, 10);
                     liveInfoParam.setPager(pager);
                 }
@@ -279,14 +279,19 @@ public class LiveController {
 
     @RequestMapping(value = "/get", method = {RequestMethod.POST})
     @ApiOperation(value = "直播-获取单个直播", notes = "直播-获取单个直播")
-    public ModelAndView getLiveByKey(@RequestParam(name = "id") Integer id) {
+    public ModelAndView getLiveByKey(
+            @RequestParam(name = "id",required = true) Integer id,
+            @ApiParam(required = false, name = "veiwUserId", value = "查看该直播的用户ID")@RequestParam(name = "veiwUserId",required = false) Integer veiwUserId) {
         Map<String, Object> attrMap = new HashMap<>();
         attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
         if (id == null) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
         } else {
             try {
-                LiveInfo liveInfo = liveInfoFacade.getById(id);
+                LiveInfoParam param = new LiveInfoParam();
+                param.setId(id);
+                param.setViewUserId(veiwUserId);
+                LiveInfoVo liveInfo = liveInfoFacade.getLiveInfo(param);
                 attrMap.put(LiveConstants.DATA, liveInfo);
                 attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
             } catch (NumberFormatException nfe) {
@@ -304,7 +309,7 @@ public class LiveController {
     @ApiOperation(value = "直播-结束直播", notes = "直播-结束直播")
     public ModelAndView getEndLive(
             @RequestParam(name = "token") String token,
-            @ApiParam(required = true, name = "liveId", value = "直播ID")@RequestParam(name = "liveId") Integer liveId) {
+            @ApiParam(required = true, name = "liveId", value = "直播ID") @RequestParam(name = "liveId") Integer liveId) {
         Map<String, Object> attrMap = new HashMap<>();
         if (token == null || "".equals(token) || null == liveId) {
             attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
