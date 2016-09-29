@@ -440,6 +440,37 @@ public class LiveController {
         jsonView.setAttributesMap(attrMap);
         return new ModelAndView(jsonView);
     }
+    @RequestMapping(value = "/number", method = RequestMethod.POST)
+    @ApiOperation(value = "直播-获取观看直播人数", notes = "直播-获取观看直播人数")
+    public ModelAndView getLiveWatchNumber(@RequestParam(name = "token") String token,
+                                     @RequestParam(name = "id") Integer id) {
+        Map<String, Object> attrMap = new HashMap<>();
+        if (token == null || "".equals(token)) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+            attrMap.put(LiveConstants.STATE, LiveConstants.REQUEST_UNAUTHORIZED);
+        } else if (id == null) {
+            attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+            attrMap.put(LiveConstants.STATE, LiveConstants.PARAM_MISS);
+        } else {
+            try {
+                boolean flag = accountCommonFacade.validateToken(token);
+                if (flag) {
+                    attrMap.put(LiveConstants.DATA, liveInfoFacade.getWatchNumber(id));
+                    attrMap.put(LiveConstants.STATE, LiveConstants.SUCCESS);
+                } else {
+                    attrMap.put(LiveConstants.STATE, AccountConstants.REQUEST_UNAUTHORIZED);
+                    attrMap.put(LiveConstants.ERROR_MSG, AccountConstants.REQUEST_UNAUTHORIZED);
+                }
+            } catch (NumberFormatException nfe) {
+                attrMap.put(LiveConstants.ERROR_MSG, LiveConstants.PARAM_ILIGAL);
+            } catch (Exception e) {
+                attrMap.put(LiveConstants.STATE, LiveConstants.ERROR);
+            }
+        }
+        AbstractView jsonView = new MappingJackson2JsonView();
+        jsonView.setAttributesMap(attrMap);
+        return new ModelAndView(jsonView);
+    }
 
     ///////////
     ////
