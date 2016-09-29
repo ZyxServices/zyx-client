@@ -5,6 +5,7 @@ import com.zyx.constants.Constants;
 import com.zyx.param.Pager;
 import com.zyx.param.account.UserMsgParam;
 import com.zyx.rpc.system.MsgFacade;
+import com.zyx.utils.MapUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
+
+import java.util.Map;
 
 /**
  * Created by wms on 2016/9/27.
@@ -45,21 +48,28 @@ public class MsgController {
             if (StringUtils.isEmpty(token) || StringUtils.isEmpty(toUserId)) {// 缺少参数
                 jsonView.setAttributesMap(Constants.MAP_PARAM_MISS);
             } else {
-                UserMsgParam userMsgParam = new UserMsgParam();
-                userMsgParam.setToken(token);
-                userMsgParam.setFromUserId(fromUserId);
-                userMsgParam.setToUserId(toUserId);
-                userMsgParam.setBodyId(bodyId);
-                userMsgParam.setBodyType(bodyType);
-                userMsgParam.setFromContent(fromContent);
-                userMsgParam.setToContent(toContent);
-                jsonView.setAttributesMap(msgFacade.insertMsg(userMsgParam));
-                return new ModelAndView(jsonView);
+                if (fromUserId.equals(toUserId)) {// 过滤自己评论自己的
+                    jsonView.setAttributesMap(MapUtils.buildErrorMap(Constants.ERROR, "评论自己的不需要发送消息"));
+                } else {
+                    jsonView.setAttributesMap(doInsertMsg(token, fromUserId, toUserId, bodyId, bodyType, fromContent, toContent));
+                }
             }
         } catch (Exception e) {
             jsonView.setAttributesMap(Constants.MAP_500);
         }
         return new ModelAndView(jsonView);
+    }
+
+    private Map<String, Object> doInsertMsg(String token, Integer fromUserId, Integer toUserId, Integer bodyId, Integer bodyType, String fromContent, String toContent) {
+        UserMsgParam userMsgParam = new UserMsgParam();
+        userMsgParam.setToken(token);
+        userMsgParam.setFromUserId(fromUserId);
+        userMsgParam.setToUserId(toUserId);
+        userMsgParam.setBodyId(bodyId);
+        userMsgParam.setBodyType(bodyType);
+        userMsgParam.setFromContent(fromContent);
+        userMsgParam.setToContent(toContent);
+        return msgFacade.insertMsg(userMsgParam);
     }
 
     @RequestMapping(value = "/info", method = {RequestMethod.DELETE})
