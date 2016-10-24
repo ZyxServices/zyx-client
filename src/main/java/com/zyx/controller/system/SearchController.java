@@ -47,4 +47,39 @@ public class SearchController {
         jsonView.setAttributesMap(map);
         return new ModelAndView(jsonView);
     }
+
+
+    @RequestMapping(value = "/accountByNo", method = {RequestMethod.POST})
+    @ApiOperation(value = "热门查询", notes = "热门查询")
+    public ModelAndView accountByNo(@RequestParam(name = "userId", required = false) Integer userId,
+                                    @RequestParam(name = "pageNumber") Integer pageNumber,
+                                    @RequestParam(name = "pages") Integer pages) {
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+        SearchParam searchParam = new SearchParam();
+        searchParam.setUserId(userId);
+        searchParam.setPageNumber(pageNumber);
+        searchParam.setPages(pages);
+        Map<String, Object> map = searchFacade.searchAccountByNO(searchParam);
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+    @RequestMapping(value = "/cirleByNo", method = {RequestMethod.POST})
+    @ApiOperation(value = "热门查询", notes = "热门查询")
+    public ModelAndView cirleByNo(@RequestParam(name = "userId", required = false) Integer userId,
+                                    @RequestParam(name = "pageNumber") Integer pageNumber,
+                                    @RequestParam(name = "pages") Integer pages) {
+
+        AbstractView jsonView = new MappingJackson2JsonView();
+        SearchParam searchParam = new SearchParam();
+        searchParam.setUserId(userId);
+        searchParam.setPageNumber(pageNumber);
+        searchParam.setPages(pages);
+        Map<String, Object> map = searchFacade.searchCirleByNo(searchParam);
+        jsonView.setAttributesMap(map);
+        return new ModelAndView(jsonView);
+    }
+
+
 }
